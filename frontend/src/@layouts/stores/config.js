@@ -25,7 +25,7 @@ export const useLayoutConfigStore = defineStore('layoutConfig', () => {
   const appContentWidth = cookieRef('appContentWidth', layoutConfig.app.contentWidth)
 
   // 👉 App Content Layout Nav
-  const appContentLayoutNav = ref(layoutConfig.app.contentLayoutNav)
+  const appContentLayoutNav = ref(AppContentLayoutNav.Horizontal)
 
   watch(appContentLayoutNav, val => {
     // If Navbar type is hidden while switching to horizontal nav => Reset it to sticky

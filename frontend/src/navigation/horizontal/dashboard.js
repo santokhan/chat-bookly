@@ -1,33 +1,23 @@
 export default [
   {
-    title: 'Dashboards',
-    icon: { icon: 'tabler-smart-home' },
+    title: 'Connect Your Business',
+    icon: { icon: 'tabler-user-plus' },
     children: [
       {
-        title: 'Analytics',
-        to: 'dashboards-analytics',
-        icon: { icon: 'tabler-chart-pie-2' },
-      },
-      {
-        title: 'CRM',
-        to: 'dashboards-crm',
-        icon: { icon: 'tabler-cube' },
-      },
-      {
-        title: 'Ecommerce',
-        to: 'dashboards-ecommerce',
-        icon: { icon: 'tabler-shopping-cart' },
-      },
-      {
-        title: 'Academy',
-        to: 'dashboards-academy',
-        icon: { icon: 'tabler-book' },
-      },
-      {
-        title: 'Logistics',
-        to: 'dashboards-logistics',
-        icon: { icon: 'tabler-truck' },
+        title: 'Embedded Signup',
+        to: 'connect-embedded-sign',
+        icon: { icon: 'tabler-user-plus' },
       },
     ],
+  },
+  {
+    title: 'Dashboard',
+    icon: { icon: 'tabler-smart-home' },
+    to: 'dashboards-analytics',
+  },
+  {
+    title: 'Appointment Calendar',
+    to: 'apps-calendar',
+    icon: { icon: 'tabler-calendar' },
   },
 ]

@@ -68,4 +68,9 @@ export const routes = [
     name: 'apps-ecommerce-dashboard',
     component: () => import('@/pages/dashboards/ecommerce.vue'),
   },
+  {
+    path: '/connect/embedded-sign',
+    name: 'connect-embedded-sign',
+    component: () => import('@/pages/connect/EmbeddedSign.vue'),
+  },
 ]
