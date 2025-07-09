@@ -2,9 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-import adminRoutes from './src/modules/admin/admin.routes';
-import staffRoutes from './src/modules/staff/staff.routes';
-import businessRoutes from './src/modules/business/business.routes';
+import userRoutes from './src/modules/user/user.routes.js';
+import businessRoutes from './src/modules/business/business.routes.js';
 
 const app = express();
 
@@ -21,8 +20,7 @@ app.get('/api/v1/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/v1/staff', staffRoutes);
-app.use('/api/v1/admin', adminRoutes);
-app.use('/api/v1/businesses', businessRoutes);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/business', businessRoutes);
 
 export default app;

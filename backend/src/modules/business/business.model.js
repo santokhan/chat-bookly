@@ -2,49 +2,20 @@ import mongoose from 'mongoose';
 
 const businessSchema = new mongoose.Schema(
   {
-    name: {
+    business_meta: {
       type: String,
-      required: true,
+      default: '{}',
     },
-    email: {
+    whatsapp_meta: {
       type: String,
-      required: true,
-      unique: true,
+      default: '{}',
     },
-    phone: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    businessMeta: {
-      type: String,
-    },
-    whatsappMeta: {
-      type: String,
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    deletedAt: {
-      type: Date,
-      default: null,
-    },
-  }, {
+  },{
     timestamps: true,
-  },
+  }
 );
 
-const Business = mongoose.model(
+export default mongoose.model(
   'Business',
   businessSchema,
 );
-export default Business;

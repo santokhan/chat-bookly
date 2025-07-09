@@ -1,117 +1,40 @@
-import Business from './business.model';
-import bcrypt from 'bcryptjs';
+import Business from './business.model.js';
 
-const register = async (data) => {
+export async function setBusinessData({ business_id, business_meta, whatsapp_meta }) {
   try {
-    data.password = await bcrypt.hash(data.password, 10);
-    const business = await Business.create(data);
+    let business;
+
+    if (business_id) {
+      business = await Business.findById(business_id);
+
+      if (!business) {
+        return {
+          success: false,
+          message: 'Business not found',
+        };
+      }
+
+      await Business.findByIdAndUpdate(
+        business_id,
+        { business_meta, whatsapp_meta },
+        { new: true },
+      );
+    } else {
+      business = await Business.create({
+        business_meta,
+        whatsapp_meta,
+      });
+    }
 
     return {
       success: true,
-      message: 'Business registered',
-      data: business,
+      message: 'Business data set successfully',
+      business,
     };
-  } catch (error) {
+  } catch (err) {
     return {
       success: false,
-      message: 'Registration failed',
-      error,
+      message: 'Set business data failed',
     };
   }
-};
-
-const login = async (email, password) => {
-  try {
-    const business = await Business.findOne({ email });
-    if (!business) return { success: false, message: 'Business not found' };
-
-    const match = await bcrypt.compare(password, business.password);
-    if (!match) return { success: false, message: 'Invalid credentials' };
-
-    return {
-      success: true,
-      message: 'Login successful',
-      data: business,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Login failed',
-      error,
-    };
-  }
-};
-
-const getById = async (id) => {
-  try {
-    const business = await Business.findById(id);
-    if (!business) return { success: false, message: 'Business not found' };
-
-    return {
-      success: true,
-      message: 'Business details fetched successfully',
-      data: business,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Get failed',
-      error,
-    };
-  }
-};
-
-const update = async (id, data) => {
-  try {
-    if (data.password) data.password = await bcrypt.hash(data.password, 10);
-
-    const business = await Business.findByIdAndUpdate(id, data, { new: true });
-    if (!business) return { success: false, message: 'Business not found' };
-
-    return {
-      success: true,
-      message: 'Business updated',
-      data: business,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Update failed',
-      error,
-    };
-  }
-};
-
-const remove = async (id) => {
-  try {
-    const business = await Business.findByIdAndUpdate(
-      id,
-      {
-        isActive: false,
-        deletedAt: new Date(),
-      },
-      { new: true },
-    );
-
-    if (!business) return { success: false, message: 'Business not found' };
-    return {
-      success: true,
-      message: 'Business deleted',
-      data: business,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Delete failed',
-      error,
-    };
-  }
-};
-
-export default {
-  register,
-  login,
-  getById,
-  update,
-  remove,
-};
+}

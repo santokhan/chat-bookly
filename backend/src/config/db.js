@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 import {
-  MONGO_URL,
   DB_NAME,
-} from './env';
+  MONGO_URL,
+} from './env.js';
 
 const dbConnection = async () => {
   try {

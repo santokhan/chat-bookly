@@ -1,6 +1,6 @@
 import app from './app.js';
-import dbConnection from './src/config/db.js';
 import { PORT } from './src/config/env.js';
+import dbConnection from './src/config/db.js';
 
 dbConnection();
 

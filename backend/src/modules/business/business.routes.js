@@ -1,14 +1,15 @@
 import express from 'express';
-import businessController from './business.controller';
-const validate = require('../../middlewares/validate');
-const { registerSchema, loginSchema } = require('./business.validation');
+import auth from '../../middlewares/auth.middleware.js';
+import * as businessController from './business.controller.js';
+import { requireRole } from '../../middlewares/role.middleware.js';
 
 const router = express.Router();
 
-router.post('/register', validate(registerSchema), businessController.register);
-router.post('/login', validate(loginSchema), businessController.login);
-router.get('/:id', businessController.getById);
-router.put('/:id', businessController.update);
-router.delete('/:id', businessController.remove);
+router.post(
+  '/set-data',
+  auth,
+  requireRole('business', 'admin'),
+  businessController.setData,
+);
 
-export default router; 
+export default router;
