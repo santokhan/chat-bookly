@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 
 import userRoutes from './src/modules/user/user.routes.js';
 import businessRoutes from './src/modules/business/business.routes.js';
+import whatsappRoutes from './src/modules/whatsapp/whatsapp.routes.js';
+import conversationRoutes from './src/modules/conversation/conversation.routes.js';
 
 const app = express();
 
@@ -22,5 +24,7 @@ app.get('/api/v1/health', (req, res) => {
 // Routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/business', businessRoutes);
+app.use('/api/v1/whatsapp', whatsappRoutes);
+app.use('/api/v1/conversation', conversationRoutes);
 
 export default app;
