@@ -1,23 +1,21 @@
 <script setup>
-import navItems from '@/navigation/vertical'
-import { themeConfig } from '@themeConfig'
-
-// Components
 import Footer from '@/layouts/components/Footer.vue'
-import NavBarNotifications from '@/layouts/components/NavBarNotifications.vue'
-import NavSearchBar from '@/layouts/components/NavSearchBar.vue'
-import NavbarShortcuts from '@/layouts/components/NavbarShortcuts.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import { getVerticalNavItems } from '@/navigation/vertical'
 import NavBarI18n from '@core/components/I18n.vue'
-
-// @layouts plugin
+import { useAuthStore } from '@core/stores/auth'
 import { VerticalNavLayout } from '@layouts'
+import { themeConfig } from '@themeConfig'
+import { computed } from 'vue'
+
+const authStore = useAuthStore()
+
+const navItems = computed(() => getVerticalNavItems(authStore.role))
 </script>
 
 <template>
   <VerticalNavLayout :nav-items="navItems">
-    <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
         <IconBtn
@@ -30,31 +28,19 @@ import { VerticalNavLayout } from '@layouts'
             icon="tabler-menu-2"
           />
         </IconBtn>
-
-        <NavSearchBar class="ms-lg-n3" />
-
+        <NavbarThemeSwitcher />
         <VSpacer />
-
         <NavBarI18n
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
           :languages="themeConfig.app.i18n.langConfig"
         />
-        <NavbarThemeSwitcher />
-        <NavbarShortcuts />
-        <NavBarNotifications class="me-1" />
         <UserProfile />
       </div>
     </template>
-
-    <!-- 👉 Pages -->
     <slot />
-
-    <!-- 👉 Footer -->
     <template #footer>
       <Footer />
     </template>
-
-    <!-- 👉 Customizer -->
-    <TheCustomizer />
+    <!-- <TheCustomizer /> -->
   </VerticalNavLayout>
 </template>

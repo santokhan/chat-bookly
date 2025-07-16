@@ -118,6 +118,7 @@ const themeSkin = computed(() => {
 })
 
 // 👉 Layout
+// const currentLayout = ref(configStore.isVerticalNavCollapsed ? 'collapsed' : configStore.appContentLayoutNav)
 const currentLayout = ref(Layout.Horizontal)
 configStore.appContentLayoutNav = Layout.Horizontal
 

@@ -4,11 +4,11 @@ const businessSchema = new mongoose.Schema(
   {
     business_meta: {
       type: String,
-      default: '{}',
+      default: '',
     },
     whatsapp_meta: {
       type: String,
-      default: '{}',
+      default: '',
     },
   },{
     timestamps: true,

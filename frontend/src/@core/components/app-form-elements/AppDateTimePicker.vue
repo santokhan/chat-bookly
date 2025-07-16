@@ -4,14 +4,14 @@ import { useTheme } from 'vuetify'
 import {
   VField,
   makeVFieldProps,
-} from 'vuetify/lib/components/VField/VField'
+} from 'vuetify/lib/components/VField/VField.mjs'
 import {
   VInput,
   makeVInputProps,
-} from 'vuetify/lib/components/VInput/VInput'
+} from 'vuetify/lib/components/VInput/VInput.mjs'
 
 
-import { filterInputAttrs } from 'vuetify/lib/util/helpers'
+import { filterInputAttrs } from 'vuetify/lib/util/helpers.mjs'
 import { useConfigStore } from '@core/stores/config'
 
 const props = defineProps({

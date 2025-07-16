@@ -1,16 +1,12 @@
-// import apps from './apps'
-// import charts from './charts'
-// import dashboard from './dashboard2'
-// import forms from './forms'
-// import misc from './misc'
-// import pages from './pages'
-// import tables from './tables'
-// import uiElements from './ui-elements'
-import embeddedSignup from './dashboard'
-import activityManagement from './activity-management'
-import customerManagement from './customer-management'
-import marketing from './marketing'
-import myPlan from './my-plan'
-import support from './support'
-
-export default [ ...embeddedSignup, ...activityManagement, ...customerManagement, ...marketing, ...myPlan, ...support]
+export default [
+  {
+    title: 'Home',
+    to: { name: 'root' },
+    icon: { icon: 'tabler-smart-home' },
+  },
+  {
+    title: 'Second page',
+    to: { name: 'second-page' },
+    icon: { icon: 'tabler-file' },
+  },
+]

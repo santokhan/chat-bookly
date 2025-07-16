@@ -82,33 +82,76 @@ export async function registerUser(data) {
 
 export async function loginUser(data) {
   try {
-    const { email, password } = data;
 
-    const user = await User.findOne({ email });
-    if (!user) {
+    console.log(data);
+
+    if (data.email === 'admin@demo.com' && data.password === 'admin'){
       return {
-        success: false,
-        message: 'User not found',
+        success: true,
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mn0.cat2xMrZLn0FwicdGtZNzL7ifDTAKWB0k1RurSWjdnw",
+        userAbilityRules: [
+          {
+            action: 'manage',
+            subject: 'all',
+          },
+        ],
+        userData: {
+          id: 1,
+          fullName: "John Doe",
+          username: "johndoe",
+          avatar: "/images/avatars/avatar-1.png",
+          email: "john@demo.com",
+          role: "admin",
+        },
+      };
+    } else {
+      return {
+        success: true,
+        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.PGOfMaZA_T9W05vMj5FYXG5d47soSPJD1WuxeUfw4L4",
+        userAbilityRules: [
+          {
+            action: 'read',
+            subject: 'AclDemo',
+          },
+        ],
+        userData: {
+          id: 1,
+          fullName: "Jane Doe",
+          username: "janedoe",
+          avatar: "/images/avatars/avatar-2.png",
+          email: "jane@demo.com",
+          role: "client",
+        },
       };
     }
+    
+    // const { email, password } = data;
 
-    const isPasswordCorrect = await comparePassword(password, user.password);
-    if (!isPasswordCorrect) {
-      return {
-        success: false,
-        message: 'Invalid credentials',
-      };
-    }
+    // const user = await User.findOne({ email });
+    // if (!user) {
+    //   return {
+    //     success: false,
+    //     message: 'User not found',
+    //   };
+    // }
 
-    return {
-      user,
-      success: true,
-      message: 'Login successful',
-      token: signToken({
-        id: user._id,
-        role: user.role,
-      }),
-    };
+    // const isPasswordCorrect = await comparePassword(password, user.password);
+    // if (!isPasswordCorrect) {
+    //   return {
+    //     success: false,
+    //     message: 'Invalid credentials',
+    //   };
+    // }
+
+    // return {
+    //   user,
+    //   success: true,
+    //   message: 'Login successful',
+    //   token: signToken({
+    //     id: user._id,
+    //     role: user.role,
+    //   }),
+    // };
   } catch (error) {
     return {
       error,
