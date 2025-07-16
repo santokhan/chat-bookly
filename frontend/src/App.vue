@@ -7,6 +7,9 @@ import {
   useConfigStore,
 } from '@core/stores/config'
 import { hexToRgb } from '@core/utils/colorConverter'
+import { useRoute } from 'vue-router'
+import { AppContentLayoutNav, ContentWidth } from '@layouts/enums'
+import { watch } from 'vue'
 
 const { global } = useTheme()
 
@@ -15,6 +18,20 @@ initCore()
 initConfigStore()
 
 const configStore = useConfigStore()
+const route = useRoute()
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath.startsWith('/business')) {
+      configStore.appContentLayoutNav = 'vertical'
+      configStore.appContentWidth = 'fluid'
+      configStore.isVerticalNavCollapsed = false
+    }
+    // Optionally handle admin or other layouts here
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

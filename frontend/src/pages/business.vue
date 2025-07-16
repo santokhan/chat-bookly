@@ -1,5 +1,4 @@
 <script setup>
-import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
 import { getDashboardData } from '@/services/dashboardService'
 import { useAuthStore } from '@core/stores/auth'
 import { onMounted } from 'vue'
@@ -18,13 +17,9 @@ const dashboard = getDashboardData('business')
 </script>
 
 <template>
-  <BusinessLayout>
-    <VCard class="mb-6" :title="dashboard.title">
-      <VCardText>
-        <div v-for="stat in dashboard.stats" :key="stat.label">
-          <strong>{{ stat.label }}:</strong> {{ stat.value }}
-        </div>
-      </VCardText>
-    </VCard>
-  </BusinessLayout>
+  <VCard class="mb-6" title="Dashboard">
+    <VCardText>
+      <div>Dashboard of the application</div>
+    </VCardText>
+  </VCard>
 </template>

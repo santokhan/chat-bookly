@@ -1,22 +1,13 @@
 <script setup>
 import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
-import { useAuthStore } from '@core/stores/auth'
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const authStore = useAuthStore()
-const router = useRouter()
-
-onMounted(() => {
-  if (!authStore.isAuthenticated || authStore.role !== 'business') {
-    router.replace('/login')
-  }
-})
 </script>
 
 <template>
   <BusinessLayout>
-    <h3>Business Orders Page</h3>
-    <p>Only visible to business users.</p>
+    <VCard class="mb-6" title="Orders">
+      <VCardText>
+        <div>Orders page content goes here.</div>
+      </VCardText>
+    </VCard>
   </BusinessLayout>
 </template> 
