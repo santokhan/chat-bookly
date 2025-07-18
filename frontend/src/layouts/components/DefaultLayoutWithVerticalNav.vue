@@ -16,7 +16,7 @@ const navItems = computed(() => getVerticalNavItems(authStore.role))
 
 <template>
   <VerticalNavLayout :nav-items="navItems">
-    <template #navbar="{ toggleVerticalOverlayNavActive }">
+    <!-- <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
         <IconBtn
           id="vertical-nav-toggle-btn"
@@ -36,7 +36,33 @@ const navItems = computed(() => getVerticalNavItems(authStore.role))
         />
         <UserProfile />
       </div>
-    </template>
+    </template> -->
+
+
+    <template #navbar="{ toggleVerticalOverlayNavActive }">
+  <div class="d-flex h-100 align-center justify-end w-100 gap-3">
+    <IconBtn
+      id="vertical-nav-toggle-btn"
+      class="ms-n3 d-lg-none"
+      @click="toggleVerticalOverlayNavActive(true)"
+    >
+      <VIcon
+        size="26"
+        icon="tabler-menu-2"
+      />
+    </IconBtn>
+
+    <!-- Right-aligned items with spacing -->
+    <NavbarThemeSwitcher />
+    <NavBarI18n
+      v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
+      :languages="themeConfig.app.i18n.langConfig"
+    />
+    <UserProfile />
+  </div>
+</template>
+
+
     <slot />
     <template #footer>
       <Footer />

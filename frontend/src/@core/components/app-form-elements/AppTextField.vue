@@ -1,4 +1,11 @@
 <script setup>
+const props = defineProps({
+  showSearchIcon: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 defineOptions({
   name: 'AppTextField',
   inheritAttrs: false,
@@ -34,6 +41,9 @@ const label = computed(() => useAttrs().label)
         label: undefined,
         variant: 'outlined',
         id: elementId,
+        'prepend-inner-icon': props.showSearchIcon ? 'tabler-search' : undefined,
+
+
       }"
     >
       <template
