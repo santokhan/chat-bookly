@@ -1,4 +1,4 @@
-const { ZodError } = require('zod');
+import { ZodError } from 'zod';
 
 const validate = schema => (req, res, next) => {
   try {

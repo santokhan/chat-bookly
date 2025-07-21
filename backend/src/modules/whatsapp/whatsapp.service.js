@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 const whatsappHelper = require('./whatsapp.helper.js');
 const conversationService = require('../conversation/conversation.service.js');
 const {

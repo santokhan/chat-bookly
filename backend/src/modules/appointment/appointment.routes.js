@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
 const controller = require('./appointment.controller');
 const { requireRole } = require('../../middlewares/role.middleware'); // Adjust path as needed

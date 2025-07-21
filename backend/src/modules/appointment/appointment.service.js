@@ -1,6 +1,5 @@
 const Appointment = require('./appointment.model');
 const AppointmentSettings = require('./appointmentSettings.model');
-const mongoose = require('mongoose');
 const moment = require('moment');
 
 exports.getAvailableDates = async (businessId) => {
