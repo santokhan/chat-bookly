@@ -17,6 +17,10 @@ import AnalyticsWebsiteAnalytics from '@/views/dashboards/analytics/AnalyticsWeb
 import ApexChartBalance from '@/views/charts/apex-chart/ApexChartBalance.vue'
 import ApexChartDataScience from '@/views/charts/apex-chart/ApexChartDataScience.vue'
 import SimpleTable from './tables/simple-table.vue'
+import TopServicesWidget from '@/components/dashboard/TopServicesWidget.vue'
+import TopTeamMembersWidget from '@/components/dashboard/TopTeamMembersWidget.vue'
+import UpcomingAppointmentsWidget from '@/components/dashboard/UpcomingAppointmentsWidget.vue'
+import StatisticsWidget from '@/components/dashboard/StatisticsWidget.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -31,91 +35,15 @@ const dashboard = getDashboardData('business')
 </script>
 
 <template>
-  <!-- <VCard class="mb-6" title="Dashboard">
-    <VCardText>
-      <div>Dashboard of the application</div>
-    </VCardText>
-  </VCard> -->
-
   <VRow class="match-height">
 
     <VCol cols="6">
-      <VCard>
-        <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
-          <VCardTitle>Statistics</VCardTitle>
-          <VCardSubtitle>Last 7 days</VCardSubtitle>
-          <br>
-          <h2 class="text-h2 me-3">
-            $221,267
-          </h2>
-          <div class="d-flex align-center">
-            <span class="me-2">Appointments:</span>
-            <h6 class="text-h6 m-0">12</h6>
-          </div>
-
-          <div class="d-flex align-center">
-            <span class="me-2">Appointments value:</span>
-            <h6 class="text-h6 m-0">$221,267</h6>
-          </div>
-          <template #append>
-            <div class="d-flex align-center">
-              <VChip
-                label
-                color="success"
-              >
-                <VIcon
-                  start
-                  icon="tabler-arrow-up"
-                  size="15"
-                />
-                <span>22%</span>
-              </VChip>
-            </div>
-          </template>
-        </VCardItem>
-
-        <VCardText>
-          <ApexChartBalance />
-        </VCardText>
-      </VCard>
+      <StatisticsWidget />
     </VCol>
 
 
     <VCol cols="6">
-      <VCard>
-        <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
-          <VCardTitle>Upcoming appointments</VCardTitle>
-          <VCardSubtitle>Next 7 days</VCardSubtitle>
-          <br>
-          <h2 class="text-h2 me-3">
-            12 booked
-          </h2>
-          <div class="d-flex align-center">
-            <span class="me-2">Confirmed:</span>
-            <h6 class="text-h6 m-0">12</h6>
-          </div>
-
-          <div class="d-flex align-center">
-            <span class="me-2">Cancelled:</span>
-            <h6 class="text-h6 m-0">0</h6>
-          </div>
-
-          <!-- <template #append>
-            <div class="date-picker-wrapper">
-              <AppDateTimePicker
-                model-value="2022-06-09"
-                prepend-inner-icon="tabler-calendar"
-                placeholder="Select Date"
-                :config="$vuetify.display.smAndDown ? { position: 'auto center' } : { position: 'auto right' }"
-              />
-            </div>
-          </template> -->
-        </VCardItem>
-
-        <VCardText>
-          <ApexChartDataScience />
-        </VCardText>
-      </VCard>
+      <UpcomingAppointmentsWidget />
     </VCol>
 
     <VCol
@@ -123,19 +51,7 @@ const dashboard = getDashboardData('business')
       sm="6"
       lg="6"
     >
-      <SimpleTable 
-        title="Top services"
-        :headers="[
-          { text: 'Service', value: 'service' },
-          { text: 'This Month', value: 'this_month' },
-          { text: 'Last Month', value: 'last_month' }
-        ]"
-        :items="[
-          { service: 'Laundry', this_month: 120, last_month: 95 },
-          { service: 'Dry Cleaning', this_month: 85, last_month: 90 },
-          { service: 'Ironing', this_month: 60, last_month: 55 }
-        ]"
-      />
+      <TopServicesWidget />
     </VCol>
 
     <VCol
@@ -143,19 +59,7 @@ const dashboard = getDashboardData('business')
       sm="6"
       lg="6"
     >
-      <SimpleTable
-        title="Top team member"
-        :headers="[
-          { text: 'Team Member', value: 'member' },
-          { text: 'This Month', value: 'this_month' },
-          { text: 'Last Month', value: 'last_month' }
-        ]"
-        :items="[
-          { member: 'Alice', this_month: 45, last_month: 30 },
-          { member: 'Bob', this_month: 38, last_month: 42 },
-          { member: 'Charlie', this_month: 32, last_month: 28 }
-        ]"
-      />
+      <TopTeamMembersWidget />
     </VCol>
 
 
