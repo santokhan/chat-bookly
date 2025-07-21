@@ -26,6 +26,7 @@ const router = createRouter({
     { path: '/business/orders', component: () => import('@/pages/BusinessOrders.vue'), name: 'BusinessOrders' },
     { path: '/business/analytics', component: () => import('@/pages/BusinessAnalytics.vue'), name: 'BusinessAnalytics' },
     { path: '/business/connect', component: () => import('@/pages/BusinessConnect.vue'), name: 'BusinessConnect' },
+    { path: '/business/chat', component: () => import('@/pages/chat.vue'), name: 'BusinessChat' },
     { path: '/business/appointments/calendar', component: () => import('@/pages/BusinessAppointmentsCalendar.vue'), name: 'BusinessAppointmentsCalendar' },
     { path: '/business/appointments/settings', component: () => import('@/pages/BusinessAppointmentsSettings.vue'), name: 'BusinessAppointmentsSettings' },
     { path: '/business/activity/times', component: () => import('@/pages/BusinessActivityTimes.vue'), name: 'BusinessActivityTimes' },

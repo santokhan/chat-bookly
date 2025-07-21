@@ -10,10 +10,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
+      index: true,
     },
     phone_number: {
       type: String,
+      unique: true,
       required: true,
+      index: true,
     },
     password: {
       type: String,
@@ -21,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['admin', 'staff', 'business'],
+      enum: ['admin', 'staff', 'business', 'user'],
       required: true,
     },
     is_verified: {
@@ -40,14 +43,9 @@ const userSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    business_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Business',
-      default: null,
-    },
   }, {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.model(
