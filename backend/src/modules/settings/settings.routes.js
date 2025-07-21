@@ -12,6 +12,6 @@ const router = express.Router();
 router.post('/business', uploadGalleryImages, setBusinessSettings);
 router.post('/staff', setStaffSettings);
 router.get('/business/:business_id', getBusinessSettings);
-router.get('/staff/:business_id/:staff_id', getStaffSettings);
+router.get('/staff/:staff_id', getStaffSettings);
 
 export default router;

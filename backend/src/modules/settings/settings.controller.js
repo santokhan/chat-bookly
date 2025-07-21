@@ -143,12 +143,10 @@ export async function getStaffSettings(req, res) {
   try {
     const {
       staff_id,
-      business_id,
     } = req.params;
 
     const settings = await Settings.findOne({
       staff_id,
-      business_id,
     });
 
     res.json({

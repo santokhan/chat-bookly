@@ -26,6 +26,16 @@ router.put(
 );
 
 router.get(
+  '/get-all-businesses',
+  userController.getAllBusinesses,
+);
+
+router.get(
+  '/get-all-staffs/:business_id',
+  userController.getAllBusinessStaffs,
+);
+
+router.get(
   '/:id',
   auth,
   userController.getUser,

@@ -47,9 +47,10 @@ export async function getServices(req, res) {
         message: 'business_id is required',
       });
     }
+
     const filter = { business_id };
     if (category_id) filter.category_id = category_id;
-    const services = await Service.find(filter);
+    const services = await Service.find(filter).populate('category_id');
     res.json({
       success: true,
       services,

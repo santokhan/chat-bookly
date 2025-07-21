@@ -1,4 +1,6 @@
+import User from './user.model.js';
 import * as userService from './user.service.js';
+import BusinessStaff from './businessStaff.model.js';
 
 export async function register(req, res) {
   try {
@@ -67,5 +69,58 @@ export async function deleteUser(req, res) {
     }
   } catch (err) {
     res.status(400).json(err);
+  }
+}
+
+export async function getAllBusinesses(req, res) {
+  try {
+    const businesses = await User.find({
+      role: 'business',
+      deleted_at: null,
+    });
+
+    res.status(200).json({
+      success: true,
+      businesses,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+export async function getAllBusinessStaffs(req, res) {
+  try {
+    const {
+      business_id,
+    } = req.params;
+
+    if (!business_id) {
+      return res.status(400).json({ success: false, message: 'business_id is required' });
+    }
+
+    const staffLinks = await BusinessStaff.find({
+      business_id,
+      deleted_at: null,
+    });
+
+    const staffIds = staffLinks.map(link => link.staff_id);
+    const staff = await User.find({
+      _id: { $in: staffIds },
+      role: 'staff',
+      deleted_at: null,
+    });
+
+    res.status(200).json({
+      success: true,
+      staff,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
   }
 }

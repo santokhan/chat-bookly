@@ -30,6 +30,11 @@ export function getVerticalNavItems(role) {
         icon: { icon: 'tabler-smart-home' },
       },
       {
+        title: 'Chat',
+        to: { name: 'BusinessChat' },
+        icon: { icon: 'tabler-message' },
+      },
+      {
         title: 'Appointments',
         icon: { icon: 'tabler-calendar' },
         children: [

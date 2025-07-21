@@ -11,4 +11,4 @@ router.post('/', createCategory);
 router.get('/', getCategories);
 router.post('/add-service', addServiceToCategory);
 
-export default router; 
+export default router;
