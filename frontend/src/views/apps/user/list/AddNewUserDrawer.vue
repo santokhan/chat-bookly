@@ -76,7 +76,7 @@ const handleDrawerModelValueUpdate = val => {
   >
     <!-- 👉 Title -->
     <AppDrawerHeaderSection
-      title="Add New User"
+      title="Add New Client"
       @cancel="closeNavigationDrawer"
     />
 

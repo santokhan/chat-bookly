@@ -84,12 +84,13 @@ export function getVerticalNavItems(role) {
             title: 'List of All Customers',
             to: { name: 'BusinessCustomersList' },
             icon: { icon: 'tabler-list-details' },
-          },
-          {
-            title: 'Customers who Spent the Most',
-            to: { name: 'BusinessTopCustomers' },
-            icon: { icon: 'tabler-crown' },
-          },
+          }
+          // ,
+          // {
+          //   title: 'Customers who Spent the Most',
+          //   to: { name: 'BusinessTopCustomers' },
+          //   icon: { icon: 'tabler-crown' },
+          // },
         ],
       },
       {

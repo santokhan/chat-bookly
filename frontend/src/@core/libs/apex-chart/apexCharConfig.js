@@ -470,10 +470,16 @@ export const getAreaChartSplineConfig = themeColors => {
   }
 }
 export const getColumnChartConfig = themeColors => {
+  // const columnColors = {
+  //   series1: '#826af9',
+  //   series2: '#d2b0ff',
+  //   bg: '#f8d3ff',
+  // }
+
   const columnColors = {
-    series1: '#826af9',
-    series2: '#d2b0ff',
-    bg: '#f8d3ff',
+    series1: '#826af9',     // Confirmed
+    series2: '#EF4444',     // Cancelled (red)
+    bg: '#ffffff',
   }
 
   const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
@@ -489,7 +495,7 @@ export const getColumnChartConfig = themeColors => {
     dataLabels: { enabled: false },
     colors: [columnColors.series1, columnColors.series2],
     legend: {
-      position: 'top',
+      position: 'bottom',
       horizontalAlign: 'left',
       fontSize: '13px',
       labels: { colors: themeSecondaryTextColor },
