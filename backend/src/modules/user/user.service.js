@@ -1,75 +1,88 @@
 import User from './user.model.js';
 import { signToken } from '../../utils/jwt.js';
 import { comparePassword, hashPassword } from '../../utils/hash.js';
-import Business from '../business/business.model.js';
+import BusinessStaff from './businessStaff.model.js';
+
+async function createUserEntry({
+  name,
+  email,
+  phone_number,
+  password,
+  role,
+  business_id,
+}) {
+  const existingUser = await User.findOne({
+    $or: [
+      { email },
+      { phone_number },
+    ],
+  });
+
+  if (existingUser) {
+    return {
+      success: false,
+      message: 'Email or phone number already exists',
+    };
+  }
+
+  const hashedPassword = await hashPassword(password);
+  const user = await User.create({
+    name,
+    email,
+    phone_number,
+    password: hashedPassword,
+    role,
+  });
+
+  if (role === 'staff' && business_id) {
+    await BusinessStaff.create({
+      business_id,
+      staff_id: user._id,
+    });
+  }
+
+  return { user, success: true };
+}
+
+function buildUserData(user) {
+  return {
+    id: user._id,
+    fullName: user.name,
+    username: user.email.split('@')[0],
+    email: user.email,
+    role: user.role,
+  };
+}
 
 export async function registerUser(data) {
   try {
-    const { role, business_id, ...rest } = data;
+    const { role, business_id, ...reqData } = data;
+    let user;
 
-    if (role === 'business') {
-      const business = await Business.create({});
-      const user = await User.create({
-        ...rest,
-        role: 'business',
-        business_id: business._id,
-        password: await hashPassword(data.password),
-      });
-
-      return {
-        user,
-        success: true,
-        message: 'Business registered',
-        token: signToken({
-          id: user._id,
-          role: user.role,
-        }),
-      };
-    } else if (role === 'staff') {
-      if (!business_id) {
-        return {
-          success: false,
-          message: 'business_id required for staff',
-        };
-      }
-
-      const user = await User.create({
-        ...rest,
-        role: 'staff',
+    if (
+      role === 'business'
+      || role === 'admin'
+      || role === 'staff'
+    ) {
+      const result = await createUserEntry({
+        role,
+        ...reqData,
         business_id,
-        password: await hashPassword(data.password),
       });
 
+      if (!result.success) return result;
+      user = result.user;
+    } else {
       return {
-        user,
-        success: true,
-        message: 'Staff registered',
-        token: signToken({
-          id: user._id,
-          role: user.role,
-        }),
-      };
-    } else if (role === 'admin') {
-      const user = await User.create({
-        ...rest,
-        role: 'admin',
-        password: await hashPassword(data.password),
-      });
-
-      return {
-        user,
-        success: true,
-        message: 'Admin registered',
-        token: signToken({
-          id: user._id,
-          role: user.role,
-        }),
+        success: false,
+        message: 'Invalid role',
       };
     }
 
     return {
-      success: false,
-      message: 'Invalid role',
+      success: true,
+      accessToken: signToken({ id: user._id, role: user.role }),
+      userData: buildUserData(user),
     };
   } catch (error) {
     return {
@@ -82,76 +95,29 @@ export async function registerUser(data) {
 
 export async function loginUser(data) {
   try {
+    const { email, password } = data;
+    const user = await User.findOne({ email });
 
-    console.log(data);
-
-    if (data.email === 'admin@demo.com' && data.password === 'admin'){
+    if (!user) {
       return {
-        success: true,
-        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mn0.cat2xMrZLn0FwicdGtZNzL7ifDTAKWB0k1RurSWjdnw",
-        userAbilityRules: [
-          {
-            action: 'manage',
-            subject: 'all',
-          },
-        ],
-        userData: {
-          id: 1,
-          fullName: "John Doe",
-          username: "johndoe",
-          avatar: "/images/avatars/avatar-1.png",
-          email: "john@demo.com",
-          role: "admin",
-        },
-      };
-    } else {
-      return {
-        success: true,
-        accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6M30.PGOfMaZA_T9W05vMj5FYXG5d47soSPJD1WuxeUfw4L4",
-        userAbilityRules: [
-          {
-            action: 'read',
-            subject: 'AclDemo',
-          },
-        ],
-        userData: {
-          id: 1,
-          fullName: "Jane Doe",
-          username: "janedoe",
-          avatar: "/images/avatars/avatar-2.png",
-          email: "jane@demo.com",
-          role: "client",
-        },
+        success: false,
+        message: 'User not found',
       };
     }
-    
-    // const { email, password } = data;
 
-    // const user = await User.findOne({ email });
-    // if (!user) {
-    //   return {
-    //     success: false,
-    //     message: 'User not found',
-    //   };
-    // }
+    const isPasswordCorrect = await comparePassword(password, user.password);
+    if (!isPasswordCorrect) {
+      return {
+        success: false,
+        message: 'Invalid credentials',
+      };
+    }
 
-    // const isPasswordCorrect = await comparePassword(password, user.password);
-    // if (!isPasswordCorrect) {
-    //   return {
-    //     success: false,
-    //     message: 'Invalid credentials',
-    //   };
-    // }
-
-    // return {
-    //   user,
-    //   success: true,
-    //   message: 'Login successful',
-    //   token: signToken({
-    //     id: user._id,
-    //     role: user.role,
-    //   }),
-    // };
+    return {
+      success: true,
+      accessToken: signToken({ id: user._id, role: user.role }),
+      userData: buildUserData(user),
+    };
   } catch (error) {
     return {
       error,
@@ -161,11 +127,10 @@ export async function loginUser(data) {
   }
 }
 
-export async function getUserWithBusiness(id) {
+export async function getUserById(id) {
   try {
     const user = await User
       .findById(id)
-      .populate('business_id')
       .lean();
 
     if (!user) {
@@ -176,9 +141,9 @@ export async function getUserWithBusiness(id) {
     }
 
     return {
-      user,
       success: true,
       message: 'User fetched',
+      userData: buildUserData(user),
     };
   } catch (error) {
     return {
@@ -220,6 +185,7 @@ export async function deleteUser(id) {
       deleted_at: new Date(),
     });
 
+    console.log(user);
     if (!user) {
       return {
         success: false,
