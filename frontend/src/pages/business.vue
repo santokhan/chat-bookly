@@ -21,6 +21,7 @@ import TopServicesWidget from '@/components/dashboard/TopServicesWidget.vue'
 import TopTeamMembersWidget from '@/components/dashboard/TopTeamMembersWidget.vue'
 import UpcomingAppointmentsWidget from '@/components/dashboard/UpcomingAppointmentsWidget.vue'
 import StatisticsWidget from '@/components/dashboard/StatisticsWidget.vue'
+import AppointmentsActivityWidget from '@/components/dashboard/AppointmentsActivityWidget.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -68,7 +69,7 @@ const dashboard = getDashboardData('business')
       sm="6"
       lg="6"
     >
-      <AnalyticsSalesByCountries />
+      <AppointmentsActivityWidget />
     </VCol>
 
     <!-- 👉 Website analytics -->
