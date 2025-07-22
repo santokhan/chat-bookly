@@ -867,8 +867,8 @@ onMounted(() => {
       
       .employee-avatar-calendar {
         flex-shrink: 0;
-        width: 32px !important;
-        height: 32px !important;
+        width: 48px !important;
+        height: 48px !important;
       }
       
       .employee-name-calendar {
