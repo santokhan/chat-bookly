@@ -33,11 +33,24 @@ const calendarOptions = computed(() => ({
   headerToolbar: false, // Remove default header toolbar
   initialView: selectedView.value, // Use the selected view
   views: {
+    timeGridDay: {
+      dayHeaderFormat: { weekday: 'long' },
+      allDaySlot: false
+    },
     timeGridThreeDay: {
       type: 'timeGrid',
       duration: { days: 3 },
       buttonText: '3 day',
+      dayHeaderFormat: { day: 'numeric', weekday: 'long' },
       allDaySlot: false // Remove all-day slot
+    },
+    timeGridWeek: {
+      dayHeaderFormat: { day: 'numeric', weekday: 'long' },
+      allDaySlot: false
+    },
+    dayGridMonth: {
+      dayHeaderFormat: { weekday: 'long' },
+      allDaySlot: false
     }
   },
   allDaySlot: false, // Remove all-day slot globally
@@ -392,16 +405,28 @@ onMounted(() => {
             </VBtn>
             
             <!-- Date range selector -->
-            <div class="d-flex align-center gap-2">
-              <VBtn
+            <div
+              class="date-range-group"
+              style="
+                display: flex;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 20px;
+                overflow: hidden;
+                height: 36px;
+              "
+            >
+                            <VBtn
                 icon="tabler-chevron-left"
                 variant="text"
                 size="small"
+                style="border-radius: 0; border: none; border-right: 1px solid #ccc; min-width: 36px; height: 100%; color: #666;"
                 @click="handlePrevPeriod"
               />
               
               <VBtn
                 variant="outlined"
+                style="border-radius: 0; border: none; height: 100%; color: #666;"
                 @click="openDateRangePicker"
               >
                 {{ formattedDateRange }}
@@ -411,6 +436,7 @@ onMounted(() => {
                 icon="tabler-chevron-right"
                 variant="text"
                 size="small"
+                style="border-radius: 0; border: none; border-left: 1px solid #ccc; min-width: 36px; height: 100%; color: #666;"
                 @click="handleNextPeriod"
               />
             </div>
@@ -474,27 +500,50 @@ onMounted(() => {
           <!-- Right side controls -->
           <div class="d-flex align-center gap-2">
             <!-- Reload button -->
-            <VBtn
-              icon="tabler-refresh"
-              variant="text"
-              size="small"
-              @click="handleReload"
-            />
-            
-            <!-- View selector -->
-            <VSelect
-              v-model="selectedView"
-              :items="viewOptions"
-              density="compact"
-              variant="outlined"
-              hide-details
-              style="width: 120px"
-              @update:model-value="handleViewChange"
-            />
+            <div
+              class="refresh-view-group"
+              style="
+                display: flex;
+                align-items: center;
+                border: 1px solid #ccc;
+                border-radius: 20px;
+                overflow: hidden;
+                height: 36px;
+              "
+            >
+              <!-- Left: Refresh Button -->
+              <VBtn
+                icon="tabler-refresh"
+                variant="plain"
+                density="comfortable"
+                style="border-right: 1px solid #ccc; border-radius: 0; min-width: 36px; height: 100%;"
+                @click="handleReload"
+              />
+
+              <!-- Right: View Selector -->
+              <VSelect
+                v-model="selectedView"
+                :items="viewOptions"
+                density="comfortable"
+                variant="plain"
+                hide-details
+                style="min-width: 50px; height: 100%; border-left: 1px solid #ccc;"
+                menu-icon="tabler-chevron-down"
+                @update:model-value="handleViewChange"
+                class="custom-view-select"
+              >
+                <!-- Custom item slot to align text and arrow -->
+                <template #selection="{ item }">
+                  <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <span style="font-size: 14px;">{{ item?.title || item }}</span>
+                  </div>
+                </template>
+              </VSelect>
+            </div>
             
             <!-- Add button -->
             <VBtn
-              prepend-icon="tabler-plus"
+              append-icon="tabler-chevron-down"
               @click="handleAddEvent"
             >
               Add
@@ -623,15 +672,7 @@ onMounted(() => {
                 v-if="selectedView === 'timeGridWeek' || selectedView === 'timeGridThreeDay'"
                 class="calendar-with-employee-column"
               >
-                <!-- Custom Header that spans both columns -->
-                <div class="calendar-integrated-header">
-                  <div class="employee-header-section">
-                    <!-- Empty space to align with employee column -->
-                  </div>
-                  <div class="calendar-header-section">
-                    <!-- This will be filled by FullCalendar's header -->
-                  </div>
-                </div>
+
                 
                 <!-- Employee Column -->
                 <div class="employee-column-calendar">
@@ -961,6 +1002,28 @@ onMounted(() => {
     }
   }
 }
+
+// FullCalendar header styling - increased height and shadow
+:deep(.fc-col-header) {
+  height: 80px !important;
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e0e0e0 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+:deep(.fc-col-header-cell) {
+  height: 80px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #f8f9fa !important;
+  border-right: 1px solid #e0e0e0 !important;
+  font-weight: 600 !important;
+}
+
+:deep(.fc-col-header-cell:last-child) {
+  border-right: none !important;
+}
 </style>
 
 <style lang="scss" scoped>
@@ -969,6 +1032,88 @@ onMounted(() => {
 
   .v-card {
     overflow: visible;
+  }
+}
+
+// Custom styling for the view selector
+.custom-view-select {
+  :deep(.v-field__input) {
+    padding: 0 12px !important;
+    min-height: 36px !important;
+    align-items: center !important;
+  }
+  
+  :deep(.v-field__append-inner) {
+    padding-right: 8px !important;
+    align-items: center !important;
+    display: flex !important;
+    height: 100% !important;
+  }
+  
+  :deep(.v-field__field) {
+    align-items: center !important;
+  }
+  
+  :deep(.v-select__selection) {
+    margin: 0 !important;
+    align-items: center !important;
+  }
+  
+  :deep(.v-field__append-inner .v-icon) {
+    align-self: center !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+  }
+}
+
+// Calendar header button styling
+.calendar-custom-header {
+  .v-btn {
+    border-radius: 25px !important;
+  }
+  
+  // Add button styling
+  .v-btn:has(.v-btn__append) {
+    background-color: #000000 !important;
+    color: white !important;
+  }
+  
+  // All other buttons except Add button and grouped buttons
+  .v-btn:not(:has(.v-btn__append)):not(.refresh-view-group .v-btn):not(.date-range-group .v-btn) {
+    border: 1px solid #e0e0e0 !important;
+    color: #666 !important;
+  }
+  
+  // Refresh and view selector group styling
+  .refresh-view-group {
+    border-radius: 25px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    
+    .v-btn {
+      border-radius: 0 !important;
+      border: none !important;
+      color: #666 !important;
+    }
+    
+    .custom-view-select {
+      :deep(.v-field) {
+        border-radius: 0 !important;
+        border: none !important;
+      }
+    }
+  }
+  
+  // Date range group styling
+  .date-range-group {
+    border-radius: 25px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    
+    .v-btn {
+      border-radius: 0 !important;
+      color: #666 !important;
+    }
   }
 }
 </style>
