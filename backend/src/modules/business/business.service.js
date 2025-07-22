@@ -38,3 +38,33 @@ export async function setBusinessData({ business_id, business_meta, whatsapp_met
     };
   }
 }
+
+export async function getBusinessData(business_id = null) {
+  try {
+    if (business_id) {
+      const business = await Business.findById(business_id);
+      if (!business) {
+        return {
+          success: false,
+          message: 'Business not found',
+        };
+      }
+      return {
+        success: true,
+        business,
+      };
+    } else {
+      const businesses = await Business.find();
+      return {
+        success: true,
+        businesses,
+      };
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message: 'Get business data failed',
+      error: err.message,
+    };
+  }
+}

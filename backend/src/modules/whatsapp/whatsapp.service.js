@@ -1,11 +1,10 @@
 import axios from 'axios';
 import whatsappHelper from './whatsapp.helper.js';
-import conversationService from '../conversation/conversation.service.js';
 
-const WHATSAPP_CLOUD_API = process.env.WHATSAPP_CLOUD_API;
-const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
-const WHATSAPP_BUSINESS_ID = process.env.WHATSAPP_BUSINESS_ID;
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
+const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+const WHATSAPP_CLOUD_API = process.env.WHATSAPP_CLOUD_API;
+const WHATSAPP_BUSINESS_ID = process.env.WHATSAPP_BUSINESS_ID;
 
 const url = `${WHATSAPP_CLOUD_API}/${WHATSAPP_PHONE_ID}/messages`;
 const header = {
@@ -343,6 +342,150 @@ const whatsappService = {
       return 'ok';
     }
     return;
+  },
+  getAccessToken: async (appId, appSecret, code = null) => {
+    try {
+      // Step 1: Get temp token
+      const tempTokenUrl = `https://graph.facebook.com/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&grant_type=client_credentials`;
+      const tempTokenRes = await axios.get(tempTokenUrl);
+      const tempToken = tempTokenRes.data.access_token;
+  
+      if (!code) {
+        return {
+          success: true,
+          access_token: tempToken,
+        };
+      }
+  
+      // Step 2: Get permanent token
+      const url = `${WHATSAPP_CLOUD_API}/oauth/access_token`;
+      const headers = {
+        Authorization: `Bearer ${tempToken}`,
+        'Content-Type': 'application/json',
+      };
+
+      const requestData = {
+        client_id: appId,
+        client_secret: appSecret,
+        code,
+      };
+
+      const accessTokenRes = await axios.post(
+        url,
+        requestData,
+        { headers },
+      );
+
+      return {
+        success: true,
+        access_token: accessTokenRes.data.access_token,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+  registerPhoneNumber: async (accessToken, phoneNumberId, pin = '123456') => {
+    try {
+      const url = `${WHATSAPP_CLOUD_API}/${phoneNumberId}/register`;
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      };
+      const requestData = {
+        messaging_product: 'whatsapp',
+        pin,
+      };
+      const res = await axios.post(url, requestData, { headers });
+      return {
+        success: true,
+        data: res.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+  subscribeApp: async (accessToken, wabaId, callbackUri, verifyToken) => {
+    try {
+      const url = `${WHATSAPP_CLOUD_API}/${wabaId}/subscribed_apps`;
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      };
+      const requestData = {
+        override_callback_uri: callbackUri,
+        verify_token: verifyToken,
+      };
+      const res = await axios.post(url, requestData, { headers });
+      return {
+        success: true,
+        data: res.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+  getBusinessProfile: async (accessToken, phoneNumberId) => {
+    try {
+      const url = `${WHATSAPP_CLOUD_API}/${phoneNumberId}/whatsapp_business_profile`;
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const res = await axios.get(url, { headers });
+      return {
+        success: true,
+        data: res.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+  getPhoneNumberStatus: async (accessToken, phoneNumberId) => {
+    try {
+      const url = `${WHATSAPP_CLOUD_API}/${phoneNumberId}`;
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const res = await axios.get(url, { headers });
+      return {
+        success: true,
+        data: res.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
+  },
+  getAccountReviewStatus: async (accessToken, wabaId) => {
+    try {
+      const url = `${WHATSAPP_CLOUD_API}/${wabaId}`;
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+      const res = await axios.get(url, { headers });
+      return {
+        success: true,
+        data: res.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.response?.data || error.message,
+      };
+    }
   },
 };
 

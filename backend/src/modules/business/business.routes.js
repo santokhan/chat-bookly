@@ -12,4 +12,11 @@ router.post(
   businessController.setData,
 );
 
+router.get(
+  '/',
+  auth,
+  requireRole('business', 'admin'),
+  businessController.getData,
+);
+
 export default router;

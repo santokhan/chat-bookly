@@ -6,5 +6,7 @@ const router = express.Router();
 // Both GET /auth and POST /webhook point to the same controller for now
 router.get('/webhook', whatsappController.webhookHandler);
 router.post('/webhook', whatsappController.webhookHandler);
+router.post('/business-data', whatsappController.getCompleteBusinessData);
+router.post('/business-settings', whatsappController.getCompleteBusinessData);
 
 export default router;
