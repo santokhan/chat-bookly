@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   WHATSAPP_CLOUD_API: process.env.WHATSAPP_CLOUD_API,
   WHATSAPP_PHONE_ID: process.env.WHATSAPP_PHONE_ID,
   WHATSAPP_BUSINESS_ID: process.env.WHATSAPP_BUSINESS_ID,

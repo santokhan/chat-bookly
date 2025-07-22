@@ -1,6 +1,10 @@
-const service = require('./appointment.service');
-const AppointmentSettings = require('./appointmentSettings.model');
-const { createSettings, updateSettings, bookAppointment } = require('./appointment.validation');
+import service from './appointment.service';
+import AppointmentSettings from './appointmentSettings.model';
+import {
+  createSettings,
+  updateSettings,
+  bookAppointment,
+} from './appointment.validation';
 
 exports.setSettings = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-const Conversation = require('./conversation.model.js');
+import Conversation from './conversation.model.js';
 
 const conversationService = {
   createConversation: async (data) => {
@@ -15,4 +15,4 @@ const conversationService = {
   },
 };
 
-module.exports = conversationService;
+export default conversationService;

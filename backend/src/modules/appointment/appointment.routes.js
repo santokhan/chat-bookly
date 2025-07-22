@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
-const controller = require('./appointment.controller');
-const { requireRole } = require('../../middlewares/role.middleware'); // Adjust path as needed
+import controller from './appointment.controller';
+import { requireRole } from '../../middlewares/role.middleware';
 
 // Appointment Settings
 router.post('/settings', requireRole(['Business', 'Admin']), controller.setSettings);
@@ -15,4 +15,4 @@ router.post('/', requireRole(['Contact', 'Business', 'Admin']), controller.bookA
 router.put('/:appointmentId', requireRole(['Contact', 'Business', 'Admin']), controller.rescheduleAppointment);
 router.get('/:businessId', controller.getAppointments);
 
-module.exports = router;
+export default router;

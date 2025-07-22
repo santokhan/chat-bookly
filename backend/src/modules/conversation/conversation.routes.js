@@ -1,12 +1,12 @@
 import express from 'express';
-const {
+import {
   createConversation,
   updateConversation,
-} = require('./conversation.controller.js');
+} from './conversation.controller.js';
 
 const router = express.Router();
 
 router.post('/', createConversation);
 router.put('/', updateConversation);
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const whatsappService = require('./whatsapp.service.js');
+import whatsappService from './whatsapp.service.js';
 
 const webhookHandler = (req, res) => {
   if (
@@ -28,6 +28,6 @@ const webhookHandler = (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   webhookHandler,
 };

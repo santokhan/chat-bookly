@@ -59,7 +59,7 @@ const appointmentSettingsSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model(
+export default mongoose.model(
   'AppointmentSettings',
   appointmentSettingsSchema,
 );

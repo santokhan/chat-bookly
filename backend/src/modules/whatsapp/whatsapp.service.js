@@ -1,13 +1,11 @@
 import axios from 'axios';
-const whatsappHelper = require('./whatsapp.helper.js');
-const conversationService = require('../conversation/conversation.service.js');
-const {
-  WHATSAPP_CLOUD_API,
-  WHATSAPP_PHONE_ID,
-  WHATSAPP_BUSINESS_ID,
-  WHATSAPP_TOKEN,
-  WHATSAPP_PHONE_NUMBER,
-} = require('./whatsapp.constants.js');
+import whatsappHelper from './whatsapp.helper.js';
+import conversationService from '../conversation/conversation.service.js';
+
+const WHATSAPP_CLOUD_API = process.env.WHATSAPP_CLOUD_API;
+const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
+const WHATSAPP_BUSINESS_ID = process.env.WHATSAPP_BUSINESS_ID;
+const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 
 const url = `${WHATSAPP_CLOUD_API}/${WHATSAPP_PHONE_ID}/messages`;
 const header = {
@@ -348,4 +346,4 @@ const whatsappService = {
   },
 };
 
-module.exports = whatsappService;
+export default whatsappService;

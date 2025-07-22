@@ -271,4 +271,4 @@ const whatsappHelper = {
   },
 };
 
-module.exports = whatsappHelper;
+export default whatsappHelper;

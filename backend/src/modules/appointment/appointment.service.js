@@ -1,6 +1,6 @@
-const Appointment = require('./appointment.model');
-const AppointmentSettings = require('./appointmentSettings.model');
-const moment = require('moment');
+import moment from 'moment';
+import Appointment from './appointment.model';
+import AppointmentSettings from './appointmentSettings.model';
 
 exports.getAvailableDates = async (businessId) => {
   const settings = await AppointmentSettings.findOne({ businessId });

@@ -1,4 +1,4 @@
-const conversationService = require('./conversation.service.js');
+import conversationService from './conversation.service.js';
 
 export const createConversation = async (req, res) => {
   try {
