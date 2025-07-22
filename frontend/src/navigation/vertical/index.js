@@ -79,19 +79,7 @@ export function getVerticalNavItems(role) {
       {
         title: 'Clients',
         icon: { icon: 'tabler-user' },
-        children: [
-          {
-            title: 'List of All Customers',
-            to: { name: 'BusinessCustomersList' },
-            icon: { icon: 'tabler-list-details' },
-          }
-          // ,
-          // {
-          //   title: 'Customers who Spent the Most',
-          //   to: { name: 'BusinessTopCustomers' },
-          //   icon: { icon: 'tabler-crown' },
-          // },
-        ],
+        to: { name: 'BusinessCustomersList' },
       },
       {
         title: 'Marketing',
