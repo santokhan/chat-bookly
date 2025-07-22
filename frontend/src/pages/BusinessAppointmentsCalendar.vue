@@ -27,6 +27,20 @@ const { isLeftSidebarOpen } = useResponsiveLeftSidebar()
 // 👉 useCalendar
 const { refCalendar, calendarOptions: baseCalendarOptions, addEvent, updateEvent, removeEvent, jumpToDate, refetchEvents } = useCalendar(event, isEventHandlerSidebarActive, isLeftSidebarOpen)
 
+// Reload calendar function
+const reloadCalendar = async () => {
+  isLoading.value = true
+  try {
+    await refetchEvents()
+    // Small delay to show loading state
+    await new Promise(resolve => setTimeout(resolve, 500))
+  } catch (error) {
+    console.error('Error reloading calendar:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 // 👉 Custom calendar options with no header toolbar
 const calendarOptions = computed(() => ({
   ...baseCalendarOptions,
@@ -35,22 +49,26 @@ const calendarOptions = computed(() => ({
   views: {
     timeGridDay: {
       dayHeaderFormat: { weekday: 'long' },
-      allDaySlot: false
+      allDaySlot: false,
+      headerToolbar: false
     },
     timeGridThreeDay: {
       type: 'timeGrid',
       duration: { days: 3 },
       buttonText: '3 day',
       dayHeaderFormat: { day: 'numeric', weekday: 'long' },
-      allDaySlot: false // Remove all-day slot
+      allDaySlot: false, // Remove all-day slot
+      headerToolbar: false
     },
     timeGridWeek: {
       dayHeaderFormat: { day: 'numeric', weekday: 'long' },
-      allDaySlot: false
+      allDaySlot: false,
+      headerToolbar: false
     },
     dayGridMonth: {
       dayHeaderFormat: { weekday: 'long' },
-      allDaySlot: false
+      allDaySlot: false,
+      headerToolbar: false
     }
   },
   allDaySlot: false, // Remove all-day slot globally
@@ -67,6 +85,7 @@ const dateRange = ref({
   end: new Date().toISOString().split('T')[0]
 })
 const isDatePickerOpen = ref(false)
+const isLoading = ref(false)
 
 // Date Range Picker Logic
 const tempStartDate = ref(null)
@@ -325,7 +344,7 @@ const updateDateRangeFromCalendar = () => {
 }
 
 const handleReload = () => {
-  refetchEvents()
+  reloadCalendar()
 }
 
 const handleAddEvent = () => {
@@ -513,9 +532,10 @@ onMounted(() => {
             >
               <!-- Left: Refresh Button -->
               <VBtn
-                icon="tabler-refresh"
+                :icon="isLoading ? 'tabler-loader-2' : 'tabler-refresh'"
                 variant="plain"
                 density="comfortable"
+                :loading="isLoading"
                 style="border-right: 1px solid #ccc; border-radius: 0; min-width: 36px; height: 100%;"
                 @click="handleReload"
               />
@@ -690,21 +710,23 @@ onMounted(() => {
                   </div>
                 </div>
                 
-                <!-- Calendar -->
-                <div class="calendar-main">
-                  <FullCalendar
-                    ref="refCalendar"
-                    :options="calendarOptions"
-                  />
-                </div>
+                                 <!-- Calendar -->
+                 <div class="calendar-main">
+                   <FullCalendar
+                     ref="refCalendar"
+                     :options="calendarOptions"
+                     class="custom-calendar-with-tall-headers"
+                   />
+                 </div>
               </div>
               
               <!-- Regular Calendar (for Day and Month views) -->
               <div v-else>
-                <FullCalendar
-                  ref="refCalendar"
-                  :options="calendarOptions"
-                />
+                                 <FullCalendar
+                   ref="refCalendar"
+                   :options="calendarOptions"
+                   class="custom-calendar-with-tall-headers"
+                 />
               </div>
             </VCard>
           </VMain>
@@ -1003,27 +1025,17 @@ onMounted(() => {
   }
 }
 
-// FullCalendar header styling - increased height and shadow
-:deep(.fc-col-header) {
-  height: 80px !important;
-  background-color: #f8f9fa !important;
-  border-bottom: 1px solid #e0e0e0 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}
 
-:deep(.fc-col-header-cell) {
-  height: 80px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background-color: #f8f9fa !important;
-  border-right: 1px solid #e0e0e0 !important;
-  font-weight: 600 !important;
-}
 
-:deep(.fc-col-header-cell:last-child) {
-  border-right: none !important;
-}
+
+
+
+
+
+
+
+
+
 </style>
 
 <style lang="scss" scoped>
