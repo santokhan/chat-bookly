@@ -26,6 +26,15 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
+app.post('/api/v1/check', (req, res) => {
+  console.log('check', req.body);
+
+  res.status(200).json({
+    success: true,
+    message: 'Check',
+  });
+});
+
 // Routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
