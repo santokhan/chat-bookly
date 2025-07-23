@@ -27,7 +27,7 @@ const navItems = computed(() => getVerticalNavItems(authStore.role))
             icon="tabler-menu-2"
           />
         </IconBtn>
-        <NavbarThemeSwitcher />
+        <!-- <NavbarThemeSwitcher /> -->
         <VSpacer />
         <NavBarI18n
           v-if="themeConfig.app.i18n.enable && themeConfig.app.i18n.langConfig?.length"
