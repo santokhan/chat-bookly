@@ -5,7 +5,7 @@ import { onMounted, ref, watch } from 'vue'
 const props = defineProps({
   apiKey: {
     type: String,
-    required: true,
+    default: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   },
   initialAddress: {
     type: String,

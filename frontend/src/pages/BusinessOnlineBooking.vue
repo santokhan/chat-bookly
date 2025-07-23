@@ -38,8 +38,7 @@ const modelValues = ref({
 const showManualDialog = ref(false)
 const mapRef = ref(null)
 
-// Replace with your actual Google Maps API key
-const GOOGLE_MAPS_API_KEY =  'AIzaSyBR7Lp3I2DTvNF0AiXsa6iwmO9pzBowdW0'
+
 
 
 const progress = computed(() => ((step.value + 1) / TOTAL_STEPS) * 100)
@@ -226,21 +225,22 @@ const venueDescriptionMin = 200
       >
         <template v-if="step === 0">
           <!-- Intro Step -->
-          <VRow>
+          <VRow class="intro-row">
             <VCol
               cols="12"
               md="6"
               class="d-flex align-center justify-center"
             >
-              <div>
+              <div class="intro-content">
                 <h1 class="booking-intro-title">
-                  Get published on the <span class="highlight">most popular marketplace</span> to grow your business
+                  Get published on the chatbookly marketplace to grow your business
                 </h1>
               </div>
             </VCol>
             <VCol
               cols="12"
               md="6"
+              class="d-flex align-center"
             >
               <div class="booking-steps">
                 <div class="booking-step">
@@ -359,7 +359,6 @@ const venueDescriptionMin = 200
             <div class="map-section">
               <GoogleMapPicker
                 ref="mapRef"
-                :api-key="GOOGLE_MAPS_API_KEY"
                 :initial-address="modelValues.locationAddress"
                 :initial-lat="modelValues.currentLocation.lat"
                 :initial-lng="modelValues.currentLocation.lng"
@@ -686,12 +685,25 @@ const venueDescriptionMin = 200
   padding: 2.5rem 2rem;
   background: transparent;
   box-shadow: none;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.intro-row {
+  width: 100%;
+  align-items: center;
+}
+
+.intro-content {
+  text-align: center;
 }
 .booking-intro-title {
   font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 0;
+  color: black;
 }
 .highlight {
   color: #8B5CF6;
@@ -700,6 +712,7 @@ const venueDescriptionMin = 200
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  color: black !important;
 }
 .booking-step {
   display: flex;
@@ -720,7 +733,6 @@ const venueDescriptionMin = 200
 }
 .step-desc {
   font-size: 1rem;
-  color: #888;
 }
 .step-icon {
   width: 48px;
@@ -728,11 +740,13 @@ const venueDescriptionMin = 200
 }
 .continue-btn {
   font-weight: 600;
+  color: black;
 }
 .venue-essentials-form {
   max-width: 500px;
   margin: 0 auto;
   padding: 2rem 0;
+  color: black !important;
 }
 .venue-title {
   font-size: 2rem;
@@ -740,7 +754,6 @@ const venueDescriptionMin = 200
   margin-bottom: 0.5rem;
 }
 .venue-desc {
-  color: #888;
   margin-bottom: 2rem;
 }
 .venue-form-fields {
@@ -758,12 +771,10 @@ const venueDescriptionMin = 200
   margin-bottom: 0.2rem;
 }
 .venue-field-desc {
-  color: #888;
   font-size: 0.95rem;
   margin-bottom: 0.2rem;
 }
 .optional {
-  color: #888;
   font-weight: 400;
   font-size: 0.95rem;
 }
@@ -771,7 +782,6 @@ const venueDescriptionMin = 200
   margin-top: 2rem;
 }
 .map-instructions {
-  color: #888;
   font-size: 0.95rem;
   margin-top: 0.5rem;
 }
@@ -880,7 +890,6 @@ const venueDescriptionMin = 200
   border: 1.5px solid #8B5CF6;
 }
 .to-label {
-  color: #888;
   font-size: 1.1rem;
   margin: 0 1rem;
   font-weight: 500;
@@ -902,7 +911,6 @@ const venueDescriptionMin = 200
   padding: 2rem 0;
 }
 .file-requirements {
-  color: #888;
   font-size: 0.95rem;
   margin-top: 0.5rem;
 }
@@ -929,11 +937,9 @@ const venueDescriptionMin = 200
   border: 1.5px solid #8B5CF6;
 }
 .desc-count {
-  color: #888;
   font-size: 1rem;
 }
 .desc-minimum {
-  color: #888;
   font-size: 0.95rem;
   margin-top: 0.5rem;
 }
