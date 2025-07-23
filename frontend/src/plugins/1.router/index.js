@@ -6,8 +6,10 @@ function recursiveLayouts(route) {
   if (route.children) {
     for (let i = 0; i < route.children.length; i++)
       route.children[i] = recursiveLayouts(route.children[i])
+
     return route
   }
+
   return setupLayouts([route])[0]
 }
 
@@ -16,10 +18,12 @@ const router = createRouter({
   scrollBehavior(to) {
     if (to.hash)
       return { el: to.hash, behavior: 'smooth', top: 60 }
+
     return { top: 0 }
   },
   extendRoutes: pages => [
     ...[...pages].map(route => recursiveLayouts(route)),
+
     // Add explicit admin and business pages
     { path: '/admin/users', component: () => import('@/pages/AdminUsers.vue'), name: 'AdminUsers' },
     { path: '/admin/reports', component: () => import('@/pages/AdminReports.vue'), name: 'AdminReports' },
@@ -41,6 +45,7 @@ const router = createRouter({
     { path: '/business/plan/invoices', component: () => import('@/pages/BusinessPlanInvoices.vue'), name: 'BusinessPlanInvoices' },
     { path: '/business/support/chat', component: () => import('@/pages/BusinessSupportChat.vue'), name: 'BusinessSupportChat' },
     { path: '/business/support/whatsapp', component: () => import('@/pages/BusinessSupportWhatsapp.vue'), name: 'BusinessSupportWhatsapp' },
+    { path: '/business/online-booking', component: () => import('@/pages/BusinessOnlineBooking.vue'), name: 'BusinessOnlineBooking' },
   ],
 })
 

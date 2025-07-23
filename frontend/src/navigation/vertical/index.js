@@ -50,7 +50,7 @@ export function getVerticalNavItems(role) {
         icon: { icon: 'tabler-activity' },
         children: [
           {
-            title: 'Opening and Closing Times',
+            title: 'Opening hours',
             to: { name: 'BusinessActivityTimes' },
             icon: { icon: 'tabler-clock' },
           },
@@ -60,12 +60,12 @@ export function getVerticalNavItems(role) {
             icon: { icon: 'tabler-users-group' },
           },
           {
-            title: 'Services Offered',
+            title: 'Services',
             to: { name: 'BusinessServicesOffered' },
             icon: { icon: 'tabler-briefcase' },
           },
           {
-            title: 'Team Availability & Times',
+            title: 'Scheduled shifts',
             to: { name: 'BusinessTeamAvailability' },
             icon: { icon: 'tabler-calendar-time' },
           },
@@ -134,13 +134,19 @@ export function getVerticalNavItems(role) {
             icon: { icon: 'tabler-message' },
           },
           {
-            title: 'Whatsapp by Chatbookly',
+            title: 'WhatsApp by Chatbookly',
             to: { name: 'BusinessSupportWhatsapp' },
             icon: { icon: 'tabler-brand-whatsapp' },
           },
         ],
       },
+      {
+        title: 'Marketplace Settings',
+        icon: { icon: 'tabler-calendar-event' },
+        to: { name: 'BusinessOnlineBooking' },
+      },
     ]
   }
+  
   return []
 }
