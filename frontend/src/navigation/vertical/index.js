@@ -37,18 +37,19 @@ export function getVerticalNavItems(role) {
       {
         title: 'Appointments',
         icon: { icon: 'tabler-calendar' },
-        children: [
-          {
-            title: 'Calendar',
-            to: { name: 'BusinessAppointmentsCalendar' },
-            icon: { icon: 'tabler-calendar-event' },
-          },
-          {
-            title: 'Settings',
-            to: { name: 'BusinessAppointmentsSettings' },
-            icon: { icon: 'tabler-settings' },
-          },
-        ],
+        to: { name: 'BusinessAppointmentsCalendar' }
+        // children: [
+        //   {
+        //     title: 'Calendar',
+        //     to: { name: 'BusinessAppointmentsCalendar' },
+        //     icon: { icon: 'tabler-calendar-event' },
+        //   },
+        //   {
+        //     title: 'Settings',
+        //     to: { name: 'BusinessAppointmentsSettings' },
+        //     icon: { icon: 'tabler-settings' },
+        //   },
+        // ],
       },
       {
         title: 'Business Settings',
