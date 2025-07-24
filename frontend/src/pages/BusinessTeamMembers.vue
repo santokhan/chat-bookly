@@ -156,7 +156,7 @@ const viewMember = member => {
         <div class="d-flex justify-start align-center">
           <!-- Search field with enhanced styling -->
           <div class="search-wrapper w-100 w-sm-auto">
-            <AppTextField
+            <VTextField
               v-model="search"
               placeholder="Search team members"
               prepend-inner-icon="tabler-search"
@@ -205,11 +205,11 @@ const viewMember = member => {
 .search-wrapper {
   .search-input {
     min-inline-size: 100%;
-
+    
     @media (min-width: 600px) {
       min-inline-size: 350px;
     }
-
+    
     :deep(.v-field) {
       background-color: rgb(var(--v-theme-background));
       box-shadow: 0 1px 3px rgba(0, 0, 0, 8%);
@@ -224,15 +224,24 @@ const viewMember = member => {
     :deep(.v-field__prepend-inner) {
       align-items: center;
       padding-inline-start: 16px;
+      display: flex !important;
     }
 
     :deep(.v-field__prepend-inner .v-icon) {
       margin-inline-end: 8px;
       opacity: 0.6;
+      display: block !important;
+      font-size: 20px;
     }
 
     :deep(.v-field--focused) {
       box-shadow: 0 0 0 2px rgb(var(--v-theme-primary), 0.2);
+    }
+
+    // Ensure icon is visible
+    :deep(.v-input__prepend-inner) {
+      display: flex !important;
+      align-items: center;
     }
   }
 }
