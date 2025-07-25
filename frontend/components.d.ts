@@ -369,6 +369,7 @@ declare module 'vue' {
     DemoTooltipVModelSupport: typeof import('./src/views/demos/components/tooltip/DemoTooltipVModelSupport.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     DropZone: typeof import('./src/@core/components/DropZone.vue')['default']
+    EditOpeningHours: typeof import('./src/components/EditOpeningHours.vue')['default']
     EnableOneTimePasswordDialog: typeof import('./src/components/dialogs/EnableOneTimePasswordDialog.vue')['default']
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     GoogleMapPicker: typeof import('./src/components/GoogleMapPicker.vue')['default']
