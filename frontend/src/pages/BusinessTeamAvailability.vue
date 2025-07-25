@@ -1,6 +1,8 @@
 <script setup>
 import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
+import AppDateTimePicker from '@/@core/components/app-form-elements/AppDateTimePicker.vue'
 import { ref, computed } from 'vue'
+import { useWindowSize } from '@vueuse/core'
 
 // Sample data - in real app this would come from an API
 const teamMembers = ref([
@@ -41,9 +43,12 @@ const teamMembers = ref([
   },
 ])
 
-// Week navigation
+// Week navigation and date picker
 const currentWeek = ref('This week')
 const weekRange = ref('21 - 27 Jul, 2025')
+const isDatePickerOpen = ref(false)
+const selectedDate = ref(new Date())
+const dateRange = ref([new Date(), new Date(Date.now() + 6 * 24 * 60 * 60 * 1000)])
 
 // Days of the week with hours
 const daysOfWeek = [
@@ -90,6 +95,25 @@ const getShiftColor = type => {
 const getShiftBgClass = type => {
   return type === 'primary' ? 'bg-primary' : 'bg-warning'
 }
+
+const openDatePicker = () => {
+  isDatePickerOpen.value = true
+}
+
+const updateDateRange = dates => {
+  if (dates && dates.length > 0) {
+    dateRange.value = dates
+
+
+    // Update week range display
+    const startDate = new Date(dates[0])
+    const endDate = dates.length > 1 ? new Date(dates[dates.length - 1]) : startDate
+    const options = { day: 'numeric', month: 'short' }
+
+    weekRange.value = `${startDate.toLocaleDateString('en-GB', options)} - ${endDate.toLocaleDateString('en-GB', options)}, ${startDate.getFullYear()}`
+  }
+  isDatePickerOpen.value = false
+}
 </script>
 
 <template>
@@ -105,7 +129,7 @@ const getShiftBgClass = type => {
             cols="12"
             md="6"
           >
-            <VCardTitle class="text-h5 pa-0">
+            <VCardTitle class="text-h5 pa-0 font-weight-bold">
               Scheduled shifts
             </VCardTitle>
           </VCol>
@@ -161,12 +185,54 @@ const getShiftBgClass = type => {
             cols="auto"
             class="text-center"
           >
-            <div class="text-body-1 font-weight-medium">
-              {{ currentWeek }}
-            </div>
-            <div class="text-body-2 text-medium-emphasis">
-              {{ weekRange }}
-            </div>
+            <VBtn
+              variant="text"
+              class="d-flex flex-column align-center pa-2"
+              style="height: auto;"
+              @click="openDatePicker"
+            >
+              <div class="text-body-1 font-weight-medium">
+                {{ currentWeek }}
+              </div>
+              <div class="text-body-2 text-medium-emphasis">
+                {{ weekRange }}
+              </div>
+            </VBtn>
+            
+            <!-- Date Picker Dialog -->
+            <VDialog
+              v-model="isDatePickerOpen"
+              max-width="400px"
+            >
+              <VCard>
+                <VCardTitle class="text-h6 font-weight-bold">
+                  Select Date Range
+                </VCardTitle>
+                <VCardText>
+                  <AppDateTimePicker
+                    v-model="dateRange"
+                    range
+                    label="Select week or date range"
+                    @update:model-value="updateDateRange"
+                  />
+                </VCardText>
+                <VCardActions>
+                  <VSpacer />
+                  <VBtn
+                    variant="text"
+                    @click="isDatePickerOpen = false"
+                  >
+                    Cancel
+                  </VBtn>
+                  <VBtn
+                    color="primary"
+                    @click="updateDateRange(dateRange)"
+                  >
+                    Apply
+                  </VBtn>
+                </VCardActions>
+              </VCard>
+            </VDialog>
           </VCol>
           <VCol cols="auto">
             <VBtn
@@ -199,7 +265,7 @@ const getShiftBgClass = type => {
               cols="2"
               class="pe-2"
             >
-              <div class="text-body-2 font-weight-medium text-medium-emphasis pa-2">
+              <div class="text-body-2 font-weight-bold text-medium-emphasis pa-2">
                 Team member 
                 <VBtn
                   variant="text"
@@ -217,7 +283,7 @@ const getShiftBgClass = type => {
               class="text-center px-1"
             >
               <div class="day-header pa-2">
-                <div class="text-body-2 font-weight-medium">
+                <div class="text-body-2 font-weight-bold">
                   {{ day.day }}, {{ day.date }}
                 </div>
                 <div class="text-caption text-medium-emphasis">
@@ -252,7 +318,7 @@ const getShiftBgClass = type => {
                   >{{ member.initials }}</span>
                 </VAvatar>
                 <div class="flex-grow-1 me-2">
-                  <div class="text-body-2 font-weight-medium text-truncate">
+                  <div class="text-body-2 font-weight-bold text-truncate">
                     {{ member.name }}
                   </div>
                   <div class="text-caption text-medium-emphasis">
@@ -330,7 +396,7 @@ const getShiftBgClass = type => {
                         >{{ member.initials }}</span>
                       </VAvatar>
                       <div>
-                        <div class="text-body-2 font-weight-medium">
+                        <div class="text-body-2 font-weight-bold">
                           {{ member.name }}
                         </div>
                         <div class="text-caption text-medium-emphasis">
@@ -350,7 +416,7 @@ const getShiftBgClass = type => {
                       >
                         <div class="d-flex justify-space-between align-center mb-2">
                           <div>
-                            <div class="text-body-2 font-weight-medium">
+                            <div class="text-body-2 font-weight-bold">
                               {{ day.day }}, {{ day.date }}
                             </div>
                             <div class="text-caption text-medium-emphasis">
@@ -382,40 +448,17 @@ const getShiftBgClass = type => {
           </VRow>
         </VContainer>
       </VCardText>
-
-      <!-- Footer Info -->
-      <VCardText class="pt-0">
-        <VAlert
-          type="info"
-          variant="tonal"
-          class="mb-0"
-        >
-          <div class="d-flex align-center">
-            <VIcon
-              icon="tabler-info-circle"
-              class="me-2"
-            />
-            <span class="text-body-2">
-              The team roster shows your availability for bookings and is not linked to your business opening hours. To set your opening hours, 
-              <a
-                href="#"
-                class="text-primary text-decoration-none"
-              >click here.</a>
-            </span>
-          </div>
-        </VAlert>
-      </VCardText>
     </VCard>
   </BusinessLayout>
 </template>
 
 <style scoped>
 .schedule-header {
-  border-bottom: 1px solid rgb(var(--v-border-color));
+  border-bottom: 1px solid #e7e7e7;
 }
 
 .schedule-row {
-  border-bottom: 1px solid rgba(var(--v-border-color), 0.5);
+  border-bottom: 1px solid #f5f5f5;
   min-height: 80px;
 }
 
@@ -428,40 +471,73 @@ const getShiftBgClass = type => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border-right: 1px solid #f5f5f5;
 }
 
 .day-column {
   min-height: 80px;
-  background-color: rgba(var(--v-theme-surface), 0.5);
+  background-color: rgba(var(--v-theme-surface), 0.3);
   border-radius: 4px;
   position: relative;
+  border-right: 1px solid #f5f5f5;
 }
 
 .shift-block {
-  padding: 4px 8px;
+  padding: 6px 8px;
   border-radius: 4px;
   text-align: center;
   position: relative;
-  min-height: 28px;
+  min-height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 500;
 }
 
+/* Purple/Blue color for marco Agency (primary type) */
 .bg-primary {
-  background-color: rgb(var(--v-theme-primary)) !important;
+  background-color: #c8c4f7 !important;
+  color: #5a52d5 !important;
 }
 
+/* Yellow/Orange color for Wendy Smith (secondary type) */
 .bg-warning {
-  background-color: rgb(var(--v-theme-warning)) !important;
+  background-color: #fff4d6 !important;
+  color: #b8860b !important;
 }
 
 .text-on-primary {
-  color: rgb(var(--v-theme-on-primary)) !important;
+  color: #5a52d5 !important;
 }
 
 .text-on-warning {
-  color: rgb(var(--v-theme-on-warning)) !important;
+  color: #b8860b !important;
+}
+
+/* Force all text in the schedule UI to be black */
+.schedule-header,
+.schedule-header *,
+.schedule-row,
+.schedule-row *,
+.day-header,
+.day-header *,
+.day-column,
+.day-column *,
+.shift-block,
+.shift-block *,
+.text-body-2,
+.text-caption,
+.text-body-1,
+.text-h5,
+.text-h6,
+.font-weight-bold,
+.font-weight-medium {
+  color: #000 !important;
+}
+
+.bg-primary,
+.bg-warning {
+  color: #000 !important;
 }
 
 /* Responsive adjustments */
