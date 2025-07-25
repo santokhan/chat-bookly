@@ -265,9 +265,10 @@ const cancelEdit = () => {
                   variant="text"
                   color="error"
                   size="small"
+                  class="remove-btn"
                   @click="removeTimeSlot(dayIndex, slotIndex)"
                 >
-                  <VIcon>mdi-close</VIcon>
+                  <VIcon icon="tabler-x" />
                 </VBtn>
                 <VBtn
                   v-if="slotIndex === day.timeSlots.length - 1"
@@ -275,9 +276,10 @@ const cancelEdit = () => {
                   variant="text"
                   color="primary"
                   size="small"
+                  class="add-btn"
                   @click="addTimeSlot(dayIndex)"
                 >
-                  <VIcon>mdi-plus</VIcon>
+                  <VIcon icon="tabler-plus" />
                 </VBtn>
               </div>
             </div>
@@ -418,6 +420,18 @@ const cancelEdit = () => {
 .copy-card {
   background-color: rgb(var(--v-theme-primary), 0.05);
   border-color: rgb(var(--v-theme-primary), 0.2);
+}
+
+.remove-btn {
+  min-width: 32px;
+  height: 32px;
+  margin-left: 8px;
+}
+
+.add-btn {
+  min-width: 32px;
+  height: 32px;
+  margin-left: 8px;
 }
 
 /* Responsive design */
