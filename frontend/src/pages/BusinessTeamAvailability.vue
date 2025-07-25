@@ -140,7 +140,7 @@ const updateDateRange = dates => {
           >
             <VBtn
               variant="outlined"
-              color="default"
+              color="primary"
               class="me-2"
               @click="openOptions"
             >
@@ -176,6 +176,7 @@ const updateDateRange = dates => {
               icon
               variant="text"
               size="small"
+              color="primary"
               @click="previousWeek"
             >
               <VIcon icon="tabler-chevron-left" />
@@ -187,6 +188,7 @@ const updateDateRange = dates => {
           >
             <VBtn
               variant="text"
+              color="primary"
               class="d-flex flex-column align-center pa-2"
               style="height: auto;"
               @click="openDatePicker"
@@ -220,6 +222,7 @@ const updateDateRange = dates => {
                   <VSpacer />
                   <VBtn
                     variant="text"
+                    color="primary"
                     @click="isDatePickerOpen = false"
                   >
                     Cancel
@@ -239,6 +242,7 @@ const updateDateRange = dates => {
               icon
               variant="text"
               size="small"
+              color="primary"
               @click="nextWeek"
             >
               <VIcon icon="tabler-chevron-right" />
@@ -271,7 +275,6 @@ const updateDateRange = dates => {
                   variant="text"
                   size="x-small"
                   color="primary"
-                  class="ms-1"
                 >
                   Change
                 </VBtn>
@@ -329,6 +332,7 @@ const updateDateRange = dates => {
                   icon
                   variant="text"
                   size="x-small"
+                  color="primary"
                   @click="editTeamMember(member)"
                 >
                   <VIcon
@@ -494,17 +498,6 @@ const updateDateRange = dates => {
   font-weight: 500;
 }
 
-/* Purple/Blue color for marco Agency (primary type) */
-.bg-primary {
-  background-color: #c8c4f7 !important;
-  color: #5a52d5 !important;
-}
-
-/* Yellow/Orange color for Wendy Smith (secondary type) */
-.bg-warning {
-  background-color: #fff4d6 !important;
-  color: #b8860b !important;
-}
 
 .text-on-primary {
   color: #5a52d5 !important;
@@ -514,31 +507,12 @@ const updateDateRange = dates => {
   color: #b8860b !important;
 }
 
-/* Force all text in the schedule UI to be black */
-.schedule-header,
-.schedule-header *,
-.schedule-row,
-.schedule-row *,
-.day-header,
-.day-header *,
-.day-column,
-.day-column *,
-.shift-block,
-.shift-block *,
-.text-body-2,
-.text-caption,
-.text-body-1,
-.text-h5,
-.text-h6,
-.font-weight-bold,
-.font-weight-medium {
-  color: #000 !important;
-}
 
-.bg-primary,
+
+/* .bg-primary,
 .bg-warning {
   color: #000 !important;
-}
+} */
 
 /* Responsive adjustments */
 @media (max-width: 959px) {
