@@ -1,6 +1,6 @@
 <script setup>
 import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // Opening hours data
 const openingHours = ref([
@@ -12,6 +12,24 @@ const openingHours = ref([
   { day: 'Saturday', open: '10:00', close: '17:00' },
   { day: 'Sunday', open: '10:00', close: '17:00' },
 ])
+
+// Generate time options in 24-hour format at 5-minute intervals
+const timeOptions = computed(() => {
+  const options = []
+
+  for (let hour = 0; hour < 24; hour++) {
+    for (let minute = 0; minute < 60; minute += 5) {
+      const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+
+      options.push({
+        title: timeString,
+        value: timeString,
+      })
+    }
+  }
+
+  return options
+})
 
 // Edit mode data
 const editMode = ref(false)
@@ -240,24 +258,28 @@ const cancelEdit = () => {
                 :key="slotIndex"
                 class="time-slot-row mb-2"
               >
-                <VTextField
+                <VSelect
                   v-model="slot.start"
-                  type="time"
+                  :items="timeOptions"
                   variant="outlined"
                   density="compact"
                   hide-details
                   class="time-input me-2"
                   style="width: 120px"
+                  item-title="title"
+                  item-value="value"
                 />
                 <span class="time-separator-text mx-2">-</span>
-                <VTextField
+                <VSelect
                   v-model="slot.end"
-                  type="time"
+                  :items="timeOptions"
                   variant="outlined"
                   density="compact"
                   hide-details
                   class="time-input me-2"
                   style="width: 120px"
+                  item-title="title"
+                  item-value="value"
                 />
                 <VBtn
                   v-if="day.timeSlots.length > 1"
