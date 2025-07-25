@@ -120,6 +120,11 @@ const updateDateRange = dates => {
 const getAvatar = member => {
   return member.avatar || DEFAULT_AVATAR
 }
+
+const addShift = (member, dayKey) => {
+  // TODO: Implement add shift logic
+  console.log('Add shift for', member.name, 'on', dayKey)
+}
 </script>
 
 <template>
@@ -358,7 +363,7 @@ const getAvatar = member => {
               :key="dayKey"
               class="px-1"
             >
-              <div class="day-column pa-1 h-100">
+              <div class="day-column pa-1 h-100 position-relative">
                 <div
                   v-for="(shift, shiftIndex) in member.shifts[dayKey]"
                   :key="shiftIndex"
@@ -372,6 +377,20 @@ const getAvatar = member => {
                     {{ shift.start }} - {{ shift.end }}
                   </div>
                 </div>
+                <!-- Add Shift Button (as shift block, only on hover) -->
+                <VBtn
+                  class="add-shift-block-btn mt-1"
+                  icon
+                  size="small"
+                  :class="getShiftBgClass(member.shifts[dayKey][0]?.type || 'primary')"
+                  aria-label="Add shift"
+                  @click="addShift(member, dayKey)"
+                >
+                  <VIcon
+                    icon="tabler-plus"
+                    color="#fff"
+                  />
+                </VBtn>
               </div>
             </VCol>
           </VRow>
@@ -496,6 +515,25 @@ const getAvatar = member => {
   border-radius: 4px;
   position: relative;
   border-right: 1px solid #f5f5f5;
+  /* Ensure relative positioning for absolute children */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Add Shift Button: hidden by default, shown on hover */
+.add-shift-btn {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.day-column:hover .add-shift-btn,
+.day-column:focus-within .add-shift-btn {
+  display: flex;
 }
 
 .shift-block {
@@ -572,5 +610,74 @@ const getAvatar = member => {
 /* Team member names in black */
 .schedule-row .pe-2 .text-body-2.font-weight-bold {
   color: #000 !important;
+}
+
+.add-shift-btn-colored {
+  display: none;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+  background: #fff;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  margin-top: 4px;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px 0 rgba(44, 39, 56, 0.08);
+}
+.day-column:hover .add-shift-btn-colored,
+.day-column:focus-within .add-shift-btn-colored {
+  display: flex;
+}
+.add-shift-btn-colored.primary {
+  border-color: #7367f0 !important;
+}
+.add-shift-btn-colored.warning {
+  border-color: #ffb400 !important;
+}
+.add-shift-btn-colored.primary:hover,
+.add-shift-btn-colored.primary:focus {
+  background: rgba(115, 103, 240, 0.08);
+}
+.add-shift-btn-colored.warning:hover,
+.add-shift-btn-colored.warning:focus {
+  background: rgba(255, 180, 0, 0.08);
+}
+.add-shift-block-btn {
+  display: none;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  width: auto !important;
+  height: 32px !important;
+  box-shadow: none;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 4px;
+}
+.day-column:hover .add-shift-block-btn,
+.day-column:focus-within .add-shift-block-btn {
+  display: flex;
+}
+.add-shift-block-btn.bg-primary {
+  background-color: #c8c4f7 !important;
+}
+.add-shift-block-btn.bg-warning {
+  background-color: #fff4d6 !important;
+}
+.add-shift-block-btn.bg-primary:hover,
+.add-shift-block-btn.bg-primary:focus {
+  background-color: #b3aaf0 !important;
+}
+.add-shift-block-btn.bg-warning:hover,
+.add-shift-block-btn.bg-warning:focus {
+  background-color: #ffe9b3 !important;
 }
 </style>
