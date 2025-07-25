@@ -177,89 +177,74 @@ const addShift = (member, dayKey) => {
 
       <!-- Week Navigation -->
       <VCardText class="pb-0">
-        <VRow
-          align="center"
-          justify="center"
-          class="mb-4"
-        >
-          <VCol cols="auto">
-            <VBtn
-              icon
-              variant="text"
-              size="small"
-              color="primary"
-              @click="previousWeek"
-            >
-              <VIcon icon="tabler-chevron-left" />
-            </VBtn>
-          </VCol>
-          <VCol
-            cols="auto"
-            class="text-center"
+        <div class="week-segmented mb-4">
+          <VBtn
+            icon
+            variant="text"
+            size="small"
+            color="primary"
+            class="week-segment week-arrow left"
+            aria-label="Previous week"
+            @click="previousWeek"
           >
-            <VBtn
-              variant="text"
-              color="primary"
-              class="d-flex flex-column align-center pa-2"
-              style="height: auto;"
-              @click="openDatePicker"
-            >
-              <div class="text-body-1 font-weight-medium">
-                {{ currentWeek }}
-              </div>
-              <div class="text-body-2 text-medium-emphasis">
-                {{ weekRange }}
-              </div>
-            </VBtn>
-            
-            <!-- Date Picker Dialog -->
-            <VDialog
-              v-model="isDatePickerOpen"
-              max-width="400px"
-            >
-              <VCard>
-                <VCardTitle class="text-h6 font-weight-bold">
-                  Select Date Range
-                </VCardTitle>
-                <VCardText>
-                  <AppDateTimePicker
-                    v-model="dateRange"
-                    range
-                    label="Select week or date range"
-                    @update:model-value="updateDateRange"
-                  />
-                </VCardText>
-                <VCardActions>
-                  <VSpacer />
-                  <VBtn
-                    variant="text"
-                    color="primary"
-                    @click="isDatePickerOpen = false"
-                  >
-                    Cancel
-                  </VBtn>
-                  <VBtn
-                    color="primary"
-                    @click="updateDateRange(dateRange)"
-                  >
-                    Apply
-                  </VBtn>
-                </VCardActions>
-              </VCard>
-            </VDialog>
-          </VCol>
-          <VCol cols="auto">
-            <VBtn
-              icon
-              variant="text"
-              size="small"
-              color="primary"
-              @click="nextWeek"
-            >
-              <VIcon icon="tabler-chevron-right" />
-            </VBtn>
-          </VCol>
-        </VRow>
+            <VIcon icon="tabler-chevron-left" />
+          </VBtn>
+          <div class="week-segment week-selected">
+            This week
+          </div>
+          <div
+            class="week-segment week-range-segment"
+            @click="openDatePicker"
+          >
+            {{ weekRange }}
+          </div>
+          <VBtn
+            icon
+            variant="text"
+            size="small"
+            color="primary"
+            class="week-segment week-arrow right"
+            aria-label="Next week"
+            @click="nextWeek"
+          >
+            <VIcon icon="tabler-chevron-right" />
+          </VBtn>
+        </div>
+        <!-- Date Picker Dialog -->
+        <VDialog
+          v-model="isDatePickerOpen"
+          max-width="400px"
+        >
+          <VCard>
+            <VCardTitle class="text-h6 font-weight-bold">
+              Select Date Range
+            </VCardTitle>
+            <VCardText>
+              <AppDateTimePicker
+                v-model="dateRange"
+                range
+                label="Select week or date range"
+                @update:model-value="updateDateRange"
+              />
+            </VCardText>
+            <VCardActions>
+              <VSpacer />
+              <VBtn
+                variant="text"
+                color="primary"
+                @click="isDatePickerOpen = false"
+              >
+                Cancel
+              </VBtn>
+              <VBtn
+                color="primary"
+                @click="updateDateRange(dateRange)"
+              >
+                Apply
+              </VBtn>
+            </VCardActions>
+          </VCard>
+        </VDialog>
       </VCardText>
 
       <!-- Desktop Schedule Grid -->
@@ -679,5 +664,67 @@ const addShift = (member, dayKey) => {
 .add-shift-block-btn.bg-warning:hover,
 .add-shift-block-btn.bg-warning:focus {
   background-color: #ffe9b3 !important;
+}
+.week-segmented {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid #e7e7e7;
+  border-radius: 32px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 1px 2px 0 rgba(44, 39, 56, 0.03);
+  overflow: hidden;
+}
+.week-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+  padding: 0 20px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-right: 1.5px solid #e7e7e7;
+  cursor: pointer;
+  user-select: none;
+}
+.week-segment:last-child {
+  border-right: none;
+}
+.week-selected {
+  background: #f8f8fb;
+  color: #222;
+  font-weight: 600;
+  border-right: 1.5px solid #e7e7e7;
+}
+.week-range-segment {
+  color: #888;
+  font-weight: 500;
+  background: #fff;
+  transition: background 0.2s;
+}
+.week-range-segment:hover {
+  background: #f8f8fb;
+}
+.week-arrow {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 0;
+  padding: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.week-arrow.left {
+  border-top-left-radius: 32px !important;
+  border-bottom-left-radius: 32px !important;
+}
+.week-arrow.right {
+  border-top-right-radius: 32px !important;
+  border-bottom-right-radius: 32px !important;
 }
 </style>
