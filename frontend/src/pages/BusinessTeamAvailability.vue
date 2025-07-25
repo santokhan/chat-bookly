@@ -2,7 +2,7 @@
 import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
 import AppDateTimePicker from '@/@core/components/app-form-elements/AppDateTimePicker.vue'
 import { ref, computed } from 'vue'
-import { useWindowSize } from '@vueuse/core'
+import { useDisplay } from 'vuetify'
 
 // Sample data - in real app this would come from an API
 const DEFAULT_AVATAR = '/images/avatars/avatar-1.png'
@@ -65,9 +65,9 @@ const daysOfWeek = [
 
 const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
-// Mobile view state
-const { width: windowWidth } = useWindowSize()
-const isMobile = computed(() => windowWidth.value < 960)
+// Mobile view state using Vuetify display service
+const display = useDisplay()
+const isMobile = computed(() => display.smAndDown.value)
 
 // Methods
 const editTeamMember = member => {
@@ -114,7 +114,6 @@ const updateDateRange = dates => {
 
     weekRange.value = `${startDate.toLocaleDateString('en-GB', options)} - ${endDate.toLocaleDateString('en-GB', options)}, ${startDate.getFullYear()}`
   }
-  isDatePickerOpen.value = false
 }
 
 const getAvatar = member => {
@@ -135,19 +134,21 @@ const addShift = (member, dayKey) => {
         <VRow
           align="center"
           no-gutters
+          class="flex-wrap"
         >
           <VCol
             cols="12"
             md="6"
+            class="mb-2 mb-md-0"
           >
-            <VCardTitle class="text-h5 pa-0 font-weight-bold">
+            <VCardTitle class="text-h5 pa-0 font-weight-bold text-center text-md-start">
               Scheduled shifts
             </VCardTitle>
           </VCol>
           <VCol
             cols="12"
             md="6"
-            class="text-end"
+            class="d-flex justify-center justify-md-end gap-2 mb-2 mb-md-0"
           >
             <VBtn
               variant="outlined"
@@ -172,44 +173,51 @@ const addShift = (member, dayKey) => {
               />
             </VBtn>
           </VCol>
+          <VCol
+            cols="12"
+            class="d-flex justify-center mt-2"
+          >
+            <div class="w-100 d-flex justify-center">
+              <div class="week-segmented mb-4">
+                <VBtn
+                  icon
+                  variant="text"
+                  size="small"
+                  color="primary"
+                  class="week-segment week-arrow left"
+                  aria-label="Previous week"
+                  @click="previousWeek"
+                >
+                  <VIcon icon="tabler-chevron-left" />
+                </VBtn>
+                <div class="week-segment week-selected">
+                  This week
+                </div>
+                <div
+                  class="week-segment week-range-segment"
+                  @click="openDatePicker"
+                >
+                  {{ weekRange }}
+                </div>
+                <VBtn
+                  icon
+                  variant="text"
+                  size="small"
+                  color="primary"
+                  class="week-segment week-arrow right"
+                  aria-label="Next week"
+                  @click="nextWeek"
+                >
+                  <VIcon icon="tabler-chevron-right" />
+                </VBtn>
+              </div>
+            </div>
+          </VCol>
         </VRow>
       </VCardItem>
 
       <!-- Week Navigation -->
       <VCardText class="pb-0">
-        <div class="week-segmented mb-4">
-          <VBtn
-            icon
-            variant="text"
-            size="small"
-            color="primary"
-            class="week-segment week-arrow left"
-            aria-label="Previous week"
-            @click="previousWeek"
-          >
-            <VIcon icon="tabler-chevron-left" />
-          </VBtn>
-          <div class="week-segment week-selected">
-            This week
-          </div>
-          <div
-            class="week-segment week-range-segment"
-            @click="openDatePicker"
-          >
-            {{ weekRange }}
-          </div>
-          <VBtn
-            icon
-            variant="text"
-            size="small"
-            color="primary"
-            class="week-segment week-arrow right"
-            aria-label="Next week"
-            @click="nextWeek"
-          >
-            <VIcon icon="tabler-chevron-right" />
-          </VBtn>
-        </div>
         <!-- Date Picker Dialog -->
         <VDialog
           v-model="isDatePickerOpen"
@@ -224,7 +232,6 @@ const addShift = (member, dayKey) => {
                 v-model="dateRange"
                 range
                 label="Select week or date range"
-                @update:model-value="updateDateRange"
               />
             </VCardText>
             <VCardActions>
@@ -238,7 +245,7 @@ const addShift = (member, dayKey) => {
               </VBtn>
               <VBtn
                 color="primary"
-                @click="updateDateRange(dateRange)"
+                @click="() => { updateDateRange(dateRange); isDatePickerOpen.value = false }"
               >
                 Apply
               </VBtn>
@@ -726,5 +733,27 @@ const addShift = (member, dayKey) => {
 .week-arrow.right {
   border-top-right-radius: 32px !important;
   border-bottom-right-radius: 32px !important;
+}
+@media (max-width: 960px) {
+  .week-segmented {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .week-segment {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 0.98rem;
+  }
+  .week-arrow {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    flex: 0 0 40px;
+  }
+  .text-center {
+    text-align: center !important;
+  }
 }
 </style>
