@@ -5,11 +5,13 @@ import { ref, computed } from 'vue'
 import { useWindowSize } from '@vueuse/core'
 
 // Sample data - in real app this would come from an API
+const DEFAULT_AVATAR = '/images/avatars/avatar-1.png'
+
 const teamMembers = ref([
   {
     id: 1,
     name: 'marco Agency',
-    avatar: null,
+    avatar: DEFAULT_AVATAR,
     initials: 'MA',
     role: '52h',
     shifts: {
@@ -113,6 +115,10 @@ const updateDateRange = dates => {
     weekRange.value = `${startDate.toLocaleDateString('en-GB', options)} - ${endDate.toLocaleDateString('en-GB', options)}, ${startDate.getFullYear()}`
   }
   isDatePickerOpen.value = false
+}
+
+const getAvatar = member => {
+  return member.avatar || DEFAULT_AVATAR
 }
 </script>
 
@@ -312,11 +318,14 @@ const updateDateRange = dates => {
                 <VAvatar
                   size="32"
                   class="me-3"
-                  :color="!member.avatar ? 'primary' : undefined"
-                  :image="member.avatar"
+                  :color="!getAvatar(member) ? 'primary' : undefined"
                 >
+                  <VImg
+                    v-if="getAvatar(member)"
+                    :src="getAvatar(member)"
+                  />
                   <span
-                    v-if="!member.avatar"
+                    v-else
                     class="text-caption"
                   >{{ member.initials }}</span>
                 </VAvatar>
@@ -391,11 +400,14 @@ const updateDateRange = dates => {
                       <VAvatar
                         size="32"
                         class="me-3"
-                        :color="!member.avatar ? 'primary' : undefined"
-                        :image="member.avatar"
+                        :color="!getAvatar(member) ? 'primary' : undefined"
                       >
+                        <VImg
+                          v-if="getAvatar(member)"
+                          :src="getAvatar(member)"
+                        />
                         <span
-                          v-if="!member.avatar"
+                          v-else
                           class="text-caption"
                         >{{ member.initials }}</span>
                       </VAvatar>
