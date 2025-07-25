@@ -263,7 +263,7 @@ const updateDateRange = dates => {
           <!-- Header Row -->
           <VRow
             no-gutters
-            class="schedule-header mb-3"
+            class="schedule-header mb-3 text-black"
           >
             <VCol
               cols="2"
@@ -507,6 +507,11 @@ const updateDateRange = dates => {
   color: #b8860b !important;
 }
 
+/* Time schedule text color white */
+.shift-block,
+.shift-block .text-caption {
+  color: #fff !important;
+}
 
 
 /* .bg-primary,
@@ -544,5 +549,16 @@ const updateDateRange = dates => {
 
 .day-column::-webkit-scrollbar-thumb:hover {
   background: rgba(var(--v-theme-primary), 0.5);
+}
+
+/* Table header names in black */
+.schedule-header .text-body-2,
+.schedule-header .day-header .text-body-2 {
+  color: #000 !important;
+}
+
+/* Team member names in black */
+.schedule-row .pe-2 .text-body-2.font-weight-bold {
+  color: #000 !important;
 }
 </style>
