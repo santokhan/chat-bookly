@@ -144,11 +144,8 @@ const cancelEdit = () => {
 
 <template>
   <BusinessLayout>
-    <!-- View Mode -->
-    <VCard
-      v-if="!editMode"
-      class="opening-hours-container"
-    >
+    <!-- View Mode - Always Visible -->
+    <VCard class="opening-hours-container mb-6">
       <VCardText class="pa-6">
         <!-- Main Heading -->
         <div class="d-flex justify-space-between align-center mb-3">
@@ -206,9 +203,9 @@ const cancelEdit = () => {
       </VCardText>
     </VCard>
 
-    <!-- Edit Mode -->
+    <!-- Edit Mode - Shows below when active -->
     <VCard
-      v-else
+      v-if="editMode"
       class="edit-opening-hours-container"
     >
       <VCardText class="pa-6">
