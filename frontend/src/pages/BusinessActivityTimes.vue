@@ -43,8 +43,8 @@ const handleCancel = () => {
     <VCard class="opening-hours-container mb-6">
       <VCardText class="pa-6">
         <!-- Main Heading -->
-        <div class="d-flex justify-space-between align-center mb-3">
-          <h2 class="text-h4 font-weight-bold">
+        <div class="d-flex justify-space-between align-center mb-4">
+          <h2 class="text-h3 font-weight-bold">
             Opening hours
           </h2>
           <VBtn
@@ -57,7 +57,7 @@ const handleCancel = () => {
         </div>
         
         <!-- Description Text -->
-        <p class="text-body-1 text-medium-emphasis mb-6">
+        <p class="text-lg text-medium-emphasis mb-6">
           Opening hours for these locations are default working hours for your team and will be visible to your clients. 
           You can amend business closed periods for events like Bank Holidays in 
           <a 
@@ -84,11 +84,32 @@ const handleCancel = () => {
   </BusinessLayout>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .opening-hours-container {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Increase button font size
+:deep(.v-btn) {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// Responsive font sizes
+@media (max-width: 768px) {
+  :deep(.text-h3) {
+    font-size: 1.75rem !important;
+  }
+  
+  :deep(.text-lg) {
+    font-size: 1.125rem !important;
+  }
+  
+  :deep(.v-btn) {
+    font-size: 14px;
+  }
 }
 </style>
 
