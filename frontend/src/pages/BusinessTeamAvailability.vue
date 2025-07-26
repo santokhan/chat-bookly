@@ -141,7 +141,7 @@ const addShift = (member, dayKey) => {
             md="6"
             class="mb-2 mb-md-0"
           >
-            <VCardTitle class="text-h5 pa-0 font-weight-bold text-center text-md-start">
+            <VCardTitle class="text-h4 pa-0 font-weight-bold text-center text-md-start">
               Scheduled shifts
             </VCardTitle>
           </VCol>
@@ -224,7 +224,7 @@ const addShift = (member, dayKey) => {
           max-width="400px"
         >
           <VCard>
-            <VCardTitle class="text-h6 font-weight-bold">
+            <VCardTitle class="text-h5 font-weight-bold">
               Select Date Range
             </VCardTitle>
             <VCardText>
@@ -272,7 +272,7 @@ const addShift = (member, dayKey) => {
               cols="2"
               class="pe-2"
             >
-              <div class="text-body-2 font-weight-bold text-medium-emphasis pa-2">
+              <div class="text-base font-weight-bold text-medium-emphasis pa-2">
                 Team member 
                 <VBtn
                   variant="text"
@@ -289,10 +289,10 @@ const addShift = (member, dayKey) => {
               class="text-center px-1"
             >
               <div class="day-header pa-2">
-                <div class="text-body-2 font-weight-bold">
+                <div class="text-base font-weight-bold">
                   {{ day.day }}, {{ day.date }}
                 </div>
-                <div class="text-caption text-medium-emphasis">
+                <div class="text-body-2 text-medium-emphasis">
                   {{ day.hours }}
                 </div>
               </div>
@@ -313,7 +313,7 @@ const addShift = (member, dayKey) => {
             >
               <div class="d-flex align-center pa-2 h-100">
                 <VAvatar
-                  size="32"
+                  size="48"
                   class="me-3"
                   :color="!getAvatar(member) ? 'primary' : undefined"
                 >
@@ -323,14 +323,14 @@ const addShift = (member, dayKey) => {
                   />
                   <span
                     v-else
-                    class="text-caption"
+                    class="text-base font-weight-medium"
                   >{{ member.initials }}</span>
                 </VAvatar>
                 <div class="flex-grow-1 me-2">
-                  <div class="text-body-2 font-weight-bold text-truncate">
+                  <div class="text-lg font-weight-semibold text-truncate">
                     {{ member.name }}
                   </div>
-                  <div class="text-caption text-medium-emphasis">
+                  <div class="text-body-2 text-medium-emphasis">
                     {{ member.role }}
                   </div>
                 </div>
@@ -365,7 +365,7 @@ const addShift = (member, dayKey) => {
                     shift.type === 'primary' ? 'text-on-primary' : 'text-on-warning'
                   ]"
                 >
-                  <div class="text-caption font-weight-medium">
+                  <div class="text-body-2 font-weight-medium text-white">
                     {{ shift.start }} - {{ shift.end }}
                   </div>
                 </div>
@@ -409,7 +409,7 @@ const addShift = (member, dayKey) => {
                   <VExpansionPanelTitle>
                     <div class="d-flex align-center w-100">
                       <VAvatar
-                        size="32"
+                        size="48"
                         class="me-3"
                         :color="!getAvatar(member) ? 'primary' : undefined"
                       >
@@ -419,14 +419,14 @@ const addShift = (member, dayKey) => {
                         />
                         <span
                           v-else
-                          class="text-caption"
+                          class="text-base font-weight-medium"
                         >{{ member.initials }}</span>
                       </VAvatar>
                       <div>
-                        <div class="text-body-2 font-weight-bold">
+                        <div class="text-lg font-weight-semibold">
                           {{ member.name }}
                         </div>
-                        <div class="text-caption text-medium-emphasis">
+                        <div class="text-body-2 text-medium-emphasis">
                           {{ member.role }}
                         </div>
                       </div>
@@ -443,10 +443,10 @@ const addShift = (member, dayKey) => {
                       >
                         <div class="d-flex justify-space-between align-center mb-2">
                           <div>
-                            <div class="text-body-2 font-weight-bold">
+                            <div class="text-body-1 font-weight-bold">
                               {{ day.day }}, {{ day.date }}
                             </div>
-                            <div class="text-caption text-medium-emphasis">
+                            <div class="text-body-2 text-medium-emphasis">
                               {{ day.hours }}
                             </div>
                           </div>
@@ -551,7 +551,7 @@ const addShift = (member, dayKey) => {
 
 /* Time schedule text color white */
 .shift-block,
-.shift-block .text-caption {
+.shift-block .text-body-2 {
   color: #fff !important;
 }
 
@@ -594,14 +594,47 @@ const addShift = (member, dayKey) => {
 }
 
 /* Table header names in black */
-.schedule-header .text-body-2,
-.schedule-header .day-header .text-body-2 {
+.schedule-header .text-base,
+.schedule-header .day-header .text-base {
   color: #000 !important;
 }
 
 /* Team member names in black */
-.schedule-row .pe-2 .text-body-2.font-weight-bold {
+.schedule-row .pe-2 .text-lg.font-weight-semibold {
   color: #000 !important;
+}
+
+/* Responsive font sizes */
+@media (max-width: 768px) {
+  :deep(.text-h4) {
+    font-size: 1.5rem !important;
+  }
+  
+  :deep(.text-lg) {
+    font-size: 1.125rem !important;
+  }
+  
+  :deep(.text-body-1) {
+    font-size: 1rem !important;
+  }
+  
+  :deep(.text-body-2) {
+    font-size: 0.875rem !important;
+  }
+  
+  :deep(.text-base) {
+    font-size: 1rem !important;
+  }
+  
+  :deep(.v-btn) {
+    font-size: 14px;
+  }
+  
+  /* Mobile avatar sizing */
+  :deep(.v-avatar) {
+    width: 40px !important;
+    height: 40px !important;
+  }
 }
 
 .add-shift-btn-colored {
