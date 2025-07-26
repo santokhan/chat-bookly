@@ -97,7 +97,7 @@ const handleDeleteMember = member => {
       <template #item.name="{ item }">
         <div class="d-flex align-center gap-3">
           <VAvatar
-            size="40"
+            size="48"
             :color="!item.avatar ? 'primary' : undefined"
             :variant="!item.avatar ? 'tonal' : undefined"
           >
@@ -107,13 +107,13 @@ const handleDeleteMember = member => {
             />
             <span
               v-else
-              class="text-sm font-weight-medium"
+              class="text-base font-weight-medium"
             >
               {{ avatarText(item.name) }}
             </span>
           </VAvatar>
           <div>
-            <h6 class="text-base font-weight-medium mb-0">
+            <h6 class="text-lg font-weight-semibold mb-0 text-high-emphasis">
               {{ item.name }}
             </h6>
             <div class="text-body-2 text-medium-emphasis">
@@ -126,10 +126,10 @@ const handleDeleteMember = member => {
       <!-- Contact Column -->
       <template #item.contact="{ item }">
         <div>
-          <div class="text-body-1 mb-1">
+          <div class="text-body-1 mb-1 text-primary">
             {{ item.email }}
           </div>
-          <div class="text-body-2 text-medium-emphasis">
+          <div class="text-body-2 text-primary">
             {{ item.phone }}
           </div>
         </div>
@@ -147,13 +147,13 @@ const handleDeleteMember = member => {
             size="small"
             density="compact"
           />
-          <span class="text-body-2 text-medium-emphasis">
+          <span class="text-body-2 text-disabled">
             ({{ item.rating }})
           </span>
         </div>
         <div
           v-else
-          class="text-body-2 text-medium-emphasis"
+          class="text-body-2 text-disabled"
         >
           No reviews yet
         </div>
@@ -256,9 +256,15 @@ const handleDeleteMember = member => {
       min-block-size: 60px;
     }
     
-    :deep(.v-data-table__td),
+    :deep(.v-data-table__td) {
+      font-size: 15px;
+      padding-block: 12px !important;
+      padding-inline: 8px !important;
+    }
+    
     :deep(.v-data-table__th) {
-      font-size: 13px;
+      font-size: 15px;
+      font-weight: 700;
       padding-block: 12px !important;
       padding-inline: 8px !important;
     }
@@ -275,8 +281,14 @@ const handleDeleteMember = member => {
       block-size: 70px !important;
     }
     
-    :deep(.v-data-table__td),
+    :deep(.v-data-table__td) {
+      font-size: 16px;
+      padding-block: 16px !important;
+    }
+    
     :deep(.v-data-table__th) {
+      font-size: 16px;
+      font-weight: 700;
       padding-block: 16px !important;
     }
   }
@@ -294,12 +306,25 @@ const handleDeleteMember = member => {
     background-color: rgb(var(--v-theme-surface-variant), 0.04) !important;
   }
   
+  // Increase checkbox size
+  :deep(.v-selection-control) {
+    .v-selection-control__input {
+      width: 20px !important;
+      height: 20px !important;
+    }
+    
+    .v-selection-control__wrapper {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+  
   // Mobile-specific avatar sizing
   @media (max-width: 768px) {
     :deep(.v-avatar) {
-      block-size: 32px !important;
-      font-size: 12px !important;
-      inline-size: 32px !important;
+      block-size: 40px !important;
+      font-size: 16px !important;
+      inline-size: 40px !important;
     }
   }
   
