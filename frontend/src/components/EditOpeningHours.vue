@@ -94,6 +94,7 @@ const cancelEdit = () => {
           <VBtn
             variant="outlined"
             color="#000000"
+            class="close-btn"
             @click="cancelEdit"
           >
             Close
@@ -256,6 +257,15 @@ const cancelEdit = () => {
   block-size: 32px;
   margin-inline-start: 8px;
   min-inline-size: 32px;
+}
+
+.close-btn {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Responsive design */
