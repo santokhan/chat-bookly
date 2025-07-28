@@ -1,8 +1,22 @@
 import User from './user.model.js';
-import * as userService from './user.service.js';
+import userService from './user.service.js';
 import BusinessStaff from './businessStaff.model.js';
 
-export async function register(req, res) {
+// export async function register(req, res) {
+//   try {
+//     const user = await userService.registerUser(req.body);
+
+//     if (user.success) {
+//       res.status(201).json(user);
+//     } else {
+//       res.status(400).json(user);
+//     }
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// }
+
+const register = async (req, res) => {
   try {
     const user = await userService.registerUser(req.body);
 
@@ -16,7 +30,21 @@ export async function register(req, res) {
   }
 }
 
-export async function login(req, res) {
+// export async function login(req, res) {
+//   try {
+//     const user = await userService.loginUser(req.body);
+
+//     if (user.success) {
+//       res.status(200).json(user);
+//     } else {
+//       res.status(400).json(user);
+//     }
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// }
+
+const login = async (req, res) => {
   try {
     const user = await userService.loginUser(req.body);
 
@@ -30,7 +58,7 @@ export async function login(req, res) {
   }
 }
 
-export async function getUser(req, res) {
+const getUser = async (req, res) => {
   try {
     const user = await userService.getUserById(req.params.id);
 
@@ -44,7 +72,7 @@ export async function getUser(req, res) {
   }
 }
 
-export async function update(req, res) {
+const update = async (req, res) => {
   try {
     const user = await userService.updateUser(req.params.id, req.body);
 
@@ -58,7 +86,7 @@ export async function update(req, res) {
   }
 }
 
-export async function deleteUser(req, res) {
+const deleteUser = async (req, res) => {
   try {
     const user = await userService.deleteUser(req.params.id);
 
@@ -72,7 +100,7 @@ export async function deleteUser(req, res) {
   }
 }
 
-export async function getAllBusinesses(req, res) {
+const getAllBusinesses = async (req, res) => {
   try {
     const businesses = await User.find({
       role: 'business',
@@ -91,7 +119,7 @@ export async function getAllBusinesses(req, res) {
   }
 }
 
-export async function getAllBusinessStaffs(req, res) {
+const getAllBusinessStaffs = async (req, res) => {
   try {
     const {
       business_id,
@@ -123,4 +151,14 @@ export async function getAllBusinessStaffs(req, res) {
       error: err.message,
     });
   }
+}
+
+module.exports = {
+  register,
+  login,
+  getUser,
+  update,
+  deleteUser,
+  getAllBusinesses,
+  getAllBusinessStaffs,
 }

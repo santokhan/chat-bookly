@@ -333,16 +333,6 @@ const whatsappService = {
       return { message: 'error', error };
     }
   },
-  webhook: async (data) => {
-    const reqData = data.entry[0]?.changes[0]?.value;
-    if (reqData.statuses) {
-      const status = reqData.statuses[0];
-      const conversationId = status.id;
-      // Conversation update logic should be handled in the conversation module
-      return 'ok';
-    }
-    return;
-  },
   getAccessToken: async (appId, appSecret, code = null) => {
     try {
       // Step 1: Get temp token
