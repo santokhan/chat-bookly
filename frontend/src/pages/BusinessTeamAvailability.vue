@@ -1,13 +1,792 @@
 <script setup>
 import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
+import AppDateTimePicker from '@/@core/components/app-form-elements/AppDateTimePicker.vue'
+import { ref, computed } from 'vue'
+import { useDisplay } from 'vuetify'
+
+// Sample data - in real app this would come from an API
+const DEFAULT_AVATAR = '/images/avatars/avatar-1.png'
+
+const teamMembers = ref([
+  {
+    id: 1,
+    name: 'marco Agency',
+    avatar: DEFAULT_AVATAR,
+    initials: 'MA',
+    role: '52h',
+    shifts: {
+      monday: [{ start: '09:00', end: '19:00', type: 'primary' }],
+      tuesday: [{ start: '09:00', end: '19:00', type: 'primary' }],
+      wednesday: [
+        { start: '09:00', end: '13:00', type: 'primary' },
+        { start: '16:00', end: '20:00', type: 'primary' },
+      ],
+      thursday: [{ start: '09:00', end: '19:00', type: 'primary' }],
+      friday: [{ start: '09:00', end: '19:00', type: 'primary' }],
+      saturday: [{ start: '10:00', end: '17:00', type: 'primary' }],
+      sunday: [{ start: '10:00', end: '17:00', type: 'primary' }],
+    },
+  },
+  {
+    id: 2,
+    name: 'Wendy Smith...',
+    avatar: '/images/avatars/avatar-2.png',
+    initials: 'WS',
+    role: '54h',
+    shifts: {
+      monday: [{ start: '09:00', end: '19:00', type: 'secondary' }],
+      tuesday: [{ start: '09:00', end: '19:00', type: 'secondary' }],
+      wednesday: [{ start: '09:00', end: '19:00', type: 'secondary' }],
+      thursday: [{ start: '09:00', end: '19:00', type: 'secondary' }],
+      friday: [{ start: '09:00', end: '19:00', type: 'secondary' }],
+      saturday: [{ start: '10:00', end: '17:00', type: 'secondary' }],
+      sunday: [{ start: '10:00', end: '17:00', type: 'secondary' }],
+    },
+  },
+])
+
+// Week navigation and date picker
+const currentWeek = ref('This week')
+const weekRange = ref('21 - 27 Jul, 2025')
+const isDatePickerOpen = ref(false)
+const selectedDate = ref(new Date())
+const dateRange = ref([new Date(), new Date(Date.now() + 6 * 24 * 60 * 60 * 1000)])
+
+// Days of the week with hours
+const daysOfWeek = [
+  { day: 'Mon', date: '21 Jul', hours: '20h' },
+  { day: 'Tue', date: '22 Jul', hours: '20h' },
+  { day: 'Wed', date: '23 Jul', hours: '18h' },
+  { day: 'Thu', date: '24 Jul', hours: '20h' },
+  { day: 'Fri', date: '25 Jul', hours: '20h' },
+  { day: 'Sat', date: '26 Jul', hours: '14h' },
+  { day: 'Sun', date: '27 Jul', hours: '14h' },
+]
+
+const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
+// Mobile view state using Vuetify display service
+const display = useDisplay()
+const isMobile = computed(() => display.smAndDown.value)
+
+// Methods
+const editTeamMember = member => {
+  console.log('Edit team member:', member.name)
+}
+
+const previousWeek = () => {
+  console.log('Previous week')
+}
+
+const nextWeek = () => {
+  console.log('Next week')
+}
+
+const openOptions = () => {
+  console.log('Open options')
+}
+
+const addNew = () => {
+  console.log('Add new')
+}
+
+const getShiftColor = type => {
+  return type === 'primary' ? 'primary' : 'warning'
+}
+
+const getShiftBgClass = type => {
+  return type === 'primary' ? 'bg-primary' : 'bg-warning'
+}
+
+const openDatePicker = () => {
+  isDatePickerOpen.value = true
+}
+
+const updateDateRange = dates => {
+  if (dates && dates.length > 0) {
+    dateRange.value = dates
+
+
+    // Update week range display
+    const startDate = new Date(dates[0])
+    const endDate = dates.length > 1 ? new Date(dates[dates.length - 1]) : startDate
+    const options = { day: 'numeric', month: 'short' }
+
+    weekRange.value = `${startDate.toLocaleDateString('en-GB', options)} - ${endDate.toLocaleDateString('en-GB', options)}, ${startDate.getFullYear()}`
+  }
+}
+
+const getAvatar = member => {
+  return member.avatar || DEFAULT_AVATAR
+}
+
+const addShift = (member, dayKey) => {
+  // TODO: Implement add shift logic
+  console.log('Add shift for', member.name, 'on', dayKey)
+}
 </script>
 
 <template>
   <BusinessLayout>
-    <VCard class="mb-6" title="Activity Management - Team Availability & Times">
-      <VCardText>
-        <div>Manage team availability and times here.</div>
+    <VCard class="mb-6">
+      <!-- Header Section -->
+      <VCardItem class="pb-0">
+        <VRow
+          align="center"
+          no-gutters
+          class="flex-wrap"
+        >
+          <VCol
+            cols="12"
+            md="6"
+            class="mb-2 mb-md-0"
+          >
+            <VCardTitle class="text-h4 pa-0 font-weight-bold text-center text-md-start">
+              Scheduled shifts
+            </VCardTitle>
+          </VCol>
+          <VCol
+            cols="12"
+            md="6"
+            class="d-flex justify-center justify-md-end gap-2 mb-2 mb-md-0"
+          >
+            <VBtn
+              variant="outlined"
+              color="primary"
+              class="me-2"
+              @click="openOptions"
+            >
+              Options
+              <VIcon
+                end
+                icon="tabler-chevron-down"
+              />
+            </VBtn>
+            <VBtn
+              color="primary"
+              @click="addNew"
+            >
+              Add
+              <VIcon
+                end
+                icon="tabler-chevron-down"
+              />
+            </VBtn>
+          </VCol>
+          <VCol
+            cols="12"
+            class="d-flex justify-center mt-2"
+          >
+            <div class="w-100 d-flex justify-center">
+              <div class="week-segmented mb-4">
+                <VBtn
+                  icon
+                  variant="text"
+                  size="small"
+                  color="primary"
+                  class="week-segment week-arrow left"
+                  aria-label="Previous week"
+                  @click="previousWeek"
+                >
+                  <VIcon icon="tabler-chevron-left" />
+                </VBtn>
+                <div class="week-segment week-selected">
+                  This week
+                </div>
+                <div
+                  class="week-segment week-range-segment"
+                  @click="openDatePicker"
+                >
+                  {{ weekRange }}
+                </div>
+                <VBtn
+                  icon
+                  variant="text"
+                  size="small"
+                  color="primary"
+                  class="week-segment week-arrow right"
+                  aria-label="Next week"
+                  @click="nextWeek"
+                >
+                  <VIcon icon="tabler-chevron-right" />
+                </VBtn>
+              </div>
+            </div>
+          </VCol>
+        </VRow>
+      </VCardItem>
+
+      <!-- Week Navigation -->
+      <VCardText class="pb-0">
+        <!-- Date Picker Dialog -->
+        <VDialog
+          v-model="isDatePickerOpen"
+          max-width="400px"
+        >
+          <VCard>
+            <VCardTitle class="text-h5 font-weight-bold">
+              Select Date Range
+            </VCardTitle>
+            <VCardText>
+              <AppDateTimePicker
+                v-model="dateRange"
+                range
+                label="Select week or date range"
+              />
+            </VCardText>
+            <VCardActions>
+              <VSpacer />
+              <VBtn
+                variant="text"
+                color="primary"
+                @click="isDatePickerOpen = false"
+              >
+                Cancel
+              </VBtn>
+              <VBtn
+                color="primary"
+                @click="() => { updateDateRange(dateRange); isDatePickerOpen.value = false }"
+              >
+                Apply
+              </VBtn>
+            </VCardActions>
+          </VCard>
+        </VDialog>
+      </VCardText>
+
+      <!-- Desktop Schedule Grid -->
+      <VCardText
+        v-if="!isMobile"
+        class="pa-0"
+      >
+        <VContainer
+          fluid
+          class="pa-4"
+        >
+          <!-- Header Row -->
+          <VRow
+            no-gutters
+            class="schedule-header mb-3 text-black"
+          >
+            <VCol
+              cols="2"
+              class="pe-2"
+            >
+              <div class="text-base font-weight-bold text-medium-emphasis pa-2">
+                Team member 
+                <VBtn
+                  variant="text"
+                  size="x-small"
+                  color="primary"
+                >
+                  Change
+                </VBtn>
+              </div>
+            </VCol>
+            <VCol 
+              v-for="(day, dayIndex) in daysOfWeek" 
+              :key="dayIndex"
+              class="text-center px-1"
+            >
+              <div class="day-header pa-2">
+                <div class="text-base font-weight-bold">
+                  {{ day.day }}, {{ day.date }}
+                </div>
+                <div class="text-body-2 text-medium-emphasis">
+                  {{ day.hours }}
+                </div>
+              </div>
+            </VCol>
+          </VRow>
+
+          <!-- Team Member Rows -->
+          <VRow 
+            v-for="member in teamMembers" 
+            :key="member.id"
+            no-gutters 
+            class="schedule-row mb-2"
+          >
+            <!-- Team Member Info -->
+            <VCol
+              cols="2"
+              class="pe-2"
+            >
+              <div class="d-flex align-center pa-2 h-100">
+                <VAvatar
+                  size="48"
+                  class="me-3"
+                  :color="!getAvatar(member) ? 'primary' : undefined"
+                >
+                  <VImg
+                    v-if="getAvatar(member)"
+                    :src="getAvatar(member)"
+                  />
+                  <span
+                    v-else
+                    class="text-base font-weight-medium"
+                  >{{ member.initials }}</span>
+                </VAvatar>
+                <div class="flex-grow-1 me-2">
+                  <div class="text-lg font-weight-semibold text-truncate">
+                    {{ member.name }}
+                  </div>
+                  <div class="text-body-2 text-medium-emphasis">
+                    {{ member.role }}
+                  </div>
+                </div>
+                <VBtn
+                  icon
+                  variant="text"
+                  size="x-small"
+                  color="primary"
+                  @click="editTeamMember(member)"
+                >
+                  <VIcon
+                    icon="tabler-edit"
+                    size="16"
+                  />
+                </VBtn>
+              </div>
+            </VCol>
+
+            <!-- Schedule Days -->
+            <VCol 
+              v-for="dayKey in dayKeys" 
+              :key="dayKey"
+              class="px-1"
+            >
+              <div class="day-column pa-1 h-100 position-relative">
+                <div
+                  v-for="(shift, shiftIndex) in member.shifts[dayKey]"
+                  :key="shiftIndex"
+                  class="shift-block mb-1"
+                  :class="[
+                    getShiftBgClass(shift.type),
+                    shift.type === 'primary' ? 'text-on-primary' : 'text-on-warning'
+                  ]"
+                >
+                  <div class="text-body-2 font-weight-medium text-white">
+                    {{ shift.start }} - {{ shift.end }}
+                  </div>
+                </div>
+                <!-- Add Shift Button (as shift block, only on hover) -->
+                <VBtn
+                  class="add-shift-block-btn mt-1"
+                  icon
+                  size="small"
+                  :class="getShiftBgClass(member.shifts[dayKey][0]?.type || 'primary')"
+                  aria-label="Add shift"
+                  @click="addShift(member, dayKey)"
+                >
+                  <VIcon
+                    icon="tabler-plus"
+                    color="#fff"
+                  />
+                </VBtn>
+              </div>
+            </VCol>
+          </VRow>
+        </VContainer>
+      </VCardText>
+
+      <!-- Mobile Schedule List -->
+      <VCardText
+        v-else
+        class="pa-0"
+      >
+        <VContainer
+          fluid
+          class="pa-4"
+        >
+          <VRow>
+            <VCol cols="12">
+              <VExpansionPanels multiple>
+                <VExpansionPanel
+                  v-for="member in teamMembers"
+                  :key="member.id"
+                  class="mb-2"
+                >
+                  <VExpansionPanelTitle>
+                    <div class="d-flex align-center w-100">
+                      <VAvatar
+                        size="48"
+                        class="me-3"
+                        :color="!getAvatar(member) ? 'primary' : undefined"
+                      >
+                        <VImg
+                          v-if="getAvatar(member)"
+                          :src="getAvatar(member)"
+                        />
+                        <span
+                          v-else
+                          class="text-base font-weight-medium"
+                        >{{ member.initials }}</span>
+                      </VAvatar>
+                      <div>
+                        <div class="text-lg font-weight-semibold">
+                          {{ member.name }}
+                        </div>
+                        <div class="text-body-2 text-medium-emphasis">
+                          {{ member.role }}
+                        </div>
+                      </div>
+                    </div>
+                  </VExpansionPanelTitle>
+                  
+                  <VExpansionPanelText>
+                    <VRow>
+                      <VCol 
+                        v-for="(day, index) in daysOfWeek" 
+                        :key="index"
+                        cols="12"
+                        class="py-2"
+                      >
+                        <div class="d-flex justify-space-between align-center mb-2">
+                          <div>
+                            <div class="text-body-1 font-weight-bold">
+                              {{ day.day }}, {{ day.date }}
+                            </div>
+                            <div class="text-body-2 text-medium-emphasis">
+                              {{ day.hours }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1">
+                          <VChip
+                            v-for="(shift, shiftIndex) in member.shifts[dayKeys[index]]"
+                            :key="shiftIndex"
+                            :color="getShiftColor(shift.type)"
+                            size="small"
+                            class="me-1"
+                          >
+                            {{ shift.start }} - {{ shift.end }}
+                          </VChip>
+                        </div>
+                        <VDivider
+                          v-if="index !== daysOfWeek.length - 1"
+                          class="mt-3"
+                        />
+                      </VCol>
+                    </VRow>
+                  </VExpansionPanelText>
+                </VExpansionPanel>
+              </VExpansionPanels>
+            </VCol>
+          </VRow>
+        </VContainer>
       </VCardText>
     </VCard>
   </BusinessLayout>
 </template>
+
+<style scoped>
+.schedule-header {
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.schedule-row {
+  border-bottom: 1px solid #f5f5f5;
+  min-height: 80px;
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.day-header {
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid #f5f5f5;
+}
+
+.day-column {
+  min-height: 80px;
+  background-color: rgba(var(--v-theme-surface), 0.3);
+  border-radius: 4px;
+  position: relative;
+  border-right: 1px solid #f5f5f5;
+  /* Ensure relative positioning for absolute children */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Add Shift Button: hidden by default, shown on hover */
+.add-shift-btn {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.day-column:hover .add-shift-btn,
+.day-column:focus-within .add-shift-btn {
+  display: flex;
+}
+
+.shift-block {
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: center;
+  position: relative;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+
+
+.text-on-primary {
+  color: #5a52d5 !important;
+}
+
+.text-on-warning {
+  color: #b8860b !important;
+}
+
+/* Time schedule text color white */
+.shift-block,
+.shift-block .text-body-2 {
+  color: #fff !important;
+}
+
+
+/* .bg-primary,
+.bg-warning {
+  color: #000 !important;
+} */
+
+/* Responsive adjustments */
+@media (max-width: 959px) {
+  .schedule-grid {
+    display: none;
+  }
+}
+
+@media (min-width: 960px) {
+  .mobile-schedule {
+    display: none;
+  }
+}
+
+/* Custom scrollbar for horizontal scroll on mobile */
+.day-column::-webkit-scrollbar {
+  height: 4px;
+}
+
+.day-column::-webkit-scrollbar-track {
+  background: rgba(var(--v-theme-surface-variant), 0.1);
+  border-radius: 2px;
+}
+
+.day-column::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-primary), 0.3);
+  border-radius: 2px;
+}
+
+.day-column::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-primary), 0.5);
+}
+
+/* Table header names in black */
+.schedule-header .text-base,
+.schedule-header .day-header .text-base {
+  color: #000 !important;
+}
+
+/* Team member names in black */
+.schedule-row .pe-2 .text-lg.font-weight-semibold {
+  color: #000 !important;
+}
+
+/* Responsive font sizes */
+@media (max-width: 768px) {
+  :deep(.text-h4) {
+    font-size: 1.5rem !important;
+  }
+  
+  :deep(.text-lg) {
+    font-size: 1.125rem !important;
+  }
+  
+  :deep(.text-body-1) {
+    font-size: 1rem !important;
+  }
+  
+  :deep(.text-body-2) {
+    font-size: 0.875rem !important;
+  }
+  
+  :deep(.text-base) {
+    font-size: 1rem !important;
+  }
+  
+  :deep(.v-btn) {
+    font-size: 14px;
+  }
+  
+  /* Mobile avatar sizing */
+  :deep(.v-avatar) {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+
+.add-shift-btn-colored {
+  display: none;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+  background: #fff;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  margin-top: 4px;
+  min-width: 28px !important;
+  min-height: 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px 0 rgba(44, 39, 56, 0.08);
+}
+.day-column:hover .add-shift-btn-colored,
+.day-column:focus-within .add-shift-btn-colored {
+  display: flex;
+}
+.add-shift-btn-colored.primary {
+  border-color: #7367f0 !important;
+}
+.add-shift-btn-colored.warning {
+  border-color: #ffb400 !important;
+}
+.add-shift-btn-colored.primary:hover,
+.add-shift-btn-colored.primary:focus {
+  background: rgba(115, 103, 240, 0.08);
+}
+.add-shift-btn-colored.warning:hover,
+.add-shift-btn-colored.warning:focus {
+  background: rgba(255, 180, 0, 0.08);
+}
+.add-shift-block-btn {
+  display: none;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  width: auto !important;
+  height: 32px !important;
+  box-shadow: none;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  margin-top: 4px;
+}
+.day-column:hover .add-shift-block-btn,
+.day-column:focus-within .add-shift-block-btn {
+  display: flex;
+}
+.add-shift-block-btn.bg-primary {
+  background-color: #c8c4f7 !important;
+}
+.add-shift-block-btn.bg-warning {
+  background-color: #fff4d6 !important;
+}
+.add-shift-block-btn.bg-primary:hover,
+.add-shift-block-btn.bg-primary:focus {
+  background-color: #b3aaf0 !important;
+}
+.add-shift-block-btn.bg-warning:hover,
+.add-shift-block-btn.bg-warning:focus {
+  background-color: #ffe9b3 !important;
+}
+.week-segmented {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 1.5px solid #e7e7e7;
+  border-radius: 32px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 1px 2px 0 rgba(44, 39, 56, 0.03);
+  overflow: hidden;
+}
+.week-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+  padding: 0 20px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-right: 1.5px solid #e7e7e7;
+  cursor: pointer;
+  user-select: none;
+}
+.week-segment:last-child {
+  border-right: none;
+}
+.week-selected {
+  background: #f8f8fb;
+  color: #222;
+  font-weight: 600;
+  border-right: 1.5px solid #e7e7e7;
+}
+.week-range-segment {
+  color: #888;
+  font-weight: 500;
+  background: #fff;
+  transition: background 0.2s;
+}
+.week-range-segment:hover {
+  background: #f8f8fb;
+}
+.week-arrow {
+  min-width: 40px !important;
+  min-height: 40px !important;
+  border-radius: 0;
+  padding: 0 !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+.week-arrow.left {
+  border-top-left-radius: 32px !important;
+  border-bottom-left-radius: 32px !important;
+}
+.week-arrow.right {
+  border-top-right-radius: 32px !important;
+  border-bottom-right-radius: 32px !important;
+}
+@media (max-width: 960px) {
+  .week-segmented {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .week-segment {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 0.98rem;
+  }
+  .week-arrow {
+    min-width: 40px !important;
+    min-height: 40px !important;
+    flex: 0 0 40px;
+  }
+  .text-center {
+    text-align: center !important;
+  }
+}
+</style>
