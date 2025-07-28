@@ -136,7 +136,6 @@ const cancelEdit = () => {
                 v-model="slot.start"
                 :items="timeOptions"
                 variant="outlined"
-                density="compact"
                 hide-details
                 class="time-input me-2"
                 style="inline-size: 120px;"
@@ -148,7 +147,6 @@ const cancelEdit = () => {
                 v-model="slot.end"
                 :items="timeOptions"
                 variant="outlined"
-                density="compact"
                 hide-details
                 class="time-input me-2"
                 style="inline-size: 120px;"
@@ -269,15 +267,15 @@ const cancelEdit = () => {
   .time-input {
     inline-size: 100px !important;
   }
-  
+
   :deep(.text-h4) {
     font-size: 1.5rem !important;
   }
-  
+
   :deep(.text-h6) {
     font-size: 1.125rem !important;
   }
-  
+
   :deep(.text-body-2) {
     font-size: 0.875rem !important;
   }
@@ -291,15 +289,15 @@ const cancelEdit = () => {
   .time-input {
     inline-size: 80px !important;
   }
-  
+
   :deep(.text-h4) {
     font-size: 1.375rem !important;
   }
-  
+
   :deep(.text-h6) {
     font-size: 1rem !important;
   }
-  
+
   :deep(.text-body-2) {
     font-size: 0.8125rem !important;
   }
