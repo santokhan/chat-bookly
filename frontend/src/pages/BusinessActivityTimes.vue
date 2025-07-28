@@ -85,18 +85,32 @@ const handleCancel = () => {
 
 // Increase button font size
 :deep(.v-btn) {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
 }
 
 // Responsive font sizes
 @media (max-width: 768px) {
   :deep(.text-h3) {
-    font-size: 1.75rem !important;
+    font-size: 1.875rem !important;
   }
 
   :deep(.text-lg) {
-    font-size: 1.125rem !important;
+    font-size: 1.1875rem !important;
+  }
+
+  :deep(.v-btn) {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  :deep(.text-h3) {
+    font-size: 1.625rem !important;
+  }
+
+  :deep(.text-lg) {
+    font-size: 1.0625rem !important;
   }
 
   :deep(.v-btn) {

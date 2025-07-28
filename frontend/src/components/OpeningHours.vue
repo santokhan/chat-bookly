@@ -62,7 +62,7 @@ defineProps({
 
 .day-name {
   color: #6a5acd;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   text-align: center;
 }
@@ -78,7 +78,7 @@ defineProps({
 }
 
 .opening-time {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   color: #333;
   line-height: 1.2;
@@ -86,14 +86,14 @@ defineProps({
 }
 
 .time-separator {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
   line-height: 1.2;
   margin: 1px 0;
 }
 
 .closing-time {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   color: #333;
   line-height: 1.2;
@@ -112,12 +112,12 @@ defineProps({
   }
   
   .day-name {
-    font-size: 13px;
+    font-size: 14px;
   }
   
   .opening-time,
   .closing-time {
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
@@ -141,16 +141,16 @@ defineProps({
   }
   
   .day-name {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .opening-time,
   .closing-time {
-    font-size: 13px;
+    font-size: 14px;
   }
   
   .time-separator {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 </style> 
