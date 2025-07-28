@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   openingHours: {
@@ -93,12 +93,13 @@ const cancelEdit = () => {
         <div class="d-flex gap-2">
           <VBtn
             variant="outlined"
+            color="#000000"
             @click="cancelEdit"
           >
-            Cancel
+            Close
           </VBtn>
           <VBtn
-            color="primary"
+            color="#000000"
             @click="saveChanges"
           >
             Save
@@ -138,7 +139,7 @@ const cancelEdit = () => {
                 density="compact"
                 hide-details
                 class="time-input me-2"
-                style="width: 120px"
+                style="inline-size: 120px;"
                 item-title="title"
                 item-value="value"
               />
@@ -150,7 +151,7 @@ const cancelEdit = () => {
                 density="compact"
                 hide-details
                 class="time-input me-2"
-                style="width: 120px"
+                style="inline-size: 120px;"
                 item-title="title"
                 item-value="value"
               />
@@ -218,9 +219,9 @@ const cancelEdit = () => {
 
 <style scoped>
 .edit-opening-hours-container {
-  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 10%);
 }
 
 .day-edit-header {
@@ -229,7 +230,7 @@ const cancelEdit = () => {
 }
 
 .time-slots-container {
-  margin-left: 40px;
+  margin-inline-start: 40px;
 }
 
 .time-slot-row {
@@ -243,40 +244,40 @@ const cancelEdit = () => {
 }
 
 .copy-card {
-  background-color: rgb(var(--v-theme-primary), 0.05);
   border-color: rgb(var(--v-theme-primary), 0.2);
+  background-color: rgb(var(--v-theme-primary), 0.05);
 }
 
 .remove-btn {
-  min-width: 32px;
-  height: 32px;
-  margin-left: 8px;
+  block-size: 32px;
+  margin-inline-start: 8px;
+  min-inline-size: 32px;
 }
 
 .add-btn {
-  min-width: 32px;
-  height: 32px;
-  margin-left: 8px;
+  block-size: 32px;
+  margin-inline-start: 8px;
+  min-inline-size: 32px;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .time-slots-container {
-    margin-left: 20px;
+    margin-inline-start: 20px;
   }
-  
+
   .time-input {
-    width: 100px !important;
+    inline-size: 100px !important;
   }
 }
 
 @media (max-width: 480px) {
   .time-slots-container {
-    margin-left: 10px;
+    margin-inline-start: 10px;
   }
-  
+
   .time-input {
-    width: 80px !important;
+    inline-size: 80px !important;
   }
 }
 </style> 

@@ -166,11 +166,10 @@ const handleDeleteMember = member => {
             <template #activator="{ props }">
               <VBtn
                 variant="outlined"
-                color="primary"
+                color="#000000"
                 append-icon="tabler-chevron-down"
                 v-bind="props"
                 rounded="xl"
-                size="small"
               >
                 Actions
               </VBtn>
@@ -245,47 +244,47 @@ const handleDeleteMember = member => {
     :deep(.v-data-table) {
       border-radius: 0;
     }
-    
+
     :deep(.v-data-table__wrapper) {
       overflow-x: auto;
     }
-    
+
     // Stack table content on very small screens
     :deep(.v-data-table__tr) {
       block-size: auto !important;
       min-block-size: 60px;
     }
-    
+
     :deep(.v-data-table__td) {
       font-size: 15px;
       padding-block: 12px !important;
       padding-inline: 8px !important;
     }
-    
+
     :deep(.v-data-table__th) {
       font-size: 15px;
       font-weight: 700;
       padding-block: 12px !important;
       padding-inline: 8px !important;
     }
-    
+
     // Hide less important columns on mobile
     :deep(.v-data-table__td):nth-child(3),
     :deep(.v-data-table__th):nth-child(3) {
       display: none;
     }
   }
-  
+
   @media (min-width: 769px) {
     :deep(.v-data-table__tr) {
       block-size: 70px !important;
     }
-    
+
     :deep(.v-data-table__td) {
       font-size: 16px;
       padding-block: 16px !important;
     }
-    
+
     :deep(.v-data-table__th) {
       font-size: 16px;
       font-weight: 700;
@@ -305,20 +304,20 @@ const handleDeleteMember = member => {
   :deep(.v-data-table tbody tr:hover) {
     background-color: rgb(var(--v-theme-surface-variant), 0.04) !important;
   }
-  
+
   // Increase checkbox size
   :deep(.v-selection-control) {
     .v-selection-control__input {
-      width: 20px !important;
-      height: 20px !important;
+      block-size: 20px !important;
+      inline-size: 20px !important;
     }
-    
+
     .v-selection-control__wrapper {
-      width: 20px !important;
-      height: 20px !important;
+      block-size: 20px !important;
+      inline-size: 20px !important;
     }
   }
-  
+
   // Mobile-specific avatar sizing
   @media (max-width: 768px) {
     :deep(.v-avatar) {
@@ -327,7 +326,7 @@ const handleDeleteMember = member => {
       inline-size: 40px !important;
     }
   }
-  
+
   // Responsive action button
   :deep(.v-btn) {
     @media (max-width: 480px) {
