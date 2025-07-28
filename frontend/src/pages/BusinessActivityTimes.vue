@@ -1,7 +1,7 @@
 <script setup>
-import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
-import OpeningHours from '@/components/OpeningHours.vue'
 import EditOpeningHours from '@/components/EditOpeningHours.vue'
+import OpeningHours from '@/components/OpeningHours.vue'
+import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
 import { ref } from 'vue'
 
 // Opening hours data
@@ -58,15 +58,7 @@ const handleCancel = () => {
         
         <!-- Description Text -->
         <p class="text-lg text-medium-emphasis mb-6">
-          Opening hours for these locations are default working hours for your team and will be visible to your clients. 
-          You can amend business closed periods for events like Bank Holidays in 
-          <a 
-            href="#" 
-            class="text-primary text-decoration-underline"
-            @click.prevent="goToSettings"
-          >
-            Settings
-          </a>.
+          Opening hours for these locations are default working hours for your team and will be visible to your clients.
         </p>
 
         <!-- Opening Hours Component -->
@@ -86,9 +78,9 @@ const handleCancel = () => {
 
 <style lang="scss" scoped>
 .opening-hours-container {
-  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 10%);
 }
 
 // Increase button font size
@@ -102,11 +94,11 @@ const handleCancel = () => {
   :deep(.text-h3) {
     font-size: 1.75rem !important;
   }
-  
+
   :deep(.text-lg) {
     font-size: 1.125rem !important;
   }
-  
+
   :deep(.v-btn) {
     font-size: 14px;
   }
