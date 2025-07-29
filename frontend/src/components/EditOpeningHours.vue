@@ -33,7 +33,7 @@ const timeOptions = computed(() => {
 const editHours = ref(props.openingHours.map(day => ({
   day: day.day,
   enabled: true,
-  timeSlots: [{ start: day.open, end: day.close }],
+  timeSlots: day.timeSlots || [{ start: day.open || '09:00', end: day.close || '17:00' }],
 })))
 
 const addTimeSlot = dayIndex => {
@@ -59,12 +59,9 @@ const copyToAllDays = () => {
 const saveChanges = () => {
   // Update the display hours from edit hours
   const updatedHours = editHours.value.map(day => {
-    const firstSlot = day.timeSlots[0]
-
     return {
       day: day.day,
-      open: firstSlot.start,
-      close: firstSlot.end,
+      timeSlots: day.timeSlots.map(slot => ({ ...slot })),
     }
   })
 
@@ -76,7 +73,7 @@ const cancelEdit = () => {
   editHours.value = props.openingHours.map(day => ({
     day: day.day,
     enabled: true,
-    timeSlots: [{ start: day.open, end: day.close }],
+    timeSlots: day.timeSlots || [{ start: day.open || '09:00', end: day.close || '17:00' }],
   }))
   emit('cancel')
 }

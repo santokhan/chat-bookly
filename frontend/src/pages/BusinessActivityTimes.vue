@@ -6,13 +6,49 @@ import { ref } from 'vue'
 
 // Opening hours data
 const openingHours = ref([
-  { day: 'Monday', open: '09:00', close: '19:00' },
-  { day: 'Tuesday', open: '09:00', close: '19:00' },
-  { day: 'Wednesday', open: '09:00', close: '19:00' },
-  { day: 'Thursday', open: '09:00', close: '19:00' },
-  { day: 'Friday', open: '09:00', close: '19:00' },
-  { day: 'Saturday', open: '10:00', close: '17:00' },
-  { day: 'Sunday', open: '10:00', close: '17:00' },
+  { 
+    day: 'Monday', 
+    timeSlots: [
+      { start: '08:00', end: '12:00' },
+      { start: '15:00', end: '20:30' },
+    ],
+  },
+  { 
+    day: 'Tuesday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Wednesday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Thursday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Friday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Saturday', 
+    timeSlots: [
+      { start: '10:00', end: '17:00' },
+    ],
+  },
+  { 
+    day: 'Sunday', 
+    timeSlots: [
+      { start: '10:00', end: '17:00' },
+    ],
+  },
 ])
 
 // Edit mode state
