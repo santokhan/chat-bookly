@@ -162,9 +162,10 @@ const viewMember = member => {
               prepend-inner-icon="tabler-search"
               variant="outlined"
               density="comfortable"
-              class="search-input"
+              class="search-input search-field"
               hide-details
               rounded="xl"
+              color="#000000"
             />
           </div>
         </div>
@@ -213,6 +214,7 @@ const viewMember = member => {
     :deep(.v-field) {
       background-color: rgb(var(--v-theme-background));
       box-shadow: 0 1px 3px rgba(0, 0, 0, 8%);
+      border-color: #000000 !important;
     }
 
     :deep(.v-field__input) {
@@ -235,7 +237,18 @@ const viewMember = member => {
     }
 
     :deep(.v-field--focused) {
-      box-shadow: 0 0 0 2px rgb(var(--v-theme-primary), 0.2);
+      box-shadow: 0 0 0 2px #000000 !important;
+      border-color: #000000 !important;
+    }
+    
+    :deep(.v-field__outline) {
+      border-color: #000000 !important;
+    }
+    
+    :deep(.v-field__outline__start),
+    :deep(.v-field__outline__end),
+    :deep(.v-field__outline__notch) {
+      border-color: #000000 !important;
     }
 
     // Ensure icon is visible
@@ -243,6 +256,13 @@ const viewMember = member => {
       display: flex !important;
       align-items: center;
     }
+  }
+}
+
+.search-field {
+  :deep(.v-input__control) {
+    border: 2px solid black;
+    border-radius: 30px;
   }
 }
 
@@ -270,6 +290,15 @@ const viewMember = member => {
 }
 
 .options-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+.search-field {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.search-field:hover {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
 </style>
