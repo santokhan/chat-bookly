@@ -79,7 +79,7 @@ useDropZone(dropZoneRef, onDrop)
       <!-- Preview section always below picker -->
       <div
         v-if="fileData.length > 0"
-        class="d-flex justify-center align-center gap-3 pa-8 flex-wrap"
+        class="d-flex justify-center align-center gap-3 pa-4 flex-wrap"
       >
         <VRow class="match-height w-100">
           <template
@@ -90,7 +90,26 @@ useDropZone(dropZoneRef, onDrop)
               cols="12"
               sm="4"
             >
-              <VCard :ripple="false">
+              <VCard
+                :ripple="false"
+                variant="outlined"
+                class="image-card"
+              >
+                <div class="floating-delete-btn">
+                  <VBtn
+                    icon
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    class="delete-icon-btn"
+                    @click.stop="fileData.splice(index, 1)"
+                  >
+                    <VIcon
+                      icon="tabler-x"
+                      size="16"
+                    />
+                  </VBtn>
+                </div>
                 <VCardText
                   class="d-flex flex-column"
                   @click.stop
@@ -106,15 +125,6 @@ useDropZone(dropZoneRef, onDrop)
                     <span>{{ item.file.size / 1000 }} KB</span>
                   </div>
                 </VCardText>
-                <VCardActions>
-                  <VBtn
-                    variant="text"
-                    block
-                    @click.stop="fileData.splice(index, 1)"
-                  >
-                    Remove File
-                  </VBtn>
-                </VCardActions>
               </VCard>
             </VCol>
           </template>
@@ -131,5 +141,37 @@ useDropZone(dropZoneRef, onDrop)
 .drop-zone-disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+.image-card {
+  position: relative;
+  overflow: visible;
+}
+
+.floating-delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 10;
+}
+
+.delete-icon-btn {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+  background-color: white;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background-color: #fef2f2;
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
 }
 </style>

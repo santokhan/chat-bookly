@@ -182,7 +182,7 @@ const venueDescriptionMin = 200
 
 <template>
   <BusinessLayout>
-    <div class="booking-intro-wrapper">
+    <div class="booking-intro-wrapper white-background">
       <div class="booking-progress-bar">
         <div class="progress-track">
           <div
@@ -211,7 +211,6 @@ const venueDescriptionMin = 200
         </VBtn>
         <VBtn
           v-if="step < TOTAL_STEPS - 1"
-          color="black"
           class="continue-btn"
           append-icon="tabler-arrow-right"
           @click="nextStep"
@@ -650,7 +649,12 @@ const venueDescriptionMin = 200
 
 <style scoped>
 .booking-intro-wrapper {
-  padding: 2rem ;
+  padding: 1rem;
+}
+
+.white-background {
+  background-color: white;
+  min-height: 100vh;
 }
 .booking-progress-bar {
   margin-bottom: 0.5rem;
@@ -672,7 +676,7 @@ const venueDescriptionMin = 200
 .booking-intro-header {
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   gap: 1rem;
 }
 .back-arrow-btn {
@@ -682,10 +686,10 @@ const venueDescriptionMin = 200
   flex-grow: 1;
 }
 .booking-intro-card {
-  padding: 2.5rem 2rem;
+  padding: 1rem;
   background: transparent;
   box-shadow: none;
-  min-height: 60vh;
+  min-height: 50vh;
   display: flex;
   align-items: center;
 }
@@ -745,21 +749,22 @@ const venueDescriptionMin = 200
 .venue-essentials-form {
   max-width: 500px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 1rem 0;
   color: black !important;
 }
 .venue-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: black !important;
 }
 .venue-desc {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .venue-form-fields {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 .venue-field {
   display: flex;
@@ -779,7 +784,7 @@ const venueDescriptionMin = 200
   font-size: 0.95rem;
 }
 .map-section {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 .map-instructions {
   font-size: 0.95rem;
@@ -791,7 +796,7 @@ const venueDescriptionMin = 200
 .opening-hours-form {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 .day-selector {
   display: flex;
@@ -828,7 +833,7 @@ const venueDescriptionMin = 200
 .day-row {
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   gap: 1.5rem;
   justify-content: center;
 }
