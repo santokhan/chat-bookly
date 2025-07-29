@@ -22,14 +22,18 @@ defineProps({
       
       <!-- Times Section -->
       <div class="times-section">
-        <div class="opening-time">
-          {{ hours.open }}
-        </div>
-        <div class="time-separator">
-          -
-        </div>
-        <div class="closing-time">
-          {{ hours.close }}
+        <div 
+          v-for="(timeSlot, slotIndex) in hours.timeSlots || [{ start: hours.open, end: hours.close }]" 
+          :key="slotIndex"
+          class="time-slot"
+        >
+          <div class="time-display">
+            {{ timeSlot.start }} {{ timeSlot.end }}
+          </div>
+          <div 
+            v-if="slotIndex < (hours.timeSlots || [{ start: hours.open, end: hours.close }]).length - 1"
+            class="time-separator-line"
+          />
         </div>
       </div>
     </div>
@@ -42,10 +46,11 @@ defineProps({
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   width: 120px;
-  height: 110px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 
 .day-header {
@@ -62,7 +67,7 @@ defineProps({
 
 .day-name {
   color: #6a5acd;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   text-align: center;
 }
@@ -71,33 +76,35 @@ defineProps({
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 16px 12px;
+  padding: 8px 6px;
   min-height: 0;
+  overflow-y: auto;
+  max-height: 78px; /* Fixed height: 110px - 32px header */
 }
 
-.opening-time {
-  font-size: 16px;
+.time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.time-display {
+  font-size: 15px;
   font-weight: 500;
   color: #333;
-  line-height: 1.2;
-  margin-bottom: 1px;
+  line-height: 1.1;
+  text-align: center;
 }
 
-.time-separator {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.2;
-  margin: 1px 0;
-}
-
-.closing-time {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  line-height: 1.2;
-  margin-top: 1px;
+.time-separator-line {
+  width: 80%;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 2px 0;
 }
 
 /* Responsive design */
@@ -111,12 +118,15 @@ defineProps({
     height: 100px;
   }
   
-  .day-name {
-    font-size: 13px;
+  .times-section {
+    max-height: 68px; /* Fixed height: 100px - 32px header */
   }
   
-  .opening-time,
-  .closing-time {
+  .day-name {
+    font-size: 14px;
+  }
+  
+  .time-display {
     font-size: 14px;
   }
 }
@@ -131,26 +141,29 @@ defineProps({
     height: 90px;
   }
   
+  .times-section {
+    max-height: 58px; /* Fixed height: 90px - 32px header */
+  }
+  
   .day-header {
     padding: 8px 6px;
     min-height: 28px;
   }
   
   .times-section {
-    padding: 12px 8px;
+    padding: 6px 4px;
   }
   
   .day-name {
-    font-size: 12px;
-  }
-  
-  .opening-time,
-  .closing-time {
     font-size: 13px;
   }
   
-  .time-separator {
-    font-size: 12px;
+  .time-display {
+    font-size: 13px;
+  }
+  
+  .time-separator-line {
+    margin: 1px 0;
   }
 }
 </style> 

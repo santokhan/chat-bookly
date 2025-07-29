@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   openingHours: {
@@ -33,7 +33,7 @@ const timeOptions = computed(() => {
 const editHours = ref(props.openingHours.map(day => ({
   day: day.day,
   enabled: true,
-  timeSlots: [{ start: day.open, end: day.close }],
+  timeSlots: day.timeSlots || [{ start: day.open || '09:00', end: day.close || '17:00' }],
 })))
 
 const addTimeSlot = dayIndex => {
@@ -59,12 +59,9 @@ const copyToAllDays = () => {
 const saveChanges = () => {
   // Update the display hours from edit hours
   const updatedHours = editHours.value.map(day => {
-    const firstSlot = day.timeSlots[0]
-
     return {
       day: day.day,
-      open: firstSlot.start,
-      close: firstSlot.end,
+      timeSlots: day.timeSlots.map(slot => ({ ...slot })),
     }
   })
 
@@ -76,7 +73,7 @@ const cancelEdit = () => {
   editHours.value = props.openingHours.map(day => ({
     day: day.day,
     enabled: true,
-    timeSlots: [{ start: day.open, end: day.close }],
+    timeSlots: day.timeSlots || [{ start: day.open || '09:00', end: day.close || '17:00' }],
   }))
   emit('cancel')
 }
@@ -93,12 +90,14 @@ const cancelEdit = () => {
         <div class="d-flex gap-2">
           <VBtn
             variant="outlined"
+            color="#000000"
+            class="close-btn"
             @click="cancelEdit"
           >
-            Cancel
+            Close
           </VBtn>
           <VBtn
-            color="primary"
+            color="#000000"
             @click="saveChanges"
           >
             Save
@@ -135,10 +134,9 @@ const cancelEdit = () => {
                 v-model="slot.start"
                 :items="timeOptions"
                 variant="outlined"
-                density="compact"
                 hide-details
                 class="time-input me-2"
-                style="width: 120px"
+                style="inline-size: 120px;"
                 item-title="title"
                 item-value="value"
               />
@@ -147,10 +145,9 @@ const cancelEdit = () => {
                 v-model="slot.end"
                 :items="timeOptions"
                 variant="outlined"
-                density="compact"
                 hide-details
                 class="time-input me-2"
-                style="width: 120px"
+                style="inline-size: 120px;"
                 item-title="title"
                 item-value="value"
               />
@@ -218,9 +215,9 @@ const cancelEdit = () => {
 
 <style scoped>
 .edit-opening-hours-container {
-  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 10%);
 }
 
 .day-edit-header {
@@ -229,7 +226,7 @@ const cancelEdit = () => {
 }
 
 .time-slots-container {
-  margin-left: 40px;
+  margin-inline-start: 40px;
 }
 
 .time-slot-row {
@@ -243,40 +240,73 @@ const cancelEdit = () => {
 }
 
 .copy-card {
-  background-color: rgb(var(--v-theme-primary), 0.05);
   border-color: rgb(var(--v-theme-primary), 0.2);
+  background-color: rgb(var(--v-theme-primary), 0.05);
 }
 
 .remove-btn {
-  min-width: 32px;
-  height: 32px;
-  margin-left: 8px;
+  block-size: 32px;
+  margin-inline-start: 8px;
+  min-inline-size: 32px;
 }
 
 .add-btn {
-  min-width: 32px;
-  height: 32px;
-  margin-left: 8px;
+  block-size: 32px;
+  margin-inline-start: 8px;
+  min-inline-size: 32px;
+}
+
+.close-btn {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.close-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
   .time-slots-container {
-    margin-left: 20px;
+    margin-inline-start: 20px;
   }
-  
+
   .time-input {
-    width: 100px !important;
+    inline-size: 100px !important;
+  }
+
+  :deep(.text-h4) {
+    font-size: 1.5rem !important;
+  }
+
+  :deep(.text-h6) {
+    font-size: 1.125rem !important;
+  }
+
+  :deep(.text-body-2) {
+    font-size: 0.875rem !important;
   }
 }
 
 @media (max-width: 480px) {
   .time-slots-container {
-    margin-left: 10px;
+    margin-inline-start: 10px;
   }
-  
+
   .time-input {
-    width: 80px !important;
+    inline-size: 80px !important;
+  }
+
+  :deep(.text-h4) {
+    font-size: 1.375rem !important;
+  }
+
+  :deep(.text-h6) {
+    font-size: 1rem !important;
+  }
+
+  :deep(.text-body-2) {
+    font-size: 0.8125rem !important;
   }
 }
 </style> 

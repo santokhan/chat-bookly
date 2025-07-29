@@ -1,18 +1,54 @@
 <script setup>
-import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
-import OpeningHours from '@/components/OpeningHours.vue'
 import EditOpeningHours from '@/components/EditOpeningHours.vue'
+import OpeningHours from '@/components/OpeningHours.vue'
+import BusinessLayout from '@/layouts/components/BusinessLayout.vue'
 import { ref } from 'vue'
 
 // Opening hours data
 const openingHours = ref([
-  { day: 'Monday', open: '09:00', close: '19:00' },
-  { day: 'Tuesday', open: '09:00', close: '19:00' },
-  { day: 'Wednesday', open: '09:00', close: '19:00' },
-  { day: 'Thursday', open: '09:00', close: '19:00' },
-  { day: 'Friday', open: '09:00', close: '19:00' },
-  { day: 'Saturday', open: '10:00', close: '17:00' },
-  { day: 'Sunday', open: '10:00', close: '17:00' },
+  { 
+    day: 'Monday', 
+    timeSlots: [
+      { start: '08:00', end: '12:00' },
+      { start: '15:00', end: '20:30' },
+    ],
+  },
+  { 
+    day: 'Tuesday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Wednesday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Thursday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Friday', 
+    timeSlots: [
+      { start: '09:00', end: '19:00' },
+    ],
+  },
+  { 
+    day: 'Saturday', 
+    timeSlots: [
+      { start: '10:00', end: '17:00' },
+    ],
+  },
+  { 
+    day: 'Sunday', 
+    timeSlots: [
+      { start: '10:00', end: '17:00' },
+    ],
+  },
 ])
 
 // Edit mode state
@@ -58,15 +94,7 @@ const handleCancel = () => {
         
         <!-- Description Text -->
         <p class="text-lg text-medium-emphasis mb-6">
-          Opening hours for these locations are default working hours for your team and will be visible to your clients. 
-          You can amend business closed periods for events like Bank Holidays in 
-          <a 
-            href="#" 
-            class="text-primary text-decoration-underline"
-            @click.prevent="goToSettings"
-          >
-            Settings
-          </a>.
+          Opening hours for these locations are default working hours for your team and will be visible to your clients.
         </p>
 
         <!-- Opening Hours Component -->
@@ -86,27 +114,41 @@ const handleCancel = () => {
 
 <style lang="scss" scoped>
 .opening-hours-container {
-  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 10%);
 }
 
 // Increase button font size
 :deep(.v-btn) {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
 }
 
 // Responsive font sizes
 @media (max-width: 768px) {
   :deep(.text-h3) {
-    font-size: 1.75rem !important;
+    font-size: 1.875rem !important;
   }
-  
+
   :deep(.text-lg) {
-    font-size: 1.125rem !important;
+    font-size: 1.1875rem !important;
   }
-  
+
+  :deep(.v-btn) {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  :deep(.text-h3) {
+    font-size: 1.625rem !important;
+  }
+
+  :deep(.text-lg) {
+    font-size: 1.0625rem !important;
+  }
+
   :deep(.v-btn) {
     font-size: 14px;
   }
