@@ -170,6 +170,7 @@ const handleDeleteMember = member => {
                 append-icon="tabler-chevron-down"
                 v-bind="props"
                 rounded="xl"
+                class="actions-btn"
               >
                 Actions
               </VBtn>
@@ -335,5 +336,14 @@ const handleDeleteMember = member => {
       padding-inline: 8px !important;
     }
   }
+}
+
+.actions-btn {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.actions-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 </style> 

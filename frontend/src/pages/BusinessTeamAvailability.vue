@@ -152,8 +152,8 @@ const addShift = (member, dayKey) => {
           >
             <VBtn
               variant="outlined"
-              color="primary"
-              class="me-2"
+              color="#000000"
+              class="me-2 options-btn"
               @click="openOptions"
             >
               Options
@@ -767,6 +767,16 @@ const addShift = (member, dayKey) => {
   border-top-right-radius: 32px !important;
   border-bottom-right-radius: 32px !important;
 }
+
+.options-btn {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.options-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
 @media (max-width: 960px) {
   .week-segmented {
     width: 100%;

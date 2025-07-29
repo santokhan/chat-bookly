@@ -121,7 +121,7 @@ const viewMember = member => {
                 append-icon="tabler-chevron-down"
                 v-bind="props"
                 size="large"
-                class="flex-grow-1 flex-sm-grow-0"
+                class="flex-grow-1 flex-sm-grow-0 options-btn"
               >
                 Options
               </VBtn>
@@ -262,5 +262,14 @@ const viewMember = member => {
   .search-wrapper .search-input {
     min-inline-size: 300px;
   }
+}
+
+.options-btn {
+  border-color: #000000 !important;
+  color: #000000 !important;
+}
+
+.options-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 </style>
