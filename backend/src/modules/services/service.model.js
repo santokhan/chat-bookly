@@ -9,7 +9,7 @@ const serviceSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    time: {
+    service_time: {
       type: Number,
       required: true,
     },

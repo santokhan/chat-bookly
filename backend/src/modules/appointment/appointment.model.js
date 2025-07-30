@@ -13,9 +13,19 @@ const appointmentSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    appointmentDateTime: {
-      type: Date,
-      required: true,
+    serviceId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Service',
+    },
+    staffId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    appointmentDate: {
+      type: String,
+    },
+    appointmentTime: {
+      type: String,
     },
     appointmentDescription: {
       type: String,
@@ -23,11 +33,20 @@ const appointmentSchema = new Schema(
     status: {
       type: String,
       enum: [
+        'in_progress',
         'scheduled',
         'completed',
         'cancelled',
       ],
-      default: 'scheduled',
+      default: 'in_progress',
+    },
+    whatsappPhoneNumber: {
+      type: String,
+    },
+    bookingStep: {
+      type: String,
+      enum: ['service_selection', 'staff_selection', 'date_selection', 'time_selection', 'completed'],
+      default: 'service_selection',
     },
   }, {
     timestamps: true,

@@ -47,6 +47,28 @@ const unavailabilitySchema = new mongoose.Schema(
   },
 );
 
+const locationSchema = new mongoose.Schema(
+  {
+    latitude: {
+      type: Number,
+      required: true,
+      min: -90,
+      max: 90,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+      min: -180,
+      max: 180,
+    },
+    map_url: {
+      type: String,
+    },
+  }, {
+    _id: false,
+  },
+);
+
 const settingsSchema = new mongoose.Schema(
   {
     business_id: {
@@ -72,9 +94,7 @@ const settingsSchema = new mongoose.Schema(
     },
     unavailability_periods: [unavailabilitySchema],
     address: addressSchema,
-    google_maps_url: {
-      type: String,
-    },
+    location: locationSchema,
     additional_amenities: {
       type: [String],
     },

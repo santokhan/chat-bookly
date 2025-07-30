@@ -1,20 +1,6 @@
 import User from './user.model.js';
 import userService from './user.service.js';
-import BusinessStaff from './businessStaff.model.js';
-
-// export async function register(req, res) {
-//   try {
-//     const user = await userService.registerUser(req.body);
-
-//     if (user.success) {
-//       res.status(201).json(user);
-//     } else {
-//       res.status(400).json(user);
-//     }
-//   } catch (err) {
-//     res.status(400).json(err);
-//   }
-// }
+import BusinessStaff from './businessStaff.model.js'
 
 const register = async (req, res) => {
   try {
@@ -29,20 +15,6 @@ const register = async (req, res) => {
     res.status(400).json(err);
   }
 }
-
-// export async function login(req, res) {
-//   try {
-//     const user = await userService.loginUser(req.body);
-
-//     if (user.success) {
-//       res.status(200).json(user);
-//     } else {
-//       res.status(400).json(user);
-//     }
-//   } catch (err) {
-//     res.status(400).json(err);
-//   }
-// }
 
 const login = async (req, res) => {
   try {

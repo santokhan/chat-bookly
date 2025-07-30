@@ -10,6 +10,7 @@ async function createUserEntry({
   password,
   role,
   business_id,
+  is_verified,
 }) {
   const existingUser = await User.findOne({
     $or: [
@@ -32,6 +33,7 @@ async function createUserEntry({
     phone_number,
     password: hashedPassword,
     role,
+    is_verified: is_verified || false,
   });
 
   if (role === 'staff' && business_id) {
@@ -63,6 +65,7 @@ export async function registerUser(data) {
       role === 'business'
       || role === 'admin'
       || role === 'staff'
+      || role === 'user'
     ) {
       const result = await createUserEntry({
         role,
@@ -123,6 +126,19 @@ export async function loginUser(data) {
       error,
       success: false,
       message: 'Login failed',
+    };
+  }
+}
+
+export async function getUserByPhoneNumber(phone_number) {
+  try {
+    const user = await User.findOne({ phone_number });
+    return user;
+  } catch (error) {
+    return {
+      error,
+      success: false,
+      message: 'Get user by phone number failed',
     };
   }
 }
@@ -202,6 +218,19 @@ export async function deleteUser(id) {
       error,
       success: false,
       message: 'Delete failed',
+    };
+  }
+}
+
+export async function getStaffByBusinessId(business_id) {
+  try {
+    const staff = await BusinessStaff.find({ business_id }).populate('staff_id');
+    return staff;
+  } catch (error) {
+    return {
+      error,
+      success: false,
+      message: 'Get staff by business id failed',
     };
   }
 }

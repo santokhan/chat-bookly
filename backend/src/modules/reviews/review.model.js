@@ -20,7 +20,34 @@ const reviewSchema = new mongoose.Schema(
     },
     comment: {
       type: String,
+      default: '',
     },
+    like: {
+      type: Number,
+      default: 0,
+    },
+    dislike: {
+      type: Number,
+      default: 0,
+    },
+    replies: [{
+      user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      comment: {
+        type: String,
+      },
+      like: {
+        type: Number,
+        default: 0,
+      },
+      dislike: {
+        type: Number,
+        default: 0,
+      },
+      default: [],
+    }],
   }, {
     timestamps: true,
   },

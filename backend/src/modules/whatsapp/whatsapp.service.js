@@ -253,12 +253,12 @@ const whatsappService = {
         });
       }
       // Header
-      const headerComponent = template[0].components.find(comp => comp.type === "HEADER");
+      const headerComponent = template[0].components.find(comp => comp.type === 'HEADER');
       if (headerComponent) {
         headerComponent.data = header.data;
       }
       // Body
-      const bodyComponent = template[0].components.find(comp => comp.type === "BODY");
+      const bodyComponent = template[0].components.find(comp => comp.type === 'BODY');
       if (!bodyComponent) {
         return { message: 'error', error: 'Body component not found' };
       }
@@ -276,7 +276,7 @@ const whatsappService = {
       });
       bodyComponent.text = populatedBodyText;
       // Buttons
-      const buttonComponent = template[0].components.find(comp => comp.type === "BUTTONS");
+      const buttonComponent = template[0].components.find(comp => comp.type === 'BUTTONS');
       if (buttonComponent) {
         const btns = buttonComponent.buttons;
         if (buttons === undefined || buttons === null) {
@@ -295,7 +295,7 @@ const whatsappService = {
         return { message: 'error', error: 'Button component not found.' };
       }
       // Footer
-      const footerComponent = template[0].components.find(comp => comp.type === "FOOTER");
+      const footerComponent = template[0].components.find(comp => comp.type === 'FOOTER');
       const component = {
         header: headerComponent ? headerComponent : {},
         body: bodyComponent ? bodyComponent : {},
@@ -338,7 +338,9 @@ const whatsappService = {
       // Step 1: Get temp token
       const tempTokenUrl = `https://graph.facebook.com/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&grant_type=client_credentials`;
       const tempTokenRes = await axios.get(tempTokenUrl);
+
       const tempToken = tempTokenRes.data.access_token;
+      console.log('tempToken: ', tempToken);
   
       if (!code) {
         return {
@@ -346,7 +348,7 @@ const whatsappService = {
           access_token: tempToken,
         };
       }
-  
+
       // Step 2: Get permanent token
       const url = `${WHATSAPP_CLOUD_API}/oauth/access_token`;
       const headers = {
@@ -366,11 +368,13 @@ const whatsappService = {
         { headers },
       );
 
+      console.log('accessTokenRes: ', accessTokenRes.data);
       return {
         success: true,
         access_token: accessTokenRes.data.access_token,
       };
     } catch (error) {
+      console.log('error: ', error?.response?.data);
       return {
         success: false,
         error: error.response?.data || error.message,
@@ -477,6 +481,68 @@ const whatsappService = {
       };
     }
   },
+  sendWhatsappFlow: async (
+    phone,
+    flow_header,
+    flow_body,
+    flow_footer,
+    flow_id,
+    // screen_name,
+  ) => {
+    const url = `${WHATSAPP_CLOUD_API}/${WHATSAPP_PHONE_ID}/messages`;
+
+    let data = {
+      messaging_product: 'whatsapp',
+      recipient_type: 'individual',
+      to: phone,
+      type: 'interactive',
+      interactive: {
+        type: 'flow',
+        header: {
+          type: 'text',
+          text: flow_header,
+        },
+        body: {
+          text: flow_body,
+        },
+        footer: {
+          text: flow_footer,
+        },
+        action: {
+          name: 'flow',
+          parameters: {
+            flow_message_version: '3',
+            flow_token: 'AQAAAAACS5FpgQ_cAAAAAD0QI3s.',
+            flow_id: flow_id,
+            flow_cta: 'Sign Up',
+            // flow_action: 'navigate',
+            // flow_action_payload: {
+            //   screen: screen_name,
+            // },
+          },
+        },
+      },
+    };
+  
+    try {
+      const response = await axios.post(
+        url,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${WHATSAPP_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      return {
+        response,
+        message: 'done',
+      };
+    } catch (error) {
+      return error?.response?.data;
+    }
+  }
 };
 
 export default whatsappService;

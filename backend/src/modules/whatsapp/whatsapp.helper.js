@@ -45,8 +45,8 @@ const whatsappHelper = {
             btns.push({
               type: 'reply',
               reply: {
-                id: button.toLowerCase(),
-                title: button,
+                id: button.id,
+                title: button.title,
               },
             })
           });
@@ -138,6 +138,7 @@ const whatsappHelper = {
               error: 'Maximum 10 buttons are allowed.',
             };
           }
+
           data.buttons.forEach((button) => {
             if (button.title.length === 0) {
               return {
@@ -146,7 +147,7 @@ const whatsappHelper = {
               };
             }
             listItems.push({
-              id: button.title.toLowerCase(),
+              id: button.id,
               title: button.title,
               description: button?.description,
             });

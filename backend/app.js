@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 
 import userRoutes from './src/modules/user/user.routes.js';
 import reviewRoutes from './src/modules/reviews/review.routes.js';
-import serviceRoutes from './src/modules/services/service.routes.js';
 import businessRoutes from './src/modules/business/business.routes.js';
 import whatsappRoutes from './src/modules/whatsapp/whatsapp.routes.js';
 import settingsRoutes from './src/modules/settings/settings.routes.js';
@@ -38,7 +37,6 @@ app.post('/api/v1/check', (req, res) => {
 // Routes
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
-app.use('/api/v1/services', serviceRoutes);
 app.use('/api/v1/business', businessRoutes);
 app.use('/api/v1/whatsapp', whatsappRoutes);
 app.use('/api/v1/settings', settingsRoutes);

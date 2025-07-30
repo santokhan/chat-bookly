@@ -3,36 +3,32 @@ import mongoose from 'mongoose';
 const conversationSchema = new mongoose.Schema(
   {
     to: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     from: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     message: {
       type: String,
       required: true,
     },
-    readyState: {
-      type: String,
-      required: true,
-    },
-    conversationId: {
+    conversation_id: {
       type: String,
       required: true,
     },
     bound: {
       type: String,
+      enum: ['inbound', 'outbound'],
       required: true,
     },
-    type: {
-      type: String,
+    business_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Business',
       required: true,
-    },
-    status: {
-      type: [String],
-      default: [],
     },
   },{
     timestamps: true,

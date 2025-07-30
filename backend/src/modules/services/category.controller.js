@@ -1,3 +1,4 @@
+import Service from './service.model.js';
 import Category from './category.model.js';
 
 export async function createCategory(req, res) {
@@ -58,27 +59,97 @@ export async function getCategories(req, res) {
   }
 }
 
-export async function addServiceToCategory(req, res) {
+export async function createService(req, res) {
   try {
+    const { category_id } = req.params;
+
     const {
-      categoryId,
-      serviceId,
+      title,
+      description,
+      service_time,
+      business_id,
     } = req.body;
 
-    const category = await Category.findByIdAndUpdate(
-      categoryId,
-      { $addToSet: { services: serviceId } },
+    if (!business_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'business_id is required',
+      });
+    }
+
+    const service = await Service.create({
+      title,
+      description,
+      service_time,
+      category_id,
+      business_id,
+    });
+
+    await Category.findByIdAndUpdate(
+      category_id,
+      { $addToSet: { services: service._id } },
       { new: true },
-    ).populate('services');
+    );
 
     res.json({
       success: true,
-      category,
+      service,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Failed to add service to category',
+      message: 'Failed to create service',
+      error,
+    });
+  }
+}
+
+export async function getServices(req, res) {
+  try {
+    const { category_id } = req.params;
+    const { business_id } = req.query;
+
+    if (!business_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'business_id is required',
+      });
+    }
+
+    const filter = { business_id };
+    let services = [];
+    if (category_id) {
+      filter.category_id = category_id;
+      services = await Service.find(filter).populate('category_id');
+    } else {
+      services = await Service.find(filter);
+    }
+
+    res.json({
+      success: true,
+      services,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch services',
+      error,
+    });
+  }
+}
+
+export async function getService(req, res) {
+  try {
+    const { service_id } = req.params;
+    const service = await Service.findById(service_id);
+    res.json({
+      success: true,
+      service,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch service',
       error,
     });
   }
