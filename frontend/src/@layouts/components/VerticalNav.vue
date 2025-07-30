@@ -70,6 +70,7 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
     :is="props.tag"
     ref="refNav"
     data-allow-mismatch
+    style="background-color: #161616; color: white"
     class="layout-vertical-nav"
     :class="[
       {
@@ -91,6 +92,7 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
 
           <Transition name="vertical-nav-app-title">
             <h1
+              style="color: white"
               v-show="!hideTitleAndIcon"
               class="app-logo-title"
             >

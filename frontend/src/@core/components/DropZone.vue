@@ -5,33 +5,40 @@ import {
   useObjectUrl,
 } from '@vueuse/core'
 
+// Emit selected files to parent
+const emit = defineEmits(['update:modelValue'])
 const dropZoneRef = ref()
 const fileData = ref([])
-const { open, onChange } = useFileDialog({ accept: 'image/*' })
+
+// Allow multiple file selection
+const { open, onChange } = useFileDialog({ accept: 'image/*', multiple: true })
 function onDrop(DroppedFiles) {
   DroppedFiles?.forEach(file => {
     if (file.type.slice(0, 6) !== 'image/') {
-
-      // eslint-disable-next-line no-alert
       alert('Only image files are allowed')
       
       return
     }
-    fileData.value.push({
-      file,
-      url: useObjectUrl(file).value ?? '',
-    })
+    if (fileData.value.length < 3) {
+      fileData.value.push({
+        file,
+        url: useObjectUrl(file).value ?? '',
+      })
+    }
   })
+  emit('update:modelValue', fileData.value)
 }
 onChange(selectedFiles => {
-  if (!selectedFiles)
-    return
+  if (!selectedFiles) return
   for (const file of selectedFiles) {
-    fileData.value.push({
-      file,
-      url: useObjectUrl(file).value ?? '',
-    })
+    if (fileData.value.length < 3) {
+      fileData.value.push({
+        file,
+        url: useObjectUrl(file).value ?? '',
+      })
+    }
   }
+  emit('update:modelValue', fileData.value)
 })
 useDropZone(dropZoneRef, onDrop)
 </script>
@@ -39,14 +46,16 @@ useDropZone(dropZoneRef, onDrop)
 <template>
   <div class="flex">
     <div class="w-full h-auto relative">
+      <!-- Picker (dotted box) always visible unless max images -->
       <div
         ref="dropZoneRef"
         class="cursor-pointer"
-        @click="() => open()"
+        :class="{ 'drop-zone-disabled': fileData.length >= 3 }"
+        @click="() => { if (fileData.length < 3) open() }"
       >
         <div
-          v-if="fileData.length === 0"
           class="d-flex flex-column justify-center align-center gap-y-2 pa-12 drop-zone rounded"
+          :style="fileData.length >= 3 ? 'opacity: 0.5; pointer-events: none;' : ''"
         >
           <IconBtn
             variant="tonal"
@@ -58,62 +67,68 @@ useDropZone(dropZoneRef, onDrop)
             Drag and drop your image here.
           </h4>
           <span class="text-disabled">or</span>
-
           <VBtn
             variant="tonal"
             size="small"
+            :disabled="fileData.length >= 3"
           >
             Browse Images
           </VBtn>
         </div>
-
-        <div
-          v-else
-          class="d-flex justify-center align-center gap-3 pa-8 drop-zone flex-wrap"
-        >
-          <VRow class="match-height w-100">
-            <template
-              v-for="(item, index) in fileData"
-              :key="index"
+      </div>
+      <!-- Preview section always below picker -->
+      <div
+        v-if="fileData.length > 0"
+        class="d-flex justify-center align-center gap-3 pa-4 flex-wrap"
+      >
+        <VRow class="match-height w-100">
+          <template
+            v-for="(item, index) in fileData"
+            :key="index"
+          >
+            <VCol
+              cols="12"
+              sm="4"
             >
-              <VCol
-                cols="12"
-                sm="4"
+              <VCard
+                :ripple="false"
+                variant="outlined"
+                class="image-card"
               >
-                <VCard :ripple="false">
-                  <VCardText
-                    class="d-flex flex-column"
-                    @click.stop
+                <div class="floating-delete-btn">
+                  <VBtn
+                    icon
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    class="delete-icon-btn"
+                    @click.stop="fileData.splice(index, 1)"
                   >
-                    <VImg
-                      :src="item.url"
-                      width="200px"
-                      height="150px"
-                      class="w-100 mx-auto"
+                    <VIcon
+                      icon="tabler-x"
+                      size="16"
                     />
-                    <div class="mt-2">
-                      <span class="clamp-text text-wrap">
-                        {{ item.file.name }}
-                      </span>
-                      <span>
-                        {{ item.file.size / 1000 }} KB
-                      </span>
-                    </div>
-                  </VCardText>
-                  <VCardActions>
-                    <VBtn
-                      variant="text"
-                      block
-                      @click.stop="fileData.splice(index, 1)"
-                    >
-                      Remove File
-                    </VBtn>
-                  </VCardActions>
-                </VCard>
-              </VCol>
-            </template>
-          </VRow>
-        </div>
+                  </VBtn>
+                </div>
+                <VCardText
+                  class="d-flex flex-column"
+                  @click.stop
+                >
+                  <VImg
+                    :src="item.url"
+                    width="200px"
+                    height="150px"
+                    class="w-100 mx-auto"
+                  />
+                  <div class="mt-2">
+                    <span class="clamp-text text-wrap">{{ item.file.name }}</span>
+                    <span>{{ item.file.size / 1000 }} KB</span>
+                  </div>
+                </VCardText>
+              </VCard>
+            </VCol>
+          </template>
+        </VRow>
       </div>
     </div>
   </div>
@@ -122,5 +137,41 @@ useDropZone(dropZoneRef, onDrop)
 <style lang="scss" scoped>
 .drop-zone {
   border: 1px dashed rgba(var(--v-theme-on-surface), var(--v-border-opacity));
+}
+.drop-zone-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.image-card {
+  position: relative;
+  overflow: visible;
+}
+
+.floating-delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 10;
+}
+
+.delete-icon-btn {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
+  background-color: white;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background-color: #fef2f2;
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
 }
 </style>
