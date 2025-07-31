@@ -51,12 +51,12 @@ const webhookService = {
             } catch (error) {
               console.log('Error: ', error);
             }
-          } else if ((reqData?.messages?.[0]?.text?.body).includes('book')) {
-            getAndSendListOfService(business_id, user_phone_no);
-          } else if ((reqData?.messages?.[0]?.text?.body).includes('reschedule')) {
-            getAndSendListOfAppointment(business_id, user_phone_no, 'reschedule');
-          } else if ((reqData?.messages?.[0]?.text?.body).includes('cancel')) {
-            getAndSendListOfAppointment(business_id, user_phone_no, 'cancel');
+          // } else if ((reqData?.messages?.[0]?.text?.body).includes('book')) {
+          //   getAndSendListOfService(business_id, user_phone_no);
+          // } else if ((reqData?.messages?.[0]?.text?.body).includes('reschedule')) {
+          //   getAndSendListOfAppointment(business_id, user_phone_no, 'reschedule');
+          // } else if ((reqData?.messages?.[0]?.text?.body).includes('cancel')) {
+          //   getAndSendListOfAppointment(business_id, user_phone_no, 'cancel');
           } else {
             sendIntentMessage(business_id, user_phone_no);
           }
