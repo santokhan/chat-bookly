@@ -13,11 +13,11 @@
   },
   "intent_header_message": {
     "en": "What would you like to do?",
-    "it": "Cosa vorresti fare?"
+    "it": "Grazie per averci contattato!"
   },
   "intent_message": {
     "en": "Please select the option you want to choose:",
-    "it": "Seleziona l'opzione che vuoi scegliere:"
+    "it": "👋 Come possiamo aiutarti oggi?"
   },
   "user_registered_success": {
     "en": "User registered successfully",
@@ -61,11 +61,15 @@
   },
   "book": {
     "en": "Book",
-    "it": "Prenota"
+    "it": "Prenota appuntamento"
   },
   "reschedule": {
     "en": "Reschedule",
-    "it": "Rischedula"
+    "it": "Riprogramma appunta"
+  },
+  "cancel_appointment": {
+    "en": "Cancel",
+    "it": "Annulla appuntamento"
   },
   "confirm": {
     "en": "Confirm",

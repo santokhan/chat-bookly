@@ -155,7 +155,7 @@ const sendIntentMessage = async (business_id, user_phone_no) => {
         },
         {
           id: `business-${business_id}-cancel`,
-          title: translationService.getItalianMessage('cancel'),
+          title: translationService.getItalianMessage('cancel_appointment'),
         },
       ],
     };
