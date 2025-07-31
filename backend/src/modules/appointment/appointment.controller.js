@@ -1,25 +1,25 @@
-import service from './appointment.service';
-import whatsappService from './whatsappAppointment.service';
-import AppointmentSettings from './appointmentSettings.model';
-import {
-  createSettings,
-  updateSettings,
-  bookAppointment,
-} from './appointment.validation';
+import service from './appointment.service.js';
+import whatsappService from './whatsappAppointment.service.js';
+import AppointmentSettings from './appointmentSettings.model.js';
+// import {
+//   createSettings,
+//   updateSetting,
+//   bookAppointmentValidator,
+// } from './appointment.validation.js';
 
 // export async function setStaffSettings(req, res) {
-export async function setSettings (req, res) {
-  try {
-    const { error } = createSettings.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
+// export async function setSettings (req, res) {
+//   try {
+//     const { error } = createSettings.validate(req.body);
+//     if (error) return res.status(400).json({ error: error.details[0].message });
 
-    const settings = new AppointmentSettings(req.body);
-    await settings.save();
-    res.status(201).json(settings);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+//     const settings = new AppointmentSettings(req.body);
+//     await settings.save();
+//     res.status(201).json(settings);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 export async function getSettings (req, res) {
   try {
@@ -32,19 +32,19 @@ export async function getSettings (req, res) {
   }
 };
 
-export async function updateSettings (req, res) {
-  try {
-    const { error } = updateSettings.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
+// export async function updateSettings (req, res) {
+//   try {
+//     const { error } = updateSetting.validate(req.body);
+//     if (error) return res.status(400).json({ error: error.details[0].message });
 
-    const { businessId } = req.params;
-    const settings = await AppointmentSettings.findOneAndUpdate({ businessId }, req.body, { new: true });
-    if (!settings) return res.status(404).json({ error: 'Settings not found' });
-    res.json(settings);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
+//     const { businessId } = req.params;
+//     const settings = await AppointmentSettings.findOneAndUpdate({ businessId }, req.body, { new: true });
+//     if (!settings) return res.status(404).json({ error: 'Settings not found' });
+//     res.json(settings);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
 export async function getAvailableDates (req, res) {
   try {
@@ -66,17 +66,17 @@ export async function getAvailableTimeSlots (req, res) {
   }
 };
 
-export async function bookAppointment (req, res) {
-  try {
-    const { error } = bookAppointment.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
+// export async function bookAppointment (req, res) {
+//   try {
+//     const { error } = bookAppointmentValidator.validate(req.body);
+//     if (error) return res.status(400).json({ error: error.details[0].message });
 
-    const appointment = await service.bookAppointment(req.body);
-    res.status(201).json(appointment);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};
+//     const appointment = await service.bookAppointment(req.body);
+//     res.status(201).json(appointment);
+//   } catch (err) {
+//     res.status(400).json({ error: err.message });
+//   }
+// };
 
 export async function rescheduleAppointment (req, res) {
   try {
@@ -234,3 +234,41 @@ export async function getAvailableTimeSlotsForWhatsApp (req, res) {
     res.status(500).json({ error: err.message });
   }
 };
+
+export async function getAppointmentsForBusiness (req, res) {
+  try {
+    const { business_id } = req.params;
+    const appointments = await whatsappService.getAppointmentsForBusiness(business_id);
+    res.json({
+      success: true,
+      appointments,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+export default {
+  // setSettings,
+  getSettings,
+  // updateSettings,
+  getAvailableDates,
+  getAvailableTimeSlots,
+  // bookAppointment,
+  rescheduleAppointment,
+  getAppointments,
+  createWhatsAppAppointment,
+  updateWhatsAppAppointmentDate,
+  updateWhatsAppAppointmentService,
+  updateWhatsAppAppointmentStaff,
+  updateWhatsAppAppointmentTime,
+  getWhatsAppAppointment,
+  getBusinessServicesForWhatsApp,
+  getBusinessStaffForWhatsApp,
+  getAvailableDatesForWhatsApp,
+  getAvailableTimeSlotsForWhatsApp,
+  getAppointmentsForBusiness,
+}

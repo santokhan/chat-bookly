@@ -21,7 +21,7 @@ exports.createSettings = Joi.object({
   aboutBusiness: Joi.string().allow(''),
 });
 
-exports.updateSettings = Joi.object({
+exports.updateSetting = Joi.object({
   availability: Joi.array().items(
     Joi.object({
       day: Joi.string().required(),
@@ -41,9 +41,15 @@ exports.updateSettings = Joi.object({
   aboutBusiness: Joi.string().allow(''),
 });
 
-exports.bookAppointment = Joi.object({
+bookAppointmentValidator = Joi.object({
   businessId: Joi.string().required(),
   contactId: Joi.string().required(),
   appointmentDateTime: Joi.date().required(),
   appointmentDescription: Joi.string().allow(''),
 });
+
+export default {
+  createSettings,
+  updateSettings,
+  bookAppointmentValidator,
+}

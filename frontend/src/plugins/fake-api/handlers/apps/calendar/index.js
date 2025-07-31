@@ -8,11 +8,13 @@ export const handlerAppsCalendar = [
   // 👉 Get Calendar Events
   http.get(('/api/apps/calendar'), ({ request }) => {
     const url = new URL(request.url)
+    console.log('Url: ', url);
     const queries = url.searchParams.getAll('calendars')
     const parsedCalendars = destr(queries)
     const calendars = is.array(parsedCalendars) ? parsedCalendars : undefined
     const events = db.events.filter(event => calendars?.includes(event.extendedProps.calendar))
     
+    console.log('Events: ', events);
     return HttpResponse.json(events, { status: 200 })
   }),
 

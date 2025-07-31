@@ -1,5 +1,7 @@
 const date = new Date()
+console.log('Date: ', date);
 const nextDay = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+console.log('Next Day: ', nextDay);
 const nextMonth = date.getMonth() === 11 ? new Date(date.getFullYear() + 1, 0, 1) : new Date(date.getFullYear(), date.getMonth() + 1, 1)
 const prevMonth = date.getMonth() === 11 ? new Date(date.getFullYear() - 1, 0, 1) : new Date(date.getFullYear(), date.getMonth() - 1, 1)
 export const db = {
@@ -54,7 +56,7 @@ export const db = {
       title: 'Dart Game?',
       start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
       end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
-      allDay: true,
+      // allDay: true,
       extendedProps: {
         calendar: 'ETC',
       },

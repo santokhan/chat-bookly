@@ -8,7 +8,7 @@ import businessRoutes from './src/modules/business/business.routes.js';
 import whatsappRoutes from './src/modules/whatsapp/whatsapp.routes.js';
 import settingsRoutes from './src/modules/settings/settings.routes.js';
 import categoryRoutes from './src/modules/services/category.routes.js';
-// import appointmentRoutes from './src/modules/appointment/appointment.routes.js';
+import appointmentRoutes from './src/modules/appointment/appointment.routes.js';
 import conversationRoutes from './src/modules/conversation/conversation.routes.js';
 
 const app = express();
@@ -41,7 +41,7 @@ app.use('/api/v1/business', businessRoutes);
 app.use('/api/v1/whatsapp', whatsappRoutes);
 app.use('/api/v1/settings', settingsRoutes);
 app.use('/api/v1/categories', categoryRoutes);
-// app.use('/api/v1/appointments', appointmentRoutes);
+app.use('/api/v1/appointments', appointmentRoutes);
 app.use('/api/v1/conversation', conversationRoutes);
 
 export default app;

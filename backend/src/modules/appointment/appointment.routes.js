@@ -2,12 +2,12 @@ import express from 'express';
 const router = express.Router();
 import { requireRole } from '../../middlewares/role.middleware.js';
 import {
-  setSettings,
+  // setSettings,
   getSettings,
-  updateSettings,
+  // updateSettings,
   getAvailableDates,
   getAvailableTimeSlots,
-  bookAppointment,
+  // bookAppointment,
   rescheduleAppointment,
   getAppointments,
   createWhatsAppAppointment,
@@ -20,17 +20,18 @@ import {
   getBusinessStaffForWhatsApp,
   getAvailableDatesForWhatsApp,
   getAvailableTimeSlotsForWhatsApp,
+  getAppointmentsForBusiness,
 } from './appointment.controller.js';
 
 // Appointment Settings
-router.post('/settings', requireRole(['Business', 'Admin']), setSettings);
+// router.post('/settings', requireRole(['Business', 'Admin']), setSettings);
 router.get('/settings/:businessId', getSettings);
-router.put('/settings/:businessId', requireRole(['Business', 'Admin']), updateSettings);
+// router.put('/settings/:businessId', requireRole(['Business', 'Admin']), updateSettings);
 
 // Appointment Booking
 router.get('/available-dates/:businessId', getAvailableDates);
 router.get('/available-slots/:businessId/:date', getAvailableTimeSlots);
-router.post('/', requireRole(['Contact', 'Business', 'Admin']), bookAppointment);
+// router.post('/', requireRole(['Contact', 'Business', 'Admin']), bookAppointment);
 router.put('/:appointmentId', requireRole(['Contact', 'Business', 'Admin']), rescheduleAppointment);
 router.get('/:businessId', getAppointments);
 
@@ -45,5 +46,6 @@ router.get('/whatsapp/services/:businessId', getBusinessServicesForWhatsApp);
 router.get('/whatsapp/staff/:businessId', getBusinessStaffForWhatsApp);
 router.get('/whatsapp/dates/:businessId', getAvailableDatesForWhatsApp);
 router.get('/whatsapp/slots/:businessId/:date', getAvailableTimeSlotsForWhatsApp);
+router.get('/appointments', getAppointmentsForBusiness);
 
 export default router;

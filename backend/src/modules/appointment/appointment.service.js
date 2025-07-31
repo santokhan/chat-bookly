@@ -1,8 +1,8 @@
 import moment from 'moment';
-import Appointment from './appointment.model';
-import AppointmentSettings from './appointmentSettings.model';
+import Appointment from './appointment.model.js';
+import AppointmentSettings from './appointmentSettings.model.js';
 
-exports.getAvailableDates = async (businessId) => {
+export async function getAvailableDates (businessId) {
   const settings = await AppointmentSettings.findOne({ businessId });
   if (!settings) throw new Error('Settings not found');
 
@@ -28,7 +28,7 @@ exports.getAvailableDates = async (businessId) => {
   return availableDates;
 };
 
-exports.getAvailableTimeSlots = async (businessId, dateStr) => {
+export async function getAvailableTimeSlots (businessId, dateStr) {
   const settings = await AppointmentSettings.findOne({ businessId });
   if (!settings) throw new Error('Settings not found');
 
@@ -70,7 +70,7 @@ exports.getAvailableTimeSlots = async (businessId, dateStr) => {
   return slots;
 };
 
-exports.bookAppointment = async (data) => {
+export async function bookAppointment (data) {
   // Check for double booking
   const { businessId, appointmentDateTime } = data;
   const existing = await Appointment.findOne({
@@ -85,7 +85,7 @@ exports.bookAppointment = async (data) => {
   return appointment;
 };
 
-exports.rescheduleAppointment = async (appointmentId, newDateTime) => {
+export async function rescheduleAppointment (appointmentId, newDateTime) {
   const appointment = await Appointment.findById(appointmentId);
   if (!appointment) throw new Error('Appointment not found');
 
@@ -102,7 +102,7 @@ exports.rescheduleAppointment = async (appointmentId, newDateTime) => {
   return appointment;
 };
 
-exports.getAppointments = async (businessId, filter) => {
+export async function getAppointments (businessId, filter) {
   const now = moment();
   let start, end;
   switch (filter) {
@@ -132,3 +132,11 @@ exports.getAppointments = async (businessId, filter) => {
   }
   return Appointment.find(query).sort({ appointmentDateTime: 1 });
 };
+
+export default {
+  getAvailableDates,
+  getAvailableTimeSlots,
+  bookAppointment,
+  rescheduleAppointment,
+  getAppointments,
+}

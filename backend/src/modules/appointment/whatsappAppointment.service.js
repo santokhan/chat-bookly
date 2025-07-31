@@ -137,3 +137,20 @@ export async function getAppointmentById(appointmentId) {
   
   return appointment;
 };
+
+export async function getAppointmentsForBusiness(business_id) {
+  const appointments = await Appointment.find({ business_id });
+  return appointments;
+}
+
+export default {
+  createOrFindAppointment,
+  updateService,
+  updateStaff,
+  updateDate,
+  updateTime,
+  updateFinalStatus,
+  getAppointmentByPhoneNumber,
+  getAppointmentById,
+  getAppointmentsForBusiness,
+}
