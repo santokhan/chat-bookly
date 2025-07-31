@@ -1,5 +1,7 @@
 import axios from 'axios';
 import whatsappService from './whatsapp.service.js';
+import translationService from './translation.service.js';
+import WHATSAPP_CONFIG from './config.js';
 import { getStaffByBusinessId, getUserByPhoneNumber, registerUser } from '../user/user.service.js';
 import {
   createOrFindAppointment,
@@ -36,18 +38,16 @@ const webhookService = {
       const user = await getUserByPhoneNumber(user_phone_no);
 
       switch (reqData?.messages?.[0]?.type) {
-        case 'text':
+        case WHATSAPP_CONFIG.MESSAGE_TYPES.TEXT:
           if (!user || user === null || user === undefined) {
             try {
-              const res = await whatsappService.sendWhatsappFlow(
+              await whatsappService.sendWhatsappFlow(
                 user_phone_no,
-                'Please Sign Up',
-                'Welcome to our app, we are looking forward to serve you better. We are here to help you in all the difficulties you are facing in your journey. First of all we need to know your name and email, for that please fill up the form provided below:',
-                'Sign Up',
+                translationService.getItalianMessage('welcome'),
+                translationService.getItalianMessage('welcome_message'),
+                translationService.getItalianMessage('sign_up'),
                 '1447863196403524',
               );
-
-              console.log('Response: ', res);
             } catch (error) {
               console.log('Error: ', error);
             }
@@ -57,28 +57,35 @@ const webhookService = {
             getAndSendListOfAppointment(business_id, user_phone_no, 'reschedule');
           } else if ((reqData?.messages?.[0]?.text?.body).includes('cancel')) {
             getAndSendListOfAppointment(business_id, user_phone_no, 'cancel');
+          } else {
+            sendIntentMessage(business_id, user_phone_no);
           }
           break;
-        case 'interactive':
+        case WHATSAPP_CONFIG.MESSAGE_TYPES.INTERACTIVE:
           switch (reqData.messages[0].interactive.type) {
-            case "button_reply":
+            case WHATSAPP_CONFIG.INTERACTIVE_TYPES.BUTTON_REPLY:
               const buttonReply = reqData.messages[0].interactive.button_reply.id.split('-');
 
-              if (buttonReply[4] === 'confirm') {
-                confirmAppointment(buttonReply[1], buttonReply[3], user_phone_no, 'scheduled');
+              console.log('Button Reply: ', buttonReply);
+              if (buttonReply[2] === 'book') {
+                getAndSendListOfService(business_id, user_phone_no);
+              } else if (buttonReply[2] === 'reschedule') {
+                getAndSendListOfAppointment(business_id, user_phone_no, 'reschedule');
+              } else if (buttonReply[2] === 'cancel') {
+                getAndSendListOfAppointment(business_id, user_phone_no, 'cancel');
+              } else if (buttonReply[4] === 'confirm') {
+                confirmAppointment(buttonReply[1], buttonReply[3], user_phone_no, WHATSAPP_CONFIG.APPOINTMENT_STATUS.SCHEDULED);
               } else if (buttonReply[4] === 'cancel') {
-                confirmAppointment(buttonReply[1], buttonReply[3], user_phone_no, 'cancelled');
+                confirmAppointment(buttonReply[1], buttonReply[3], user_phone_no, WHATSAPP_CONFIG.APPOINTMENT_STATUS.CANCELLED);
               }
               break;
-            case "list_reply":
+            case WHATSAPP_CONFIG.INTERACTIVE_TYPES.LIST_REPLY:
               const data = reqData.messages[0].interactive.list_reply.id.split('-');
 
               if (data[0] === 'reschedule') {
-                console.log('Reschedule', data);
                 getAndSendListOfDate(data[1], data[5], data[3], user_phone_no);
               } else if (data[0] === 'cancel') {
-                console.log('Cancel', data);
-                confirmAppointment(data[1], data[3], user_phone_no, 'cancelled');
+                confirmAppointment(data[1], data[3], user_phone_no, WHATSAPP_CONFIG.APPOINTMENT_STATUS.CANCELLED);
               } else if (data[2] === 'service') {
                 getAndSendListOfTeam(data[1], data[3], data[5], user_phone_no);
               } else if (data[2] === 'staff') {
@@ -89,14 +96,12 @@ const webhookService = {
                 sendAppointmentConfirmation(data[1], data[5], data[3], user_phone_no);
               }
               break;
-            case "nfm_reply":
+            case WHATSAPP_CONFIG.INTERACTIVE_TYPES.NFM_REPLY:
               const flowData = await JSON.parse(
                 reqData.messages[0].interactive.nfm_reply.response_json
               );
 
               if (flowData.name && flowData.email) {
-                console.log('Flow Data: ', flowData, user_phone_no);
-
                 const newUser = await registerUser({
                   name: flowData.name,
                   email: flowData.email,
@@ -106,10 +111,9 @@ const webhookService = {
                   is_verified: true,
                 });
 
-                console.log('New User: ', newUser);
                 if (newUser.success) {
                   await whatsappService.sendText(
-                    'User registered successfully',
+                    translationService.getItalianMessage('user_registered_success'),
                     user_phone_no,
                   );
 
@@ -131,6 +135,37 @@ const webhookService = {
   },
 };
 
+const sendIntentMessage = async (business_id, user_phone_no) => {
+  try {
+    const data = {
+      phone: user_phone_no,
+      header: {
+        type: 'text',
+        text: translationService.getItalianMessage('intent_header_message'),
+      },
+      body: translationService.getItalianMessage('intent_message'),
+      buttons: [
+        {
+          id: `business-${business_id}-book`,
+          title: translationService.getItalianMessage('book'),
+        },
+        {
+          id: `business-${business_id}-reschedule`,
+          title: translationService.getItalianMessage('reschedule'),
+        },
+        {
+          id: `business-${business_id}-cancel`,
+          title: translationService.getItalianMessage('cancel'),
+        },
+      ],
+    };
+
+    await whatsappService.sendButton(data);
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+}
+
 const getAndSendListOfAppointment = async (business_id, user_phone_no, type) => {
   try {
     const appointments = await getAppointmentByPhoneNumber(business_id, user_phone_no);
@@ -142,8 +177,10 @@ const getAndSendListOfAppointment = async (business_id, user_phone_no, type) => 
 
     const data = {
       phone: user_phone_no,
-      body: `Please select the appointment you want to ${type}`,
-      buttonTitle: 'Appointments',
+      body: type === 'reschedule'
+        ? translationService.getItalianMessage('select_appointment_to_reschedule')
+        : translationService.getItalianMessage('select_appointment_to_cancel'),
+      buttonTitle: translationService.getItalianMessage('appointments'),
       buttons: appointmentData,
     };
 
@@ -160,13 +197,13 @@ const getAndSendListOfService = async (business_id, user_phone_no) => {
     const servicesData = services?.data?.services.map((service) => ({
       id: `booking-${business_id}-service-${service._id}-appointment-${appointment._id}`,
       title: service.title,
-      description: `This service will take ${service.service_time} minutes`,
+      description: translationService.getItalianMessage('service_duration', { duration: service.service_time }),
     }));
 
     const data = {
       phone: user_phone_no,
-      body: 'Please select the service you want to book',
-      buttonTitle: 'Services',
+      body: translationService.getItalianMessage('select_service'),
+      buttonTitle: translationService.getItalianMessage('services'),
       buttons: servicesData,
     };
 
@@ -188,8 +225,8 @@ const getAndSendListOfTeam = async (business_id, service_id, appointment_id, use
 
     const data = {
       phone: user_phone_no,
-      body: 'Please select the staff you want to book',
-      buttonTitle: 'Staff',
+      body: translationService.getItalianMessage('select_staff'),
+      buttonTitle: translationService.getItalianMessage('staff'),
       buttons: staffData,
     };
 
@@ -207,13 +244,16 @@ const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_
     const dateData = date?.data?.available_dates.map((date) => ({
       id: `booking-${business_id}-date-${date.date}-staff-${staff_id}-appointment-${appointment._id}`,
       title: date.date,
-      description: `Available from ${date.available_from} to ${date.available_to}`,
+      description: translationService.getItalianMessage('available_from_to', { 
+        from: date.available_from, 
+        to: date.available_to 
+      }),
     }));
 
     const data = {
       phone: user_phone_no,
-      body: 'Please select the date you want to book',
-      buttonTitle: 'Date',
+      body: translationService.getItalianMessage('select_date'),
+      buttonTitle: translationService.getItalianMessage('date'),
       buttons: dateData,
     };
 
@@ -235,8 +275,8 @@ const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id,
 
     const data = {
       phone: user_phone_no,
-      body: 'Please select the time you want to book',
-      buttonTitle: 'Time',
+      body: translationService.getItalianMessage('select_time'),
+      buttonTitle: translationService.getItalianMessage('time'),
       buttons: timeData,
     };
 
@@ -253,18 +293,23 @@ const sendAppointmentConfirmation = async (business_id, appointment_id, time, us
       phone: user_phone_no,
       header: {
         type: 'text',
-        text: 'Appointment Confirmation',
+        text: translationService.getItalianMessage('appointment_confirmation'),
       },
-      body: `Service: ${appointment?.serviceId?.title}\nStaff: ${appointment?.staffId?.name}\nDate: ${appointment?.appointmentDate}\nTime: ${appointment?.appointmentTime}`,
-      footer: 'Appointment',
+      body: translationService.getItalianMessage('appointment_details', {
+        service: appointment?.serviceId?.title,
+        staff: appointment?.staffId?.name,
+        date: appointment?.appointmentDate,
+        time: appointment?.appointmentTime
+      }),
+      footer: translationService.getItalianMessage('appointment'),
       buttons: [
         {
           id: `booking-${business_id}-appointment-${appointment._id}-confirm`,
-          title: 'Confirm',
+          title: translationService.getItalianMessage('confirm'),
         },
         {
           id: `booking-${business_id}-appointment-${appointment._id}-cancel`,
-          title: 'Cancel',
+          title: translationService.getItalianMessage('cancel'),
         },
       ],
     };
@@ -279,14 +324,14 @@ const confirmAppointment = async (business_id, appointment_id, user_phone_no, st
   try {
     await updateFinalStatus(appointment_id, status);
 
-    if (status === 'scheduled') {
+    if (status === WHATSAPP_CONFIG.APPOINTMENT_STATUS.SCHEDULED) {
       await whatsappService.sendText(
-        'Appointment scheduled successfully',
+        translationService.getItalianMessage('appointment_scheduled_success'),
         user_phone_no,
       );
-    } else if (status === 'cancelled') {
+    } else if (status === WHATSAPP_CONFIG.APPOINTMENT_STATUS.CANCELLED) {
       await whatsappService.sendText(
-        'Appointment cancelled successfully',
+        translationService.getItalianMessage('appointment_cancelled_success'),
         user_phone_no,
       );
     }

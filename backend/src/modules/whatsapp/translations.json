@@ -1,0 +1,130 @@
+{
+  "welcome": {
+    "en": "Please Sign Up",
+    "it": "Registrati"
+  },
+  "welcome_message": {
+    "en": "Welcome to our app, we are looking forward to serve you better. We are here to help you in all the difficulties you are facing in your journey. First of all we need to know your name and email, for that please fill up the form provided below:",
+    "it": "Benvenuto nella nostra app, non vediamo l'ora di servirti meglio. Siamo qui per aiutarti in tutte le difficoltà che incontri nel tuo percorso. Prima di tutto abbiamo bisogno di conoscere il tuo nome e email, per questo compila il modulo fornito di seguito:"
+  },
+  "sign_up": {
+    "en": "Sign Up",
+    "it": "Registrati"
+  },
+  "intent_header_message": {
+    "en": "What would you like to do?",
+    "it": "Cosa vorresti fare?"
+  },
+  "intent_message": {
+    "en": "Please select the option you want to choose:",
+    "it": "Seleziona l'opzione che vuoi scegliere:"
+  },
+  "user_registered_success": {
+    "en": "User registered successfully",
+    "it": "Utente registrato con successo"
+  },
+  "appointment_scheduled_success": {
+    "en": "Appointment scheduled successfully",
+    "it": "Appuntamento programmato con successo"
+  },
+  "appointment_cancelled_success": {
+    "en": "Appointment cancelled successfully",
+    "it": "Appuntamento cancellato con successo"
+  },
+  "select_appointment_to_reschedule": {
+    "en": "Please select the appointment you want to reschedule",
+    "it": "Seleziona l'appuntamento che vuoi riprogrammare"
+  },
+  "select_appointment_to_cancel": {
+    "en": "Please select the appointment you want to cancel",
+    "it": "Seleziona l'appuntamento che vuoi cancellare"
+  },
+  "select_service": {
+    "en": "Please select the service you want to book",
+    "it": "Seleziona il servizio che vuoi prenotare"
+  },
+  "select_staff": {
+    "en": "Please select the staff you want to book",
+    "it": "Seleziona il personale che vuoi prenotare"
+  },
+  "select_date": {
+    "en": "Please select the date you want to book",
+    "it": "Seleziona la data che vuoi prenotare"
+  },
+  "select_time": {
+    "en": "Please select the time you want to book",
+    "it": "Seleziona l'orario che vuoi prenotare"
+  },
+  "appointment_confirmation": {
+    "en": "Appointment Confirmation",
+    "it": "Conferma Appuntamento"
+  },
+  "book": {
+    "en": "Book",
+    "it": "Prenota"
+  },
+  "reschedule": {
+    "en": "Reschedule",
+    "it": "Rischedula"
+  },
+  "confirm": {
+    "en": "Confirm",
+    "it": "Conferma"
+  },
+  "cancel": {
+    "en": "Cancel",
+    "it": "Annulla"
+  },
+  "appointments": {
+    "en": "Appointments",
+    "it": "Appuntamenti"
+  },
+  "services": {
+    "en": "Services",
+    "it": "Servizi"
+  },
+  "staff": {
+    "en": "Staff",
+    "it": "Personale"
+  },
+  "date": {
+    "en": "Date",
+    "it": "Data"
+  },
+  "time": {
+    "en": "Time",
+    "it": "Orario"
+  },
+  "appointment": {
+    "en": "Appointment",
+    "it": "Appuntamento"
+  },
+  "service": {
+    "en": "Service",
+    "it": "Servizio"
+  },
+  "staff_label": {
+    "en": "Staff",
+    "it": "Personale"
+  },
+  "date_label": {
+    "en": "Date",
+    "it": "Data"
+  },
+  "time_label": {
+    "en": "Time",
+    "it": "Orario"
+  },
+  "available_from_to": {
+    "en": "Available from {from} to {to}",
+    "it": "Disponibile dalle {from} alle {to}"
+  },
+  "service_duration": {
+    "en": "This service will take {duration} minutes",
+    "it": "Questo servizio richiederà {duration} minuti"
+  },
+  "appointment_details": {
+    "en": "Service: {service}\nStaff: {staff}\nDate: {date}\nTime: {time}",
+    "it": "Servizio: {service}\nPersonale: {staff}\nData: {date}\nOrario: {time}"
+  }
+}
