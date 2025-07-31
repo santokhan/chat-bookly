@@ -1,6 +1,6 @@
-import Appointment from './appointment.model';
-import User from '../user/user.model';
-import Service from '../services/service.model';
+import Appointment from './appointment.model.js';
+import User from '../user/user.model.js';
+import Service from '../services/service.model.js';
 import moment from 'moment';
 
 // Create or find appointment

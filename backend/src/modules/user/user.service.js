@@ -234,3 +234,13 @@ export async function getStaffByBusinessId(business_id) {
     };
   }
 }
+
+export default {
+  registerUser,
+  loginUser,
+  getUserByPhoneNumber,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getStaffByBusinessId,
+}

@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import { requireRole } from '../../middlewares/role.middleware';
+import { requireRole } from '../../middlewares/role.middleware.js';
 import {
   setSettings,
   getSettings,
@@ -20,7 +20,7 @@ import {
   getBusinessStaffForWhatsApp,
   getAvailableDatesForWhatsApp,
   getAvailableTimeSlotsForWhatsApp,
-} from './appointment.controller';
+} from './appointment.controller.js';
 
 // Appointment Settings
 router.post('/settings', requireRole(['Business', 'Admin']), setSettings);
