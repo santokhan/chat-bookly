@@ -1,3 +1,4 @@
+import User from '../user/user.model.js';
 import Service from './service.model.js';
 import Category from './category.model.js';
 
@@ -6,13 +7,29 @@ export async function createCategory(req, res) {
     const {
       title,
       description,
-      business_id,
     } = req.body;
+
+    const { business_id } = req.params;
 
     if (!business_id) {
       return res.status(400).json({
         success: false,
         message: 'business_id is required',
+      });
+    }
+
+    if (!title || !description) {
+      return res.status(400).json({
+        success: false,
+        message: 'Title and description are required',
+      });
+    }
+
+    const business = await User.findOne({ _id: business_id, role: 'business' });
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: 'Business not found',
       });
     }
 
@@ -37,15 +54,23 @@ export async function createCategory(req, res) {
 
 export async function getCategories(req, res) {
   try {
-    const { business_id } = req.query;
+    const { business_id } = req.params;
     if (!business_id) {
       return res.status(400).json({
         success: false,
         message: 'business_id is required',
       });
     }
-    const categories = await Category.find({ business_id }).populate('services');
 
+    const business = await User.findOne({ _id: business_id, role: 'business' });
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: 'Business not found',
+      });
+    }
+
+    const categories = await Category.find({ business_id }).populate('services');
     res.json({
       success: true,
       categories,
@@ -61,19 +86,34 @@ export async function getCategories(req, res) {
 
 export async function createService(req, res) {
   try {
-    const { category_id } = req.params;
+    const { category_id, business_id } = req.params;
 
     const {
       title,
       description,
       service_time,
-      business_id,
     } = req.body;
 
-    if (!business_id) {
+    if (!business_id || !category_id) {
       return res.status(400).json({
         success: false,
-        message: 'business_id is required',
+        message: 'business_id & category_id are required',
+      });
+    }
+
+    const business = await User.findOne({ _id: business_id, role: 'business' });
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: 'Business not found',
+      });
+    }
+
+    const category = await Category.findOne({ _id: category_id, business_id });
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: 'Either category not found or does not belong to this business',
       });
     }
 
@@ -104,10 +144,27 @@ export async function createService(req, res) {
   }
 }
 
+export async function getAllServices(req, res) {
+  try {
+    const { business_id } = req.params;
+    if (!business_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'business_id is required',
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch all services',
+      error,
+    });
+  }
+}
+
 export async function getServices(req, res) {
   try {
-    const { category_id } = req.params;
-    const { business_id } = req.query;
+    const { category_id, business_id } = req.params;
 
     if (!business_id) {
       return res.status(400).json({
@@ -116,9 +173,25 @@ export async function getServices(req, res) {
       });
     }
 
+    const business = await User.findOne({ _id: business_id, role: 'business' });
+    if (!business) {
+      return res.status(404).json({
+        success: false,
+        message: 'Business not found',
+      });
+    }
+
     const filter = { business_id };
     let services = [];
     if (category_id) {
+        const category = await Category.findOne({ _id: category_id, business_id });
+        if (!category) {
+          return res.status(404).json({
+            success: false,
+            message: 'Either category not found or does not belong to this business',
+          });
+        }
+
       filter.category_id = category_id;
       services = await Service.find(filter).populate('category_id');
     } else {

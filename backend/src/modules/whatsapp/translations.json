@@ -13,11 +13,11 @@
   },
   "intent_header_message": {
     "en": "What would you like to do?",
-    "it": "Grazie per averci contattato!"
+    "it": "Grazie per averci contattato!👋🏻 Come possiamo aiutarti?"
   },
   "intent_message": {
     "en": "Please select the option you want to choose:",
-    "it": "👋 Come possiamo aiutarti oggi?"
+    "it": "Seleziona una delle seguenti opzioni per procedere:"
   },
   "user_registered_success": {
     "en": "User registered successfully",
@@ -33,27 +33,27 @@
   },
   "select_appointment_to_reschedule": {
     "en": "Please select the appointment you want to reschedule",
-    "it": "Seleziona l'appuntamento che vuoi riprogrammare"
+    "it": "Scegli l’appuntamento che desideri spostare"
   },
   "select_appointment_to_cancel": {
     "en": "Please select the appointment you want to cancel",
-    "it": "Seleziona l'appuntamento che vuoi cancellare"
+    "it": "Quale appuntamento desideri annullare?\n\nSelezionalo dall’elenco qui sotto:"
   },
   "select_service": {
     "en": "Please select the service you want to book",
-    "it": "Seleziona il servizio che vuoi prenotare"
+    "it": "Per quale servizio desideri prenotare un appuntamento?\n\nSeleziona dall’elenco qui sotto:"
   },
   "select_staff": {
     "en": "Please select the staff you want to book",
-    "it": "Seleziona il personale che vuoi prenotare"
+    "it": "Seleziona il membro dello staff con cui desideri prenotare:"
   },
   "select_date": {
     "en": "Please select the date you want to book",
-    "it": "Seleziona la data che vuoi prenotare"
+    "it": "Seleziona la data in cui desideri prenotare l’appuntamento:"
   },
   "select_time": {
     "en": "Please select the time you want to book",
-    "it": "Seleziona l'orario che vuoi prenotare"
+    "it": "A che ora preferisci prenotare?"
   },
   "appointment_confirmation": {
     "en": "Appointment Confirmation",
@@ -65,7 +65,7 @@
   },
   "reschedule": {
     "en": "Reschedule",
-    "it": "Riprogramma appunta"
+    "it": "Sposta appuntamento"
   },
   "cancel_appointment": {
     "en": "Cancel",
@@ -81,23 +81,23 @@
   },
   "appointments": {
     "en": "Appointments",
-    "it": "Appuntamenti"
+    "it": "Mostra appuntamenti"
   },
   "services": {
     "en": "Services",
-    "it": "Servizi"
+    "it": "Lista dei servizi"
   },
   "staff": {
     "en": "Staff",
-    "it": "Personale"
+    "it": "Visualizza staff"
   },
   "date": {
     "en": "Date",
-    "it": "Data"
+    "it": "Mostra le date"
   },
   "time": {
     "en": "Time",
-    "it": "Orario"
+    "it": "Mostra gli orari"
   },
   "appointment": {
     "en": "Appointment",
@@ -129,6 +129,66 @@
   },
   "appointment_details": {
     "en": "Service: {service}\nStaff: {staff}\nDate: {date}\nTime: {time}",
-    "it": "Servizio: {service}\nPersonale: {staff}\nData: {date}\nOrario: {time}"
+    "it": "Desideri confermare questa prenotazione?\n\nServizio: {service}\nPersonale: {staff}\nData: {date}\nOrario: {time}"
+  },
+  "appointment_reschedule_details": {
+    "en": "Service: {service}\nStaff: {staff}\nDate: {date}\nTime: {time}",
+    "it": "Confermi di voler spostare questa prenotazione?\n\nEcco i dettagli aggiornati.\n\nServizio: {service}\nPersonale: {staff}\nData: {date}\nOrario: {time}"
+  },
+  "appointment_confirmation_message": {
+    "en": "Your appointment has been confirmed successfully",
+    "it": "Appuntamento confermato con successo.\n\nGrazie per averci scelto!\n\nTi aspettiamo il {date} alle {time}. Se desideri modificare o annullare l’appuntamento, puoi contattarci in qualsiasi momento qui."
+  },
+  "appointment_reschedule_message": {
+    "en": "Your appointment has been rescheduled successfully",
+    "it": "Appuntamento spostato con successo!\n\nIl tuo appuntamento è stato spostato al {date} alle ore {time}.\n\nSe hai bisogno di modificarlo nuovamente o annullarlo, puoi contattarci in qualsiasi momento qui."
+  },
+  "appointment_cancelation_header": {
+    "en": "Appointment Cancelation",
+    "it": "Prenotazione annullata con successo."
+  },
+  "appointment_cancelation_message": {
+    "en": "Your appointment has been cancelled successfully",
+    "it": "Prenotazione annullata con successo.\n\nSe desideri effettuare una nuova prenotazione, puoi tornare al menu principale oppure terminare qui la chat."
+  },
+  "appointment_reschedule_cancelation_message": {
+    "en": "Your appointment reschedule has been cancelled successfully",
+    "it": "Operazione annullata con successo.\n\nPuoi tornare al menu principale per eseguire un’altra operazione o terminare qui la chat."
+  },
+  "appointment_cancel_message": {
+    "en": "Your appointment has been cancelled successfully. If you want to book a new appointment, please go back to the main menu.",
+    "it": "Appuntamento annullato con successo.\n\nSe desideri effettuare una nuova prenotazione, puoi tornare al menù principale oppure terminare qui la chat."
+  },
+  "appointment_back_to_main_menu": {
+    "en": "Back to Main Menu",
+    "it": "Menù principale"
+  },
+  "appointment_cancel_confirm": {
+    "en": "Are you sure you want to cancel this appointment?",
+    "it": "Termina qui la chat"
+  },
+  "appointment_cancelation_message_1": {
+    "en": "Your appointment has been cancelled successfully. If you want to book a new appointment, please go back to the main menu.",
+    "it": "Hai terminato la chat.\n\nPer effettuare una nuova prenotazione, spostare o cancellare un appuntamento, potrai contattarci in qualsiasi momento qui.\n\nA presto!"
+  },
+  "select_date_to_reschedule": {
+    "en": "Please select the date you want to reschedule your appointment to",
+    "it": "Seleziona una nuova data per il tuo appuntamento"
+  },
+  "date_button_title": {
+    "en": "Select Date",
+    "it": "Cambia la data"
+  },
+  "select_time_to_reschedule": {
+    "en": "Please select the time you want to reschedule your appointment to",
+    "it": "A che ora preferisci spostare l’appuntamento?"
+  },
+  "time_button_title": {
+    "en": "Select Time",
+    "it": "Mostra gli orari"
+  },
+  "cancel_reschedule": {
+    "en": "Cancel Reschedule",
+    "it": "Annulla operazione"
   }
 }

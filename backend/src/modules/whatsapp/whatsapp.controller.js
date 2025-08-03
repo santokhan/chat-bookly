@@ -46,7 +46,7 @@ const getCompleteBusinessData = async (req, res) => {
 
     let token = accessToken;
     if (!token && appId && appSecret) {
-      const tokenRes = await whatsappService.getAccessToken(appId, appSecret, code);
+      const tokenRes = await whatsappService.getAccessToken(appId, appSecret, code, process.env.REDIRECT_URI);
       if (!tokenRes.success) {
         return res.status(400).json(tokenRes);
       }

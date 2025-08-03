@@ -21,7 +21,8 @@ export const WHATSAPP_CONFIG = {
   // Appointment statuses
   APPOINTMENT_STATUS: {
     SCHEDULED: 'scheduled',
-    CANCELLED: 'cancelled'
+    CANCELLED: 'cancelled',
+    IN_PROGRESS: 'in_progress',
   },
 };
 

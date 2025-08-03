@@ -351,7 +351,7 @@ export async function getNextAvailableTimes(req, res) {
     const settings = {
       operational_hours: [
         {
-          day: 'Monday',
+          day: 'Tuesday',
           from: '10:00 AM',
           to: '07:00 PM',
         },

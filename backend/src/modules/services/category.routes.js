@@ -9,11 +9,11 @@ import {
 
 const router = express.Router();
 
-router.get('/', getCategories);
-router.post('/', createCategory);
-router.get('/service', getServices);
-router.get('/service/:category_id', getServices);
-router.post('/:category_id/service', createService);
-router.get('/:category_id/service/:service_id', getService);
+router.get('/:business_id', getCategories);
+router.post('/:business_id', createCategory);
+router.get('/service/:business_id', getServices);
+router.get('/:business_id/:category_id/service', getServices);
+router.post('/:business_id/:category_id/service', createService);
+router.get('/:business_id/:category_id/service/:service_id', getService);
 
 export default router;

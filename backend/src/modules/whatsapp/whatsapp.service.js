@@ -1,5 +1,6 @@
 import axios from 'axios';
 import whatsappHelper from './whatsapp.helper.js';
+import whatsappFlowModel from './whatsappFlow.model.js';
 
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_ID;
@@ -336,42 +337,20 @@ const whatsappService = {
   getAccessToken: async (appId, appSecret, code = null) => {
     try {
       // Step 1: Get temp token
-      const tempTokenUrl = `https://graph.facebook.com/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&grant_type=client_credentials`;
-      const tempTokenRes = await axios.get(tempTokenUrl);
+      const temporaryAccessToken = await getTemporaryAccessToken(appId, appSecret);
+      console.log('temporaryAccessToken: ', temporaryAccessToken);
 
-      const tempToken = tempTokenRes.data.access_token;
-      console.log('tempToken: ', tempToken);
-  
-      if (!code) {
-        return {
-          success: true,
-          access_token: tempToken,
-        };
-      }
-
-      // Step 2: Get permanent token
-      const url = `${WHATSAPP_CLOUD_API}/oauth/access_token`;
-      const headers = {
-        Authorization: `Bearer ${tempToken}`,
-        'Content-Type': 'application/json',
-      };
-
-      const requestData = {
-        client_id: appId,
-        client_secret: appSecret,
+      const permanentAccessToken = await getPermanentAccessToken(
+        appId,
+        appSecret,
+        temporaryAccessToken.access_token,
         code,
-      };
-
-      const accessTokenRes = await axios.post(
-        url,
-        requestData,
-        { headers },
       );
 
-      console.log('accessTokenRes: ', accessTokenRes.data);
+      console.log('permanentAccessToken: ', permanentAccessToken);
       return {
         success: true,
-        access_token: accessTokenRes.data.access_token,
+        access_token: 'accessTokenRes.data.access_token',
       };
     } catch (error) {
       console.log('error: ', error?.response?.data);
@@ -542,7 +521,104 @@ const whatsappService = {
     } catch (error) {
       return error?.response?.data;
     }
+  },
+  getFlowIdForBusiness: async (business_id) => {
+    const flow = await whatsappFlowModel.findOne({ business_id });
+    return flow;
   }
 };
+
+  const getTemporaryAccessToken = async (appId, appSecret) => {
+    try {
+      const response = await axios.get(
+        `https://graph.facebook.com/oauth/access_token?client_id=${appId}&client_secret=${appSecret}&grant_type=client_credentials`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error: ', error?.response?.data?.error);
+    }
+  }
+
+  const getPermanentAccessToken = async (appId, appSecret, temporaryAccessToken, token) => {
+    try {
+      console.log('temporaryAccessToken: ', temporaryAccessToken, token);
+
+      const url = 'https://graph.facebook.com/v20.0/oauth/access_token';
+      const response = await axios.post(
+        url,
+        {
+          client_id: appId,
+          client_secret: appSecret,
+          code: token,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${temporaryAccessToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+
+      console.log('response: ', response);
+      return response.data;
+    } catch (error) {
+      console.error('Error in generating permanent access token: ', error?.response?.data?.error);
+    }
+  }
+
+  const webhookRegistration = async (accessToken, identifier, wabaId) => {
+    try {
+      const url = `https://graph.facebook.com/v20.0/${wabaId}/subscribed_apps`;
+      const response = await axios.post(
+        url,
+        {
+          override_callback_uri: `https://${identifier}-api.firmli.com/v1/whatsapp-webhook/receive`,
+          verify_token: identifier.toUpperCase(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error: ', error?.response?.data?.error);
+    }
+  }
+
+  const createSignupFlow = async (accessToken, wabaId, business_id) => {
+    try {
+      const url = `https://graph.facebook.com/v20.0/${wabaId}/message_flows`;
+      const response = await axios.post(
+        url,
+        {
+          name: "Sign Up Form",
+          categories: [ "SIGN_UP" ],
+          flow_json: "{\"version\":\"7.2\",\"screens\":[{\"id\":\"SIGNUPFORM\",\"title\":\"SignupForm\",\"data\":{},\"terminal\":true,\"success\":true,\"layout\":{\"type\":\"SingleColumnLayout\",\"children\":[{\"type\":\"Form\",\"name\":\"form\",\"children\":[{\"type\":\"TextInput\",\"name\":\"Name\",\"label\":\"Name\",\"input-type\":\"text\",\"required\":true},{\"type\":\"TextInput\",\"label\":\"Email\",\"name\":\"Email\",\"input-type\":\"email\",\"required\":true},{\"type\":\"TextInput\",\"label\":\"Password\",\"name\":\"Password\",\"input-type\":\"password\",\"min-chars\":6,\"required\":true},{\"type\":\"OptIn\",\"label\":\"Iagreetotheterms&conditions.\",\"required\":true,\"name\":\"tos_optin\"},{\"type\":\"Footer\",\"label\":\"Done\",\"on-click-action\":{\"name\":\"complete\",\"payload\":{\"name\":\"${form.Name}\",\"email\":\"${form.Email}\",\"password\":\"${form.Password}\",\"optin\":\"${form.tos_optin}\"}}}]}]}}]}",
+          publish: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const flow = new whatsappFlowModel({
+        flow_id: response.data.id,
+        business_id: business_id,
+      });
+      flow.save();
+
+      return flow;
+    } catch (error) {
+      console.error('Error: ', error?.response?.data?.error);
+    }
+  }
 
 export default whatsappService;

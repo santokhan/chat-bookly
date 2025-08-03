@@ -21,7 +21,15 @@ export async function addReview(req, res) {
       });
     }
 
-    const user = await User.findById(user_id);
+    const business = await User.findOne({_id: business_id, role: 'business'});
+    if (!business) {
+      return res.status(400).json({
+        success: false,
+        message: 'Business not found',
+      });
+    }
+
+    const user = await User.findOne({_id: user_id, role: 'user'});
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -54,6 +62,14 @@ export async function getBusinessReviews(req, res) {
     const {
       business_id,
     } = req.params;
+
+    const business = await User.findOne({_id: business_id, role: 'business'});
+    if (!business) {
+      return res.status(400).json({
+        success: false,
+        message: 'Business not found',
+      });
+    }
 
     const reviews = await Review.find({
       business_id,

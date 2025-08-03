@@ -35,6 +35,8 @@ const whatsappHelper = {
               error: 'Maximum 3 buttons are allowed.',
             };
           }
+
+          console.log('Buttons: ', data.buttons);
           data.buttons.forEach((button) => {
             if (button.length === 0) {
               return {
