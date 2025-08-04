@@ -208,18 +208,18 @@ export async function getNextAvailableDates(req, res) {
       operational_hours: [
         {
           day: 'Monday',
-          from: '10:00 AM',
-          to: '07:00 PM',
+          from: '10:00',
+          to: '19:00',
         },
         {
           day: 'Wednesday',
-          from: '09:00 AM',
-          to: '06:00 PM',
+          from: '09:00',
+          to: '18:00',
         },
         {
           day: 'Friday',
-          from: '11:00 AM',
-          to: '08:00 PM',
+          from: '11:00',
+          to: '20:00',
         },
       ],
     };
@@ -272,26 +272,34 @@ export async function getNextAvailableDates(req, res) {
     let currentDate = new Date(today);
     let foundDates = 0;
 
+    // Helper to format date as dd/mm/yyyy
+    const formatDateEU = (dateObj) => {
+      const day = dateObj.getDate().toString().padStart(2, '0');
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const year = dateObj.getFullYear();
+      return `${day}/${month}/${year}`;
+    };
+
     // Start from today and look for the next 7 available dates
     while (foundDates < 7) {
       const dayOfWeek = currentDate.getDay();
-      
+
       // Check if this day is operational
       if (operationalDayNumbers.includes(dayOfWeek)) {
         const dayName = Object.keys(dayNameToNumber).find(key => dayNameToNumber[key] === dayOfWeek);
         const hours = dayToHoursMap[dayName];
-        
+
         availableDates.push({
-          date: currentDate.toISOString().split('T')[0], // YYYY-MM-DD format
+          date: formatDateEU(currentDate), // dd/mm/yyyy format
           day: dayName.charAt(0).toUpperCase() + dayName.slice(1), // Capitalized day name
           available_from: hours.from,
           available_to: hours.to,
           day_of_week: dayOfWeek,
         });
-        
+
         foundDates++;
       }
-      
+
       // Move to next day
       currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -351,19 +359,19 @@ export async function getNextAvailableTimes(req, res) {
     const settings = {
       operational_hours: [
         {
-          day: 'Tuesday',
-          from: '10:00 AM',
-          to: '07:00 PM',
+          day: 'Monday',
+          from: '10:00',
+          to: '19:00',
         },
         {
           day: 'Wednesday',
-          from: '09:00 AM',
-          to: '06:00 PM',
+          from: '09:00',
+          to: '18:00',
         },
         {
           day: 'Friday',
-          from: '11:00 AM',
-          to: '08:00 PM',
+          from: '11:00',
+          to: '20:00',
         },
       ],
     };
@@ -424,9 +432,7 @@ export async function getNextAvailableTimes(req, res) {
     const minutesToTime = (minutes) => {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
-      const period = hours >= 12 ? 'PM' : 'AM';
-      const hour12 = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
-      return `${hour12.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')} ${period}`;
+      return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
     };
 
     const startMinutes = timeToMinutes(dayHours.from);
@@ -453,7 +459,7 @@ export async function getNextAvailableTimes(req, res) {
       if (!isBooked) {
         availableTimes.push({
           time: minutesToTime(currentMinutes),
-          time_24h: `${Math.floor(currentMinutes / 60).toString().padStart(2, '0')}:${(currentMinutes % 60).toString().padStart(2, '0')}`,
+          time_24h: minutesToTime(currentMinutes),
           minutes: currentMinutes
         });
       }
@@ -473,7 +479,6 @@ export async function getNextAvailableTimes(req, res) {
       date: date,
       day: dayOfWeek
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,

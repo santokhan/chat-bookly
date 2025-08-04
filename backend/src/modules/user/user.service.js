@@ -201,7 +201,6 @@ export async function deleteUser(id) {
       deleted_at: new Date(),
     });
 
-    console.log(user);
     if (!user) {
       return {
         success: false,

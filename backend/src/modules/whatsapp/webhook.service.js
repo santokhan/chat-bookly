@@ -81,7 +81,6 @@ const webhookService = {
             case WHATSAPP_CONFIG.INTERACTIVE_TYPES.LIST_REPLY:
               const data = reqData.messages[0].interactive.list_reply.id.split('-');
 
-              console.log('List Reply Data: ', data);
               if (data[0] === 'reschedule') {
                 getAndSendListOfDate(data[1], data[5], data[3], user_phone_no, 'reschedule');
               } else if (data[0] === 'cancel') {
@@ -169,12 +168,19 @@ const sendIntentMessage = async (business_id, user_phone_no) => {
 const getAndSendListOfAppointment = async (business_id, user_phone_no, type) => {
   try {
     const appointments = await getAppointmentByPhoneNumber(business_id, user_phone_no);
-    console.log('Appointments: ', appointments);
+
+    // Helper to format date as dd/mm/yyyy
+    const formatDateEU = (dateStr) => {
+      if (!dateStr) return '';
+      const [year, month, day] = dateStr.split('-');
+      if (!year || !month || !day) return dateStr;
+      return `${day}/${month}/${year}`;
+    };
 
     const appointmentData = appointments?.map((appointment) => ({
       id: `${type}-${business_id}-appointment-${appointment._id}-staff-${appointment.staffId._id}-service-${appointment.serviceId._id}-type-${type}`,
       title: appointment.serviceId.title,
-      description: `Staff: ${appointment.staffId.name}\nDate: ${appointment.appointmentDate}\nTime: ${appointment.appointmentTime}`,
+      description: `Staff: ${appointment.staffId.name}\nDate: ${formatDateEU(appointment.appointmentDate)}\nTime: ${appointment.appointmentTime}`,
     }));
 
     const data = {

@@ -13,14 +13,12 @@ const webhookHandler = (req, res) => {
     const data = req.body;
     const reqData = data.entry?.[0]?.changes?.[0]?.value;
 
-    console.log('Hello there', JSON.stringify(reqData.statuses));
     if (reqData?.statuses) {
       res.send('ok');
       return;
     }
 
     res.send('ok');
-    console.log('Request Data: ', req.body);
 
     const wp_user_name = reqData?.contacts?.[0]?.profile?.name;
     const user_phone_no = reqData?.contacts?.[0]?.wa_id;
