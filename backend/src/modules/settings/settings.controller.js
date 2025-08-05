@@ -272,12 +272,12 @@ export async function getNextAvailableDates(req, res) {
     let currentDate = new Date(today);
     let foundDates = 0;
 
-    // Helper to format date as dd/mm/yyyy
+    // Helper to format date as dd-mm-yyyy
     const formatDateEU = (dateObj) => {
       const day = dateObj.getDate().toString().padStart(2, '0');
       const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
       const year = dateObj.getFullYear();
-      return `${day}/${month}/${year}`;
+      return `${day}-${month}-${year}`;
     };
 
     // Start from today and look for the next 7 available dates
@@ -290,7 +290,7 @@ export async function getNextAvailableDates(req, res) {
         const hours = dayToHoursMap[dayName];
 
         availableDates.push({
-          date: formatDateEU(currentDate), // dd/mm/yyyy format
+          date: formatDateEU(currentDate), // dd-mm-yyyy format
           day: dayName.charAt(0).toUpperCase() + dayName.slice(1), // Capitalized day name
           available_from: hours.from,
           available_to: hours.to,

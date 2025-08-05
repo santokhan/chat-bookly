@@ -169,12 +169,12 @@ const getAndSendListOfAppointment = async (business_id, user_phone_no, type) => 
   try {
     const appointments = await getAppointmentByPhoneNumber(business_id, user_phone_no);
 
-    // Helper to format date as dd/mm/yyyy
+    // Helper to format date as dd-mm-yyyy
     const formatDateEU = (dateStr) => {
       if (!dateStr) return '';
       const [year, month, day] = dateStr.split('-');
       if (!year || !month || !day) return dateStr;
-      return `${day}/${month}/${year}`;
+      return `${day}-${month}-${year}`;
     };
 
     const appointmentData = appointments?.map((appointment) => ({
@@ -277,9 +277,10 @@ const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_
 }
 
 const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id, user_phone_no, type = 'book') => {
-  try { 
-    const appointment = await updateDate(appointment_id, date);
-    const time = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/staff/${staff_id}/available-times/${date}`);
+  try {
+    const dateStr = date.split('-');
+    const appointment = await updateDate(appointment_id, `${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
+    const time = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/staff/${staff_id}/available-times/${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
     const timeData = time?.data?.available_times.map((time) => ({
       id: type === 'book' ? `booking-${business_id}-time-${time.time}-appointment-${appointment._id}` : `booking-${business_id}-time-${time.time}-appointment-${appointment._id}-reschedule`,
       title: time.time,
