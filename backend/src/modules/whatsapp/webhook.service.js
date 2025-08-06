@@ -82,17 +82,25 @@ const webhookService = {
               const data = reqData.messages[0].interactive.list_reply.id.split('-');
 
               if (data[0] === 'reschedule') {
-                getAndSendListOfDate(data[1], data[5], data[3], user_phone_no, 'reschedule');
+                getAndSendNext6MonthsList(data[1], data[5], data[3], user_phone_no, 'reschedule');
               } else if (data[0] === 'cancel') {
                 confirmAppointment(data[1], data[3], user_phone_no, WHATSAPP_CONFIG.APPOINTMENT_STATUS.IN_PROGRESS, 'cancel');
               } else if (data[2] === 'service') {
                 getAndSendListOfTeam(data[1], data[3], data[5], user_phone_no);
               } else if (data[2] === 'staff') {
-                getAndSendListOfDate(data[1], data[3], data[7], user_phone_no);
+                getAndSendNext6MonthsList(data[1], data[3], data[7], user_phone_no);
               } else if (data[2] === 'date') {
-                getAndSendListOfTime(data[1], `${data[3]}-${data[4]}-${data[5]}`, data[7], data[9], user_phone_no, data[10]);
+                const date = data[3].split('/');
+                getAndSendListOfTime(data[1], `${date[0]}-${date[1]}-${date[2]}`, data[5], data[7], user_phone_no, data[8]);
               } else if (data[2] === 'time') {
                 sendAppointmentConfirmation(data[1], data[5], data[3], user_phone_no, data[6]);
+              } else if (data[2] === 'month') {
+                getAndSendWeeklyList(data[1], `${data[4]} ${data[3]}`, data[6], data[8], user_phone_no, data[9]);
+              } else if (data[2] === 'week') {
+                getAndSendListOfDate(data[1], data[9], data[11], user_phone_no, data[12], {
+                  from: data[3],
+                  to: data[5],
+                });
               }
               break;
             case WHATSAPP_CONFIG.INTERACTIVE_TYPES.NFM_REPLY:
@@ -245,13 +253,94 @@ const getAndSendListOfTeam = async (business_id, service_id, appointment_id, use
   }
 }
 
-const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_phone_no, type = 'book') => {
+const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, user_phone_no, type = 'book') => {
   try {
     const appointment = await updateStaff(appointment_id, staff_id);
-    const date = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/available-dates`);
 
-    const dateData = date?.data?.available_dates.map((date) => ({
-      id: type === 'book' ? `booking-${business_id}-date-${date.date}-staff-${staff_id}-appointment-${appointment._id}` : `booking-${business_id}-date-${date.date}-staff-${staff_id}-appointment-${appointment._id}-reschedule`,
+    const next6Months = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + i);
+      const monthName = date.toLocaleString('default', { month: 'long' });
+      const year = date.getFullYear();
+
+      return {
+        id: `booking-${business_id}-month-${year}-${monthName}-staff-${staff_id}-appointment-${appointment._id}-${type === 'reschedule' ? 'reschedule' : 'book'}`,
+        title: `${monthName} ${year}`,
+      };
+    });
+
+    const data = {
+      phone: user_phone_no,
+      body: type === 'book' ? translationService.getItalianMessage('select_month_to_book') : translationService.getItalianMessage('select_month_to_reschedule'),
+      buttonTitle: type === 'book' ? translationService.getItalianMessage('month') : translationService.getItalianMessage('month_button_title'),
+      buttons: next6Months,
+    };
+    await whatsappService.sendList(data);
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+}
+
+const getAndSendWeeklyList = async (business_id, month, staff_id, appointment_id, user_phone_no, type = 'book') => {
+  try {
+    const [monthName, yearStr] = month.split(' ');
+    const year = parseInt(yearStr, 10);
+    const monthIndex = new Date(`${monthName} 1, ${year}`).getMonth();
+    const today = new Date();
+
+    let startDay = 1;
+    if (today.getMonth() === monthIndex && today.getFullYear() === year) {
+      startDay = today.getDate();
+    }
+
+    const lastDay = new Date(year, monthIndex + 1, 0).getDate();
+    const formatDateEU = (dateObj) => {
+      const day = dateObj.getDate().toString().padStart(2, '0');
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const year = dateObj.getFullYear();
+      return `${day}/${month}/${year}`;
+    };
+
+    const weeklyRanges = [];
+    let rangeStart = startDay;
+    while (rangeStart <= lastDay) {
+      let rangeEnd = Math.min(rangeStart + 6, lastDay);
+      const startDateObj = new Date(year, monthIndex, rangeStart);
+      const endDateObj = new Date(year, monthIndex, rangeEnd);
+
+      weeklyRanges.push({
+        id: `booking-${business_id}-week-${formatDateEU(startDateObj)}-to-${formatDateEU(endDateObj)}-${monthName}-${year}-staff-${staff_id}-appointment-${appointment_id}-${type === 'reschedule' ? 'reschedule' : 'book'}`,
+        title: `${formatDateEU(startDateObj)} - ${formatDateEU(endDateObj)}`,
+      });
+      rangeStart = rangeEnd + 1;
+    }
+
+    const data = {
+      phone: user_phone_no,
+      body: translationService.getItalianMessage('select_week_to_book'),
+      buttonTitle: translationService.getItalianMessage('week'),
+      buttons: weeklyRanges,
+    };
+
+    await whatsappService.sendList(data);
+  } catch (error) {
+    console.log('Error: ', error);
+  }
+}
+
+const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_phone_no, type = 'book', dateRange = null) => {
+  try {
+    let appointmentDates = [];
+    if (dateRange?.from && dateRange.to) {
+      const date = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/available-dates?from=${dateRange.from}&to=${dateRange.to}`);
+      appointmentDates = date?.data?.available_dates;
+    } else {
+      const date = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/available-dates`);
+      appointmentDates = date?.data?.available_dates;
+    }
+
+    const dateData = appointmentDates.map((date) => ({
+      id: `booking-${business_id}-date-${date.date}-staff-${staff_id}-appointment-${appointment_id}-${type}`,
       title: date.date,
       description: translationService.getItalianMessage('available_from_to', { 
         from: date.available_from, 

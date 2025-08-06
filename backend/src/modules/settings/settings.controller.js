@@ -190,6 +190,7 @@ export async function getStaffSettings(req, res) {
 export async function getNextAvailableDates(req, res) {
   try {
     const { business_id } = req.params;
+    const { from, to } = req.query;
 
     if (!business_id) {
       return res.status(400).json({
@@ -266,41 +267,52 @@ export async function getNextAvailableDates(req, res) {
     // Get day numbers for operational days
     const operationalDayNumbers = operationalDays.map(day => dayNameToNumber[day]);
 
-    // Calculate next 7 available dates
-    const availableDates = [];
-    const today = new Date();
-    let currentDate = new Date(today);
-    let foundDates = 0;
-
-    // Helper to format date as dd-mm-yyyy
+    // Helper to format date as dd/mm/yyyy
     const formatDateEU = (dateObj) => {
       const day = dateObj.getDate().toString().padStart(2, '0');
       const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
       const year = dateObj.getFullYear();
-      return `${day}-${month}-${year}`;
+      return `${day}/${month}/${year}`;
     };
 
-    // Start from today and look for the next 7 available dates
-    while (foundDates < 7) {
-      const dayOfWeek = currentDate.getDay();
+    // Helper to parse dd/mm/yyyy to Date
+    const parseEUDate = (str) => {
+      const [day, month, year] = str.split('/').map(Number);
+      return new Date(year, month - 1, day);
+    };
 
-      // Check if this day is operational
+    let startDate, endDate;
+    if (from && to) {
+      // Accept both dd/mm/yyyy and yyyy-mm-dd
+      startDate = from.includes('/') ? parseEUDate(from) : new Date(from);
+      endDate = to.includes('/') ? parseEUDate(to) : new Date(to);
+    } else {
+      // Default: next 7 available dates from today
+      startDate = new Date();
+      endDate = new Date();
+      endDate.setDate(startDate.getDate() + 30); // Look ahead 30 days to find 7 available dates
+    }
+
+    const availableDates = [];
+    let currentDate = new Date(startDate);
+    let foundDates = 0;
+    while (currentDate <= endDate) {
+      const dayOfWeek = currentDate.getDay();
       if (operationalDayNumbers.includes(dayOfWeek)) {
         const dayName = Object.keys(dayNameToNumber).find(key => dayNameToNumber[key] === dayOfWeek);
         const hours = dayToHoursMap[dayName];
-
         availableDates.push({
-          date: formatDateEU(currentDate), // dd-mm-yyyy format
+          date: formatDateEU(currentDate), // dd/mm/yyyy format
           day: dayName.charAt(0).toUpperCase() + dayName.slice(1), // Capitalized day name
           available_from: hours.from,
           available_to: hours.to,
           day_of_week: dayOfWeek,
         });
-
-        foundDates++;
+        if (!from || !to) {
+          foundDates++;
+          if (foundDates >= 7) break;
+        }
       }
-
-      // Move to next day
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
