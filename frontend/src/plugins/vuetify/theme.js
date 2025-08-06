@@ -41,6 +41,57 @@ export const themes = {
       'skin-bordered-background': '#fff',
       'skin-bordered-surface': '#fff',
       'expansion-panel-text-custom-bg': '#fafafa',
+      'bg-menu': '#181B25',
+
+      // Background Colors
+      'bg-white': '#FFFFFF',
+      'bg-bglight': '#E1E4EA',
+      'bg-bgsoft': '#F5F7FA',
+      'bg-disabled': '#F5F7FA',
+      'bg-darkbg': '#0E121B',
+      'bg-menubg': '#181B25',
+      'bg-bgprimary': '#335CFF',
+
+      // Text Colors
+      'text-strong': '#0E121B',
+      'text-secondary': '#525866',
+      'text-tertiary': '#99A0AE',
+      'text-disabled': '#CACFD8',
+      'text-white': '#FFFFFF',
+      'text-primary': '#335CFF',
+      'text-error': '#FB3748',
+
+      // Border Colors
+      'border-strong': '#0E121B',
+      'border-light': '#E1E4EA',
+      'border-dark': '#2B303B',
+      'border-primary': '#335CFF',
+      'border-error': '#FB3748',
+
+      // Icon Colors
+      'icon-strong': '#0E121B',
+      'icon-secondary': '#525866',
+      'icon-tertiary': '#99A0AE',
+      'icon-disabled': '#CACFD8',
+      'icon-white': '#FFFFFF',
+      'icon-primary': '#335CFF',
+      'icon-error': '#FB3748',
+
+      // Buttons
+      'btn-neutral-default': '#0E121B',
+      'btn-neutral-hover': '#222530',
+      'btn-primary-default': '#335CFF',
+      'btn-primary-hover': '#2547D0',
+      'btn-error-default': '#FB3748',
+      'btn-error-hover': '#D02533',
+
+      // Alpha
+      'alpha-primary': 'rgba(51, 92, 255, 0.1)',
+      'alpha-error': 'rgba(251, 55, 72, 0.1)',
+
+      // Success
+      'text-success': '#1FC16B',
+      'bg-success': '#1FC16B'
     },
     variables: {
       'code-color': '#d400ff',
