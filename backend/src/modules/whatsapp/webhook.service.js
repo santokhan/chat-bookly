@@ -90,8 +90,12 @@ const webhookService = {
               } else if (data[2] === 'staff') {
                 getAndSendNext6MonthsList(data[1], data[3], data[7], user_phone_no);
               } else if (data[2] === 'date') {
-                const date = data[3].split('/');
-                getAndSendListOfTime(data[1], `${date[0]}-${date[1]}-${date[2]}`, data[5], data[7], user_phone_no, data[8]);
+                if (data.length === 9) {
+                  const date = data[3].split('/');
+                  getAndSendListOfTime(data[1], `${date[0]}-${date[1]}-${date[2]}`, data[5], data[7], user_phone_no, data[8]);
+                } else {
+                  getAndSendListOfTime(data[1], `${data[3]}-${data[4]}-${data[5]}`, data[7], data[9], user_phone_no, data[10], data[11], data[12]);
+                }
               } else if (data[2] === 'time') {
                 sendAppointmentConfirmation(data[1], data[5], data[3], user_phone_no, data[6]);
               } else if (data[2] === 'month') {
@@ -365,16 +369,30 @@ const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_
   }
 }
 
-const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id, user_phone_no, type = 'book') => {
+const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id, user_phone_no, type = 'book', check = 'start', timeslot = null) => {
   try {
     const dateStr = date.split('-');
-    const appointment = await updateDate(appointment_id, `${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
-    const time = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/staff/${staff_id}/available-times/${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
+
+    let time = [];
+    if (check === 'more') {
+      time = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/staff/${staff_id}/available-times/${dateStr[2]}-${dateStr[1]}-${dateStr[0]}?time=${timeslot}`);
+    } else {
+      await updateDate(appointment_id, `${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
+      time = await axios.get(`${process.env.API_URL}/api/v1/settings/business/${business_id}/staff/${staff_id}/available-times/${dateStr[2]}-${dateStr[1]}-${dateStr[0]}`);
+    }
     const timeData = time?.data?.available_times.map((time) => ({
-      id: type === 'book' ? `booking-${business_id}-time-${time.time}-appointment-${appointment._id}` : `booking-${business_id}-time-${time.time}-appointment-${appointment._id}-reschedule`,
+      id: type === 'book' ? `booking-${business_id}-time-${time.time}-appointment-${appointment_id}` : `booking-${business_id}-time-${time.time}-appointment-${appointment_id}-reschedule`,
       title: time.time,
-      description: time.description,
     }));
+
+    if (timeData.length === 9) {
+      const lastTime = timeData[timeData.length - 1].title;
+      timeData.push({
+        id: `booking-${business_id}-date-${date}-staff-${staff_id}-appointment-${appointment_id}-${type}-more-${lastTime}`,
+        title: 'More Time Slots',
+        description: 'You can get next time slots from this',
+      });
+    }
 
     const data = {
       phone: user_phone_no,

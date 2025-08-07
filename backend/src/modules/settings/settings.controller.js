@@ -333,6 +333,7 @@ export async function getNextAvailableDates(req, res) {
 export async function getNextAvailableTimes(req, res) {
   try {
     const { business_id, date, staff_id } = req.params;
+    const { time } = req.query;
 
     if (!business_id || !date) {
       return res.status(400).json({
@@ -429,16 +430,11 @@ export async function getNextAvailableTimes(req, res) {
 
     const existingAppointments = await Appointment.find(appointmentQuery);
 
-    // Convert time strings to minutes for easier comparison
+    // Convert time strings to minutes for easier comparison (24h format: HH:mm)
     const timeToMinutes = (timeStr) => {
-      const [time, period] = timeStr.split(' ');
-      const [hours, minutes] = time.split(':').map(Number);
-      let hour24 = hours;
-      
-      if (period === 'PM' && hours !== 12) hour24 += 12;
-      if (period === 'AM' && hours === 12) hour24 = 0;
-      
-      return hour24 * 60 + minutes;
+      if (!timeStr) return 0;
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      return hours * 60 + minutes;
     };
 
     const minutesToTime = (minutes) => {
@@ -458,11 +454,21 @@ export async function getNextAvailableTimes(req, res) {
       return timeToMinutes(aptTime);
     }).filter(time => time !== null);
 
+    // Determine the starting time for slots
+    let slotStartMinutes = startMinutes;
+    if (time) {
+      // If a time is provided, start after that time
+      const queryMinutes = timeToMinutes(time);
+      // Find the next slot after the given time
+      slotStartMinutes = queryMinutes + timeSlotDuration;
+      if (slotStartMinutes < startMinutes) slotStartMinutes = startMinutes;
+      if (slotStartMinutes > endMinutes) slotStartMinutes = endMinutes;
+    }
+
     // Generate available time slots
     const availableTimes = [];
-    let currentMinutes = startMinutes;
-
-    while (currentMinutes < endMinutes && availableTimes.length < 10) {
+    let currentMinutes = slotStartMinutes;
+    while (currentMinutes < endMinutes && availableTimes.length < 9) {
       // Check if this time slot is available
       const isBooked = bookedTimes.some(bookedTime => 
         Math.abs(bookedTime - currentMinutes) < timeSlotDuration
