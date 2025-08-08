@@ -13,6 +13,7 @@ const store = useCalendarStore();
 // 👉 Event
 const event = ref(structuredClone(blankEvent));
 const isEventHandlerSidebarActive = ref(false);
+const selectAll = ref(true);
 
 watch(isEventHandlerSidebarActive, (val) => {
   if (!val) event.value = structuredClone(blankEvent);
@@ -81,7 +82,7 @@ const calendarOptions = computed(() => ({
 }));
 
 // 👉 Custom calendar controls
-const selectedView = ref("timeGridDay");
+const selectedView = ref("timeGridWeek");
 const selectedEmployees = ref([
   "john doe",
   "jane smith",
@@ -282,10 +283,10 @@ const employeeOptions = [
 
 // View options with 3-day view
 const viewOptions = [
-  { title: "Day", value: "timeGridDay" },
-  { title: "3 Day", value: "timeGridThreeDay" },
+  // { title: "Day", value: "timeGridDay" },
+  // { title: "3 Day", value: "timeGridThreeDay" },
   { title: "Week", value: "timeGridWeek" },
-  { title: "Month", value: "dayGridMonth" },
+  // { title: "Month", value: "dayGridMonth" },
 ];
 
 // Format date range for display
@@ -296,18 +297,18 @@ const formattedDateRange = computed(() => {
   if (start.getTime() === end.getTime()) {
     return start.toLocaleDateString("en-US", {
       day: "numeric",
-      month: "long",
+      month: "short",
       year: "numeric",
     });
   }
 
   const startFormatted = start.toLocaleDateString("en-US", {
     day: "numeric",
-    month: "long",
+    month: "short",
   });
   const endFormatted = end.toLocaleDateString("en-US", {
     day: "numeric",
-    month: "long",
+    month: "short",
     year: "numeric",
   });
 
@@ -410,12 +411,53 @@ const handleTeamChange = () => {
   console.log("Selected teams:", selectedEmployees.value);
 };
 
+// const selectAllEmployees = () => {
+//   const allSelected =
+//     selectedEmployees.value.length === employeeOptions.length - 1;
+
+//   if (allSelected) {
+//     selectedEmployees.value = [];
+//     selectAll.value = false;
+//   } else {
+//     selectedEmployees.value = employeeOptions
+//       .filter((emp) => emp.value !== "all team")
+//       .map((emp) => emp.value);
+//     selectAll.value = true;
+//   }
+// };
 const selectAllEmployees = () => {
-  // Select all employees
-  selectedEmployees.value = employeeOptions
-    .filter((emp) => emp.value !== "all team")
-    .map((emp) => emp.value);
+  if (selectAll.value) {
+    selectedEmployees.value = [];
+    selectAll.value = false;
+  } else {
+    selectedEmployees.value = employeeOptions.map(emp => emp.value);
+    selectAll.value = true;
+  }
 };
+watch(selectedEmployees, (newVal) => {
+  const allEmployeesExceptAllTeam = employeeOptions
+    .filter(emp => emp.value !== "all team")
+    .map(emp => emp.value);
+
+  // Check if all individual employees are selected
+  const allSelected = allEmployeesExceptAllTeam.every(empVal => newVal.includes(empVal));
+
+  if (allSelected) {
+    // If all individual employees selected, check 'all team'
+    if (!newVal.includes("all team")) {
+      selectedEmployees.value = [...newVal, "all team"];
+    }
+    selectAll.value = true;
+  } else {
+    // If not all selected, uncheck 'all team'
+    if (newVal.includes("all team")) {
+      selectedEmployees.value = newVal.filter(val => val !== "all team");
+    }
+    selectAll.value = false;
+  }
+});
+
+
 
 const clearAllEmployees = () => {
   // Clear all employees
@@ -464,6 +506,7 @@ onMounted(() => {
 
 import { ref } from 'vue'
 import AddBookingModal from '@/views/apps/calendar/AddBookingModal.vue'
+import SlotBookingModal from "@/views/apps/calendar/SlotBookingModal.vue";
 
 const isAppointmentModalOpen = ref(false)
 
@@ -473,12 +516,13 @@ const openAppointmentModal = () => {
   isAppointmentModalOpen.value = true;
 };
 
-const selectedClientType = ref("existing");
-const selectedClient = ref("");
-const selectedService = ref("");
-const selectedTeamMember = ref("");
-const selectedDate = ref("");
-const selectedTime = ref("");
+
+const isSlotBookingModalOpen = ref(false);
+const handleBookedSlot = () => {
+  isSlotBookingModalOpen.value = true;
+};
+
+
 </script>
 
 <template>
@@ -486,24 +530,27 @@ const selectedTime = ref("");
     <!-- Custom Calendar Header -->
     <VMenu location="bottom end" offset-y>
       <template #activator="{ props }">
-        <div style="
+        <div class="d-flex flex-wrap justify-md-space-between align-start  w-100"  >
+          <!-- v style="
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
-            align-items: center;
+            align-items: start;
             width: 100%;
-          ">
+          " -->
+        
           <!-- Left button -->
           <div>
-            <div class="d-flex align-center justify-space-between mb-4 calendar-custom-header">
+            <div class="d-flex align-center justify-md-space-between mb-4 calendar-custom-header">
               <!-- Left side controls -->
-              <div class="d-flex align-center gap-4">
+              <div class="d-flex flex-wrap align-center gap-4">
                 <!-- Today button -->
                 <!-- <VBtn variant="outlined" @click="goToToday"> Today </VBtn> -->
                 <div class="refresh-view-group" style="
             display: flex;
             align-items: center;
             border: 1px solid #ccc;
-            border-radius: 20px;
+            border-radius: 100px;
             overflow: hidden;
             height: 36px;
           ">
@@ -518,10 +565,9 @@ const selectedTime = ref("");
               /> -->
 
                   <!-- Right: View Selector -->
-                  <VSelect v-model="selectedView" :items="viewOptions" density="comfortable" variant="plain"
-                    hide-details style="min-width: 50px; height: 100%; border-left: 1px solid #ccc"
-                    menu-icon="tabler-chevron-down" @update:model-value="handleViewChange" class="custom-view-select">
-                    <!-- Custom item slot to align text and arrow -->
+                  <VSelect v-model="selectedView" :items="viewOptions" density="compact" variant="plain" hide-details
+                    style="min-width: 50px; background-color: white; height: 100%;" menu-icon="tabler-chevron-down"
+                    @update:model-value="handleViewChange" class="custom-view-select">
                     <template #selection="{ item }">
                       <div style="
                   display: flex;
@@ -542,21 +588,24 @@ const selectedTime = ref("");
                     border-radius: 20px;
                     overflow: hidden;
                     height: 36px;
+                    background-color: white;
                   ">
                   <VBtn icon="tabler-chevron-left" variant="text" size="small" style="
                       border-radius: 0;
                       border: none;
-                      border-right: 1px solid #ccc;
+                      /* border-right: 1px solid #ccc; */
                       min-width: 36px;
                       height: 100%;
                       color: #666;
                     " @click="handlePrevPeriod" />
 
                   <VBtn variant="outlined" style="
-                      border-radius: 0;
+                     border-radius: 0;
                       border: none;
                       height: 100%;
                       color: #666;
+                      padding-left: 10px;
+                      padding-right: 10px;
                     " @click="openDateRangePicker">
                     {{ formattedDateRange }}
                   </VBtn>
@@ -564,7 +613,7 @@ const selectedTime = ref("");
                   <VBtn icon="tabler-chevron-right" variant="text" size="small" style="
                       border-radius: 0;
                       border: none;
-                      border-left: 1px solid #ccc;
+                      /* border-left: 1px solid #ccc; */
                       min-width: 36px;
                       height: 100%;
                       color: #666;
@@ -574,33 +623,71 @@ const selectedTime = ref("");
                 <!-- Team filter -->
                 <VMenu v-model="isTeamDropdownOpen" :close-on-content-click="false">
                   <template #activator="{ props }">
-                    <VBtn v-bind="props" variant="outlined" prepend-icon="tabler-users">
-                      Custom
+
+                    <VBtn v-bind="props" variant="outlined" class="icon-button1"
+                      style="background-color: white;display: flex;justify-content: space-between;"
+                      prepend-icon="tabler-users">
+                      All Team Members
+                      <VIcon size="15" :class="{ 'rotate-180': isTeamDropdownOpen }" style="margin-left: 10px;"
+                        icon="tabler-chevron-down" />
                     </VBtn>
                   </template>
 
                   <VCard min-width="250">
                     <VCardTitle class="text-h6 pa-4">
                       <!-- All Team Button -->
-                      <div class="d-flex align-center justify-space-between mb-2">
-                        <VBtn variant="text" size="small" color="primary" @click="selectAllEmployees">
-                          All Team
-                        </VBtn>
+                      <div class="d-flex align-center justify-space-between">
+                        <VCheckbox v-model="selectAll" label="All Team Members" @click="selectAllEmployees"
+                          color="primary" hide-details density="compact" />
+
+                        <!-- <VBtn
+                          variant="text"
+                          size="small"
+                          color="primary"
+                          @click="selectAllEmployees"
+                        > -->
+                        <!-- All Team Members
+                        </VBtn> -->
 
                         <!-- Clear All Button -->
-                        <VBtn variant="text" size="small" color="error" @click="clearAllEmployees">
+                        <!-- <VBtn
+                          variant="text"
+                          size="small"
+                          color="error"
+                          @click="clearAllEmployees"
+                        >
                           Clear All
-                        </VBtn>
+                        </VBtn> -->
                       </div>
-                      Select Employees
+                      <!-- Select Employees -->
                     </VCardTitle>
-                    <VCardText>
+                    <!-- <VCardText>
                       <div class="d-flex flex-column gap-2">
-                        <!-- Employee Checkboxes -->
                         <VCheckbox v-for="employee in employeeOptions.filter(
                           (emp) => emp.value !== 'all team'
                         )" :key="employee.value" v-model="selectedEmployees" :value="employee.value"
                           :label="employee.title" />
+                      </div>
+                    </VCardText> -->
+                    <VCardText style="padding: 0 16px">
+                      <div class="d-flex flex-column gap-2 pb-4">
+                        <!-- Employee Checkboxes -->
+                        <VCheckbox v-for="employee in employeeOptions.filter(
+                          (emp) => emp.value !== 'all team'
+                        )" :key="employee.value" v-model="selectedEmployees" :value="employee.value" density="compact">
+                          <template #label>
+                            <div class="d-flex align-center justify-between w-100">
+                              <div class="d-flex align-center gap-2 ms-2">
+                                <VAvatar :image="employee.avatar" size="24" />
+                                <span>{{ employee.title }}</span>
+                              </div>
+                              <VIcon v-if="
+                                selectedEmployees.includes(employee.value)
+                              " icon="tabler-check" size="17" color="secondary" style="margin-left: auto;" />
+                            </div>
+
+                          </template>
+                        </VCheckbox>
                       </div>
                     </VCardText>
                   </VCard>
@@ -625,20 +712,23 @@ const selectedTime = ref("");
       </template>
 
       <VList>
-        <VListItem @click="openAppointmentModal">
+        <VListItem  @click="openAppointmentModal">
           <VListItemTitle>
-            <VBtn icon="tabler-calendar" variant="text" size="small" color="black" />
+            <VBtn  icon="tabler-calendar" variant="text" size="small" color="black" />
             Book An Appointment
           </VListItemTitle>
         </VListItem>
         <VListItem @click="handleBookedSlot">
-          <VListItemTitle>Booked Slot</VListItemTitle>
+          <VListItemTitle>
+            <VBtn icon="tabler-calendar-x" variant="text" size="small" color="black" />
+            Blocked Slot
+          </VListItemTitle>
         </VListItem>
       </VList>
     </VMenu>
     <VCard>
       <!-- <VCard title="Appointments - Calendar"> -->
-      <VCardText>
+      <VCardText class="pa-0">
         <!-- Date Range Picker Dialog -->
         <VDialog v-model="isDatePickerOpen" max-width="600">
           <VCard>
@@ -725,7 +815,7 @@ const selectedTime = ref("");
                 <!-- Employee Column -->
                 <div class="employee-column-calendar">
                   <div class="employee-list-calendar">
-                    <div v-for="employee in employeeOptions.filter(
+                    <!-- <div v-for="employee in employeeOptions.filter(
                       (emp) =>
                         emp.value !== 'all team' &&
                         selectedEmployees.includes(emp.value)
@@ -736,7 +826,7 @@ const selectedTime = ref("");
                       <span class="employee-name-calendar">{{
                         employee.title
                       }}</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
 
@@ -761,6 +851,7 @@ const selectedTime = ref("");
 
     <!-- Appointment Modal -->
     <AddBookingModal v-model="isAppointmentModalOpen" />
+    <SlotBookingModal v-model="isSlotBookingModalOpen" />
   </BusinessLayout>
 </template>
 
@@ -802,6 +893,10 @@ const selectedTime = ref("");
   &~.flatpickr-calendar .flatpickr-weekdays {
     margin-block: 0 4px;
   }
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
 }
 
 @media screen and (max-width: 1279px) {
@@ -1090,7 +1185,7 @@ const selectedTime = ref("");
 // Calendar header button styling
 .calendar-custom-header {
   .v-btn {
-    border-radius: 25px !important;
+    border-radius: 10px !important;
   }
 
   // Add button styling
@@ -1107,7 +1202,7 @@ const selectedTime = ref("");
 
   // Refresh and view selector group styling
   .refresh-view-group {
-    border-radius: 25px !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 
@@ -1127,7 +1222,7 @@ const selectedTime = ref("");
 
   // Date range group styling
   .date-range-group {
-    border-radius: 25px !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 

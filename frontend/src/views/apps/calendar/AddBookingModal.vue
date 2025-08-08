@@ -13,7 +13,7 @@
             " />
                     <div class="w-full">
                         <h4>Book an Appointment</h4>
-                        <div class="text-caption text-grey">
+                        <div class="text-caption text-wrap m-none text-grey">
                             Book an appointment with a professional
                         </div>
                     </div>
@@ -27,10 +27,10 @@
                 <!-- Client Type -->
                 <div class="mb-4">
                     <label for="selectedClient" class="field-label">Select Client</label>
-                    <VRadioGroup v-model="selectedClientType">
-                        <div class="d-flex align-center" style="gap: 1rem;">
-                            <div>
-                                <VRadio label="Existing" value="existing" />
+                    <VRadioGroup v-model="selectedClientType" class="-m-2">
+                        <div class="d-flex align-center start" style="gap: 1rem;">
+                            <div class="start">
+                                <VRadio class="start" label="Existing" value="existing" />
                             </div>
                             <div>
                                 <VRadio label="New" value="new" />
@@ -44,14 +44,14 @@
                     <div class="d-flex gap-4 fBtn">
                         <!-- First Name -->
                         <div class="flex-1 fBtn mb-4">
-                            <label class="field-label mb-2" for="firstName">First Name</label>
+                            <label class="field-label mb-2" for="firstName">First Name<span class="star" color="primary">*</span></label>
                             <input id="firstName" v-model="form.firstName" type="text" placeholder="Enter first name"
                                 class="input-field" />
                         </div>
 
                         <!-- Last Name -->
                         <div class="flex-1 fBtn mb-4">
-                            <label class="field-label mb-2" for="lastName">Last Name</label>
+                            <label class="field-label mb-2" for="lastName">Last Name<span class="star" color="primary">*</span></label>
                             <input id="lastName" v-model="form.lastName" type="text" placeholder="Enter last name"
                                 class="input-field" />
                         </div>
@@ -59,29 +59,22 @@
 
                     <!-- Email -->
                     <div class="flex-1 mb-4">
-                        <label class="field-label mb-2" for="email">Email</label>
+                        <label class="field-label mb-2" for="email">Email<span class="star" color="primary">*</span></label>
                         <input id="email" v-model="form.email" type="email" placeholder="example@email.com"
                             class="input-field" />
                     </div>
 
-                    <!-- Phone Number -->
                     <div class="flex-1 mb-4">
-                        <label class="field-label mb-2" for="phone">Phone Number</label>
-                        <input id="phone" v-model="form.phone" type="tel" placeholder="+920000000001"
-                            class="input-field" />
-                    </div>
-
-                    <!-- <div class="flex-1 mb-4">
-                        <label class="field-label mb-2" for="phone">Phone Number</label>
-                        <vue-tel-input-vuetify
+                        <label class="field-label mb-2" for="phone">Phone Number<span class="star" color="primary">*</span></label>
+                        <vue-tel-input
                         id="phone"
                         v-model="form.phone"
-                        placeholder="Enter phone number"
+                        placeholder="(+92) 000 0000 0000"
                         :rules="[v => !!v || 'Phone is required']"
-                        class="input-field"
+                        class="input-field m-0"
                         />
-                    </div> -->
-                    <p class="text-sm text-muted d-flex align-center gap-2">
+                    </div>
+                    <p class="text-sm text-muted d-flex align-center gap-2 mb-1">
                         <VIcon icon="tabler-info-circle" size="18" />
                         New customer will be saved to your clients list.
                     </p>
@@ -130,6 +123,7 @@
                     <VMenu v-model="dropdown.team" :close-on-content-click="false">
                         <template #activator="{ props }">
                             <VBtn v-bind="props" block variant="outlined" prepend-icon="tabler-user"
+                             
                                 class="vBtn custom-dropdown-btn">
                                 {{ selectedTeamMember || 'Select team member' }}
                             </VBtn>
@@ -162,7 +156,7 @@
                     </div>
                 </div> -->
 
-                <div class="field-row">
+                <div class="field-row mb-0">
                     <!-- Select Date -->
                     <div class="field">
                         <label for="selectedDate" class="field-label">Select Date</label>
@@ -385,10 +379,13 @@ const submitAppointment = () => {
     height: 38px;
     outline: none;
     transition: border-color 0.2s;
+    box-shadow: none;
+    background-color: white;
 }
 
 .input-field:focus {
     border-color: #ccc;
+    background-color: white;
     /* blue outline on focus */
 }
 
@@ -406,4 +403,44 @@ const submitAppointment = () => {
     top: 50%;
     transform: translateY(-50%);
 }
+
+.star{
+    color: #435CFF;
+    margin-left: 2px;
+}
+
+.text-caption{
+    letter-spacing: normal !important;
+}
+
+.start{
+    margin-left: -2px;
+}
+
+
+/* For flag */
+::v-deep(.vti__flag) {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-right: 5px !important;
+}
+
+/* For dropdown arrow wrapper */
+::v-deep(.vti__dropdown) {
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-right: 5px !important;
+}
+
+/* For dropdown arrow icon */
+::v-deep(.vti__dropdown-arrow) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Optionally, reduce input padding if needed */
+::v-deep(.vti__input) {
+  padding-left: 0 !important; /* or adjust as needed */
+}
+
 </style>
