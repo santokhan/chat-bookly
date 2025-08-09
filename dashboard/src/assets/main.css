@@ -1,0 +1,127 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Primary Brand Colors */
+  --color-brand-primary: #335cff;
+  --color-brand-primary-hover: #2347e6;
+  --color-brand-primary-light: #333cff;
+  --color-brand-secondary: #1fc1b8;
+
+  /* Neutral Colors */
+  --color-neutral-white: #ffffff;
+  --color-neutral-50: #f5f7fa;
+  --color-neutral-100: #e1e4ea;
+  --color-neutral-200: #cacfd8;
+  --color-neutral-300: #99a0ae;
+  --color-neutral-400: #9a9aae;
+  --color-neutral-500: #525866;
+  --color-neutral-600: #414651;
+  --color-neutral-700: #313025;
+  --color-neutral-800: #181b25;
+  --color-neutral-900: #131218;
+  --color-neutral-950: #0e121b;
+
+  /* Text Colors */
+  --color-text-primary: #0e121b;
+  --color-text-secondary: #525866;
+  --color-text-tertiary: #9a9aae;
+  --color-text-disabled: #cacfd8;
+  --color-text-inverse: #ffffff;
+  --color-text-brand: #335cff;
+  --color-text-error: #f93748;
+  --color-text-success: #1fc1b8;
+
+  /* Background Colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f5f7fa;
+  --color-bg-tertiary: #e1e4ea;
+  --color-bg-inverse: #131218;
+  --color-bg-brand: #335cff;
+  --color-bg-brand-hover: #2347e6;
+  --color-bg-surface: #ffffff;
+  --color-bg-overlay: #181b25;
+  --color-bg-disabled: #f5f7fa;
+
+  /* Border Colors */
+  --color-border-default: #e1e4ea;
+  --color-border-strong: #131218;
+  --color-border-brand: #335cff;
+  --color-border-error: #f93748;
+  --color-border-focus: #414651;
+  --color-border-inverse: #2b303b;
+
+  /* Status Colors */
+  --color-success: #1fc1b8;
+  --color-error: #f93748;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* Interactive Colors */
+  --color-interactive-primary: #335cff;
+  --color-interactive-primary-hover: #2347e6;
+  --color-interactive-secondary: #525866;
+  --color-interactive-tertiary: #9a9aae;
+  --color-interactive-disabled: #cacfd8;
+
+  /* Surface Colors */
+  --color-surface-default: #ffffff;
+  --color-surface-subtle: #f5f7fa;
+  --color-surface-muted: #e1e4ea;
+  --color-surface-emphasis: #131218;
+  --color-surface-brand: #335cff;
+  --color-surface-overlay: rgba(19, 18, 24, 0.5);
+
+  /* Shadow Colors */
+  --color-shadow-default: rgba(10, 13, 20, 0.08);
+  --color-shadow-medium: rgba(10, 13, 20, 0.12);
+  --color-shadow-strong: rgba(10, 13, 20, 0.24);
+
+  /* Scrollbar Colors */
+  --color-scrollbar-track: #f1f1f1;
+  --color-scrollbar-thumb: #c1c1c1;
+  --color-scrollbar-thumb-hover: #a8a8a8;
+
+  /* Layout & Component Colors */
+  --color-sidebar-bg: #131218;
+  --color-sidebar-menu: #181b25;
+  --color-sidebar-border: #2b303b;
+  --color-header-text: #181d27;
+
+  /* Additional Brand & Accent Colors */
+  --color-accent-blue: #3b82f6;
+  --color-accent-green: #10b981;
+  --color-accent-yellow: #f59e0b;
+  --color-accent-red: #ef4444;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-orange: #f97316;
+
+  /* Legacy Color Mappings for Compatibility */
+  --color-light: var(--color-neutral-100);
+  --color-white: var(--color-neutral-white);
+  --color-soft: var(--color-neutral-50);
+  --color-disabled: var(--color-neutral-200);
+  --color-dark: var(--color-neutral-900);
+  --color-neutral: var(--color-neutral-700);
+  --color-primary: var(--color-brand-primary);
+  --color-menu: var(--color-sidebar-menu);
+  --color-strong: var(--color-text-primary);
+  --color-secondary: var(--color-text-secondary);
+  --color-tertiary: var(--color-text-tertiary);
+  --color-error: var(--color-error);
+  --color-success: var(--color-success);
+
+  /* Border Color Mappings */
+  --color-border-light: var(--color-border-default);
+  --color-border-dark: var(--color-border-inverse);
+  --color-border-primary: var(--color-border-focus);
+  --color-border-primary2: var(--color-border-brand);
+  --color-border-error: var(--color-border-error);
+
+  /* Typography - Font Family */
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+}
+
+button,a{
+  cursor: pointer;
+}
