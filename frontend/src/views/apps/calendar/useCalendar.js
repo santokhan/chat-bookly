@@ -13,9 +13,10 @@ export const blankEvent = {
   url: '',
   extendedProps: {
     /*
-          ℹ️ We have to use undefined here because if we have blank string as value then select placeholder will be active (moved to top).
-          Hence, we need to set it to undefined or null
-        */
+    ℹ️ We have to use undefined here because if we have blank string as value then select placeholder will be active (moved to top).
+    Hence, we need to set it to undefined or null
+    */
+    status: '',
     calendar: undefined,
     guests: [],
     location: '',
@@ -24,15 +25,10 @@ export const blankEvent = {
 }
 export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpen) => {
   const configStore = useConfigStore()
-
-  // 👉 Store
   const store = useCalendarStore()
-
-  // 👉 Calendar template ref
   const refCalendar = ref()
 
 
-  // 👉 Calendar colors
   const calendarsColor = {
     Business: 'primary',
     Holiday: 'success',
@@ -41,18 +37,39 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     ETC: 'info',
   }
 
+  function getEventStyle(event) {
+    const styles = [];
+
+    if (event._def.extendedProps.status === "completed") {
+      styles.push(`bg-light-primary`);
+    }
+
+    if (event._def.extendedProps.status === "booked") {
+      styles.push(`bg-light-warning`);
+    }
+
+    if (event._def.extendedProps.status === "blocked" || event._def.status === "blocked-slot") {
+      styles.push(`bg-light-secondary blocked-slot`);
+    }
+
+    return styles.join('; ');
+  }
+
+
 
   // ℹ️ Extract event data from event API
   const extractEventDataFromEventApi = eventApi => {
-        
-    const { id, title, start, end, url, extendedProps: { calendar, guests, location, description }, allDay } = eventApi
-    
+
+    const { id, title, start, end, url, status, extendedProps: { calendar, guests, location, description }, allDay } = eventApi
+
+    console.log("status113", status)
     return {
       id,
       title,
       start,
       end,
       url,
+      status,
       extendedProps: {
         calendar,
         guests,
@@ -62,7 +79,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
       allDay,
     }
   }
-    
+
   if (typeof process !== 'undefined' && process.server)
     store.fetchEvents()
 
@@ -99,7 +116,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     const existingEvent = calendarApi.value?.getEventById(String(updatedEventData.id))
     if (!existingEvent) {
       console.warn('Can\'t found event in calendar to update')
-      
+
       return
     }
 
@@ -157,7 +174,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     store.updateEvent(_event)
       .then(r => {
         const propsToUpdate = ['id', 'title', 'url']
-        const extendedPropsToUpdate = ['calendar', 'guests', 'location', 'description']
+        const extendedPropsToUpdate = ['calendar', 'guests', 'location','status','client','teamMemeber','service','blockedTime', 'description']
 
         updateEventInCalendar(r, propsToUpdate, extendedPropsToUpdate)
       })
@@ -221,12 +238,14 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
       */
     navLinks: true,
     eventClassNames({ event: calendarEvent }) {
-      const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
-      
-      return [
-        // Background Color
-        `bg-light-${colorName} text-${colorName}`,
-      ]
+      // const colorName = calendarsColor[calendarEvent._def.status]
+      const styles = getEventStyle(calendarEvent)
+      return styles
+      // return [
+      //   // Background Color
+      //   `bg-light-${colorName} text-${colorName} `,
+      //   // 'fc-event-lower'
+      // ]
     },
     eventClick({ event: clickedEvent, jsEvent }) {
       // Prevent the default action
@@ -293,7 +312,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
   watch(() => configStore.isAppRTL, val => {
     calendarApi.value?.setOption('direction', val ? 'rtl' : 'ltr')
   }, { immediate: true })
-  
+
   return {
     refCalendar,
     calendarOptions,
