@@ -8,3 +8,14 @@
 html {
   box-sizing: border-box;
 }
+
+.blocked-slot {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.05),
+    rgba(0, 0, 0, 0.05) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  background-color: #f8f9fa; // light base color
+}

@@ -4,9 +4,12 @@ import FullCalendar from "@fullcalendar/vue3";
 import { blankEvent, useCalendar } from "@/views/apps/calendar/useCalendar";
 import BusinessLayout from "@/layouts/components/BusinessLayout.vue";
 import { useCalendarStore } from "@/views/apps/calendar/useCalendarStore";
+import { ref } from 'vue'
+import AddBookingModal from '@/views/apps/calendar/AddBookingModal.vue'
+import SlotBookingModal from "@/views/apps/calendar/SlotBookingModal.vue";
+import CalendarEventHandler from "@/views/apps/calendar/CalendarEventHandler.vue";
 
 // Components
-import CalendarEventHandler from "@/views/apps/calendar/CalendarEventHandler.vue";
 
 const store = useCalendarStore();
 
@@ -51,6 +54,28 @@ const calendarOptions = computed(() => ({
   ...baseCalendarOptions,
   headerToolbar: false, // Remove default header toolbar
   initialView: selectedView.value, // Use the selected view
+  firstDay: 1,
+  customButtons: {
+    myPrevButton: {
+      text: 'Prev',
+      click: function () {
+        calendar.prev();  // call calendar API prev()
+      }
+    },
+    myNextButton: {
+      text: 'Next',
+      click: function () {
+        calendar.next();  // call calendar API next()
+      }
+    },
+    myRefreshButton: {
+      text: 'Refresh',
+      click: function () {
+        // Your custom refresh action
+        alert('Refresh clicked!');
+      }
+    }
+  },
   views: {
     timeGridDay: {
       dayHeaderFormat: { weekday: "long" },
@@ -66,15 +91,229 @@ const calendarOptions = computed(() => ({
       headerToolbar: false,
     },
     timeGridWeek: {
-      dayHeaderFormat: { day: "numeric", weekday: "long" },
+      dayHeaderFormat: { day: "numeric", weekday: "short" },
       allDaySlot: false,
       headerToolbar: false,
+      firstDay: 1
     },
     dayGridMonth: {
       dayHeaderFormat: { weekday: "long" },
       allDaySlot: false,
       headerToolbar: false,
     },
+  },
+  eventContent: function (arg) {
+    const status = arg.event.extendedProps.status;
+    const tickHtml = `
+  <span style="
+    float: right;
+    background-color: #198754;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+  ">
+    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" stroke-width="3" stroke="white" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M5 12l5 5l10 -10" />
+    </svg>
+  </span>
+`;
+
+    // Compose HTML with time on top, title below, tick on right if completed
+    let html = `
+    <div >
+      <div style="flex-grow: 1;">
+        <div style=" color:black; font-weight: 600;"> <span>${new Date(arg.event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+            ${new Date(arg.event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;  margin-top:4px;">
+               <div style=" color:#6c757d;">${arg.event.title}</div>
+        ${status === 'completed' ? tickHtml : ''}
+              </div>
+       
+      </div>
+    </div>
+  `;
+
+    return { html };
+  },
+
+  // eventMouseEnter(info) {
+  //   const { status, client, teamMemeber, service } = info.event.extendedProps;
+
+  //   const tooltip = document.createElement("div");
+  //   tooltip.className = "event-tooltip";
+  //   tooltip.style.position = "absolute";
+  //   tooltip.style.top = "110%";
+  //   tooltip.style.left = "0";
+  //   tooltip.style.padding = "0";
+  //   tooltip.style.margin = "0"
+  //   tooltip.style.background = "#fff";
+  //   tooltip.style.border = "1px solid #ccc";
+  //   tooltip.style.borderRadius = "8px";
+  //   tooltip.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+  //   tooltip.style.width = "240px";
+  //   tooltip.style.fontFamily = "sans-serif";
+  //   tooltip.style.overflow = "hidden";
+
+  //   tooltip.innerHTML = `
+  //   <!-- Header -->
+  //   <div style="
+  //     display:flex;
+  //     justify-content:space-between;
+  //     align-items:center;
+  //     background:${status === 'completed' ? '#28a745' : '#6c757d'};
+  //     color:#fff;
+  //     padding:6px 10px;
+  //     font-size:13px;
+  //     font-weight:bold;
+  //   ">
+  //     <span>${new Date(info.event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+  //           ${new Date(info.event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+  //     <span style="text-transform:uppercase;">${status}</span>
+  //   </div>
+
+  //   <!-- Client -->
+  //   <div style="padding:10px;">
+  //     <div style="font-size:11px; color:#6c757d; margin-bottom:4px;">CLIENT</div>
+  //     <div style="display:flex; align-items:center; gap:8px;">
+  //       <img src="${client.avatar}" alt="${client.name}" style="width:28px; height:28px; border-radius:50%;">
+  //       <div>
+  //         <div style="font-size:13px; font-weight:500;">${client.name}</div>
+  //         <div style="font-size:11px; color:#6c757d;">+39 351 195 5891</div>
+  //       </div>
+  //     </div>
+
+  //     <!-- Team Member -->
+  //     <div style="font-size:11px; color:#6c757d; margin:10px 0 4px;">TEAM MEMBER</div>
+  //     <div style="display:flex; align-items:center; gap:8px;">
+  //       <img src="${teamMemeber.avatar}" alt="${teamMemeber.name}" style="width:28px; height:28px; border-radius:50%;">
+  //       <div style="font-size:13px; font-weight:500;">${teamMemeber.name}</div>
+  //     </div>
+
+  //     <!-- Service -->
+  //     <div style="font-size:11px; color:#6c757d; margin:10px 0 4px;">SERVICE</div>
+  //     <div style="font-size:13px; font-weight:500;">
+  //       ${service.type} • ${service.duration}
+  //     </div>
+  //   </div>
+  // `;
+
+  //   info.el.appendChild(tooltip);
+  // },
+  eventMouseEnter(info) {
+    const { status, client, teamMemeber, service, blockedTime } = info.event.extendedProps;
+
+    // Status color mapping
+    const statusColors = {
+      completed: "#28a745",
+      booked: "#007bff",
+      blocked: "#212529",
+      "blocked-slot": "#212529"
+    };
+
+    const headerColor = statusColors[status] || "#6c757d";
+
+    // Build tooltip HTML based on status
+    let bodyContent = "";
+
+    if (status === "completed" || status === "booked") {
+      bodyContent = `
+      <div style="font-size:11px; color:#6c757d; margin-bottom:4px;">CLIENT</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="${client.avatar}" alt="${client.name}" style="width:28px; height:28px; border-radius:50%;">
+        <div>
+          <div style="font-size:13px; color:black; font-weight:500;">${client.name}</div>
+          <div style="font-size:11px; color:#6c757d;">+39 351 195 5891</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px; color:gray; margin:10px 0 4px;">TEAM MEMBER</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="${teamMemeber.avatar}" alt="${teamMemeber.name}" style="width:28px; height:28px; border-radius:50%;">
+        <div style="font-size:13px; color:black; font-weight:500;">${teamMemeber.name}</div>
+      </div>
+
+      <div style="font-size:11px; color:gray; margin:10px 0 4px;">SERVICE</div>
+      <div style="font-size:13px; color:black; font-weight:500;">
+        ${service.type} • ${service.duration}
+      </div>
+    `;
+    }
+    else if (status === "blocked" || status === "blocked-slot") {
+      bodyContent = `
+      <div style="font-size:11px; color:#6c757d; background-color:#ffff; margin-bottom:4px;">TEAM MEMBER</div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <img src="${teamMemeber.avatar}" alt="${teamMemeber.name}" style="width:28px; height:28px; border-radius:50%;">
+        <div style="font-size:13px; color:black; font-weight:500;">${teamMemeber.name}</div>
+      </div>
+
+      <div style="font-size:11px; color:gray; margin:10px 0 4px;">BLOCKED TIME</div>
+      <div style="font-size:13px; color:black; font-weight:500;">
+        ${blockedTime || "N/A"}
+      </div>
+    `;
+    }
+
+    // Tooltip container
+    const tooltip = document.createElement("div");
+    tooltip.className = "event-tooltip";
+    tooltip.style.position = "static";
+    tooltip.style.top = "100px";
+    tooltip.style.left = "0px";
+    tooltip.style.padding = "0";
+    tooltip.style.margin = "0"
+    tooltip.style.background = "#ffff";
+    tooltip.style.border = "1px solid #ccc";
+    tooltip.style.borderRadius = "8px";
+    tooltip.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+    tooltip.style.width = "240px";
+    tooltip.style.fontFamily = "sans-serif";
+    tooltip.style.overflow = "hidden";
+    tooltip.style.zIndex = "99";
+    tooltip.innerHTML = `
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:${headerColor};
+      color:#fff;
+      padding:6px 10px;
+      font-size:13px;
+      font-weight:bold;
+    ">
+      <span>${new Date(info.event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
+            ${new Date(info.event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      <span style="text-transform:uppercase;">${status.replace("-", " ")}</span>
+    </div>
+    <div style="padding:10px;">${bodyContent}</div>
+  `;
+    document.body.appendChild(tooltip);
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const eventRect = info.el.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    let top = eventRect.bottom;
+    let left = eventRect.left;
+    if (left + tooltipRect.width > viewportWidth) {
+      left = viewportWidth - tooltipRect.width - 70;
+    }
+    if (top + tooltipRect.height > viewportHeight) {
+      top = eventRect.top - tooltipRect.height;
+    }
+
+    tooltip.style.position = "fixed";
+    tooltip.style.top = `${top}px`;
+    tooltip.style.zIndex = "9999";
+    tooltip.style.left = `${left}px`;
+
+  },
+  eventMouseLeave(info) {
+    const tooltip = document.body.querySelector(".event-tooltip");
+    if (tooltip) tooltip.remove();
   },
   allDaySlot: false, // Remove all-day slot globally
   slotMinTime: "00:00:00", // Start from midnight
@@ -434,6 +673,7 @@ const selectAllEmployees = () => {
     selectAll.value = true;
   }
 };
+
 watch(selectedEmployees, (newVal) => {
   const allEmployeesExceptAllTeam = employeeOptions
     .filter(emp => emp.value !== "all team")
@@ -504,10 +744,6 @@ onMounted(() => {
 
 // Changes
 
-import { ref } from 'vue'
-import AddBookingModal from '@/views/apps/calendar/AddBookingModal.vue'
-import SlotBookingModal from "@/views/apps/calendar/SlotBookingModal.vue";
-
 const isAppointmentModalOpen = ref(false)
 
 // const isAppointmentModalOpen = ref(false);
@@ -530,7 +766,7 @@ const handleBookedSlot = () => {
     <!-- Custom Calendar Header -->
     <VMenu location="bottom end" offset-y>
       <template #activator="{ props }">
-        <div class="d-flex flex-wrap justify-md-space-between align-start  w-100"  >
+        <div class="d-flex flex-wrap justify-end justify-md-space-between align-start w-100">
           <!-- v style="
             display: flex;
             flex-wrap: wrap;
@@ -538,7 +774,7 @@ const handleBookedSlot = () => {
             align-items: start;
             width: 100%;
           " -->
-        
+
           <!-- Left button -->
           <div>
             <div class="d-flex align-center justify-md-space-between mb-4 calendar-custom-header">
@@ -711,14 +947,16 @@ const handleBookedSlot = () => {
         </div>
       </template>
 
-      <VList>
-        <VListItem  @click="openAppointmentModal">
+      <VList style="border-radius: 15px !important;">
+        <VListItem @click="openAppointmentModal"
+          style="padding-top: 4px !important; padding-bottom: 4px !important; padding-left: 4px !important; border-radius: 10px !important;">
           <VListItemTitle>
-            <VBtn  icon="tabler-calendar" variant="text" size="small" color="black" />
+            <VBtn icon="tabler-calendar" variant="text" size="small" color="black" />
             Book An Appointment
           </VListItemTitle>
         </VListItem>
-        <VListItem @click="handleBookedSlot">
+        <VListItem @click="handleBookedSlot"
+          style="padding-top: 4px !important; padding-bottom: 4px !important; padding-left: 4px !important; border-radius: 10px !important;">
           <VListItemTitle>
             <VBtn icon="tabler-calendar-x" variant="text" size="small" color="black" />
             Blocked Slot
@@ -735,7 +973,6 @@ const handleBookedSlot = () => {
             <VCardText class="pa-0">
               <div class="date-range-picker">
                 <div class="calendar-container">
-                  <!-- First Calendar -->
                   <div class="calendar-section">
                     <div class="calendar-header">
                       <VBtn icon="tabler-chevron-left" variant="text" size="small" @click="previousMonth" />
@@ -761,8 +998,6 @@ const handleBookedSlot = () => {
                       </div>
                     </div>
                   </div>
-
-                  <!-- Second Calendar -->
                   <div class="calendar-section">
                     <div class="calendar-header">
                       <VBtn icon="tabler-chevron-left" variant="text" size="small" @click="previousMonth2" />
@@ -832,8 +1067,10 @@ const handleBookedSlot = () => {
 
                 <!-- Calendar -->
                 <div class="calendar-main">
+                  <!-- <div class="calendar-wrapper"> -->
                   <FullCalendar ref="refCalendar" :options="calendarOptions"
                     class="custom-calendar-with-tall-headers" />
+                  <!-- </div> -->
                 </div>
               </div>
 
@@ -845,8 +1082,8 @@ const handleBookedSlot = () => {
           </VMain>
         </VLayout>
       </VCardText>
-      <CalendarEventHandler v-model:is-drawer-open="isEventHandlerSidebarActive" :event="event" @add-event="addEvent"
-        @update-event="updateEvent" @remove-event="removeEvent" />
+      <!-- <CalendarEventHandler v-model:is-drawer-open="isEventHandlerSidebarActive" :event="event" @add-event="addEvent"
+        @update-event="updateEvent" @remove-event="removeEvent" /> -->
     </VCard>
 
     <!-- Appointment Modal -->
@@ -863,6 +1100,30 @@ const handleBookedSlot = () => {
     color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
     opacity: var(--v-high-emphasis-opacity);
   }
+}
+
+.fc-timegrid-col-header {
+  background-color: #f0f0f0;
+  /* your desired background color */
+  border-bottom: 1px solid #ccc;
+  /* optional bottom border */
+}
+
+/* Add right border to each day header cell */
+.fc-timegrid-col-header-cell {
+  border-right: 1px solid #ddd;
+  /* right border color */
+}
+
+/* Optional: remove border on last cell so it looks neat */
+.fc-timegrid-col-header-cell:last-child {
+  border-right: none;
+}
+
+.fc-event-lower {
+  z-index: 10 !important;
+  /* Ensure your tooltip can go over it */
+  background-color: red !important;
 }
 
 .calendar-add-event-drawer {
@@ -922,6 +1183,12 @@ const handleBookedSlot = () => {
       min-height: 36px;
     }
   }
+}
+
+body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
+  width: 100% !important;
+  background-color: #f3f3f4;
+  // border-right: 1px solid #ccc;
 }
 
 // Calendar with employee column
@@ -1001,12 +1268,19 @@ const handleBookedSlot = () => {
     }
   }
 
+  // .event-tooltip {
+  //   position: absolute;
+  //   z-index: 999;
+  // }
+
   .calendar-main {
     flex: 1;
     margin-left: 100px; // Push calendar to the right to make space for employee column
+    // width: 100%;
+    // overflow: auto;
 
     .fc {
-      height: 100%;
+      // height: 100%;
 
       // Ensure the calendar header extends properly
       .fc-header-toolbar {
@@ -1016,6 +1290,7 @@ const handleBookedSlot = () => {
       .fc-timegrid-axis {
         border-right: none !important;
       }
+
 
       // Remove all-day section styling
       .fc-timegrid-slot-label.fc-timegrid-slot-label-lane {
@@ -1045,10 +1320,14 @@ const handleBookedSlot = () => {
   }
 }
 
+
+
 // Calendar container for side-by-side display
 .calendar-container {
   display: flex;
   gap: 16px;
+  overflow: hidden;
+  position: relative;
 
   .calendar-section {
     flex: 1;

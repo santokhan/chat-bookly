@@ -6,114 +6,153 @@ const nextMonth = date.getMonth() === 11 ? new Date(date.getFullYear() + 1, 0, 1
 const prevMonth = date.getMonth() === 11 ? new Date(date.getFullYear() - 1, 0, 1) : new Date(date.getFullYear(), date.getMonth() - 1, 1)
 export const db = {
   events: [
+    // {
+    //   id: 1,
+    //   url: '',
+    //   title: 'Design Review',
+    //   start: date,
+    //   end: nextDay,
+    //   allDay: false,
+    //   extendedProps: {
+    //     calendar: 'Business',
+    //   },
+    // },
     {
       id: 1,
       url: '',
       title: 'Design Review',
-      start: date,
-      end: nextDay,
+      start: '2025-08-07T13:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-07T14:00:00',
       allDay: false,
       extendedProps: {
+        status: 'completed',
         calendar: 'Business',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        service: {
+          type: 'Balayage',
+          duration: '45 min'
+        }
       },
     },
     {
       id: 2,
       url: '',
-      title: 'Meeting With Client',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -11),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -10),
-      allDay: true,
+      title: 'Offfice Meeting',
+      start: '2025-08-07T11:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-07T12:00:00',
+      allDay: false,
       extendedProps: {
+        status: 'booked',
         calendar: 'Business',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        service: {
+          type: 'Balayage',
+          duration: '45 min'
+        }
       },
     },
     {
       id: 3,
       url: '',
-      title: 'Family Trip',
-      allDay: true,
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -9),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -7),
+      title: 'Lunch Break',
+      start: '2025-08-10T09:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-10T10:00:00',
+      allDay: false,
       extendedProps: {
-        calendar: 'Holiday',
+        status: 'blocked',
+        calendar: 'Business',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        blockedTime: '1 Hour'
       },
     },
     {
       id: 4,
       url: '',
-      title: 'Doctor\'s Appointment',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -11),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -10),
-      allDay: true,
+      title: 'Consulting',
+      start: '2025-08-05T13:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-05T14:00:00',
+      allDay: false,
       extendedProps: {
-        calendar: 'Personal',
+        status: 'completed',
+        calendar: 'Business',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        service: {
+          type: 'Balayage',
+          duration: '45 min'
+        }
       },
     },
     {
       id: 5,
       url: '',
-      title: 'Dart Game?',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
-      // allDay: true,
+      title: 'Haircut',
+      start: '2025-08-07T22:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-07T24:00:00',
+      allDay: false,
       extendedProps: {
-        calendar: 'ETC',
+        status: 'booked',
+        calendar: 'Business',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        service: {
+          type: 'Balayage',
+          duration: '45 min'
+        }
       },
     },
     {
       id: 6,
       url: '',
-      title: 'Meditation',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
-      allDay: true,
+      title: 'Prayer Break',
+      start: '2025-08-09T04:00:00', // YYYY-MM-DDTHH:mm:ss
+      end: '2025-08-09T05:00:00',
+      allDay: false,
       extendedProps: {
-        calendar: 'Personal',
-      },
-    },
-    {
-      id: 7,
-      url: '',
-      title: 'Dinner',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
-      allDay: true,
-      extendedProps: {
-        calendar: 'Family',
-      },
-    },
-    {
-      id: 8,
-      url: '',
-      title: 'Product Review',
-      start: new Date(date.getFullYear(), date.getMonth() + 1, -13),
-      end: new Date(date.getFullYear(), date.getMonth() + 1, -12),
-      allDay: true,
-      extendedProps: {
+        status: 'blocked',
         calendar: 'Business',
-      },
-    },
-    {
-      id: 9,
-      url: '',
-      title: 'Monthly Meeting',
-      start: nextMonth,
-      end: nextMonth,
-      allDay: true,
-      extendedProps: {
-        calendar: 'Business',
-      },
-    },
-    {
-      id: 10,
-      url: '',
-      title: 'Monthly Checkup',
-      start: prevMonth,
-      end: prevMonth,
-      allDay: true,
-      extendedProps: {
-        calendar: 'Personal',
+        client: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-1.png",
+        },
+        teamMemeber: {
+          name: "John Doe",
+          avatar: "/images/avatars/avatar-2.png",
+        },
+        blockedTime: '1 Hour'
       },
     },
   ],
