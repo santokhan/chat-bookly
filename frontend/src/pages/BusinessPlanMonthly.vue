@@ -268,6 +268,7 @@ const selectedBilling = ref('monthly');
 }
 
 .main-title {
+  color: #0e121b;
   font-size: 32px;
   font-weight: 600;
   letter-spacing: -1.5%;
