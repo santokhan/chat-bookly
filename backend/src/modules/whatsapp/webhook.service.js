@@ -154,6 +154,7 @@ const sendIntentMessage = async (business_id, user_phone_no) => {
         type: 'text',
         text: translationService.getItalianMessage('intent_header_message'),
       },
+      // "it": "Grazie per averci contattato {{namelocalactivity}}!\n\nCome possiamo aiutarti?"
       body: translationService.getItalianMessage('intent_message'),
       buttons: [
         {
@@ -264,7 +265,8 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
     const next6Months = Array.from({ length: 6 }, (_, i) => {
       const date = new Date();
       date.setMonth(date.getMonth() + i);
-      const monthName = date.toLocaleString('default', { month: 'long' });
+      let monthName = date.toLocaleString('it-IT', { month: 'long' });
+      monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
       const year = date.getFullYear();
 
       return {
@@ -276,7 +278,7 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
     const data = {
       phone: user_phone_no,
       body: type === 'book' ? translationService.getItalianMessage('select_month_to_book') : translationService.getItalianMessage('select_month_to_reschedule'),
-      buttonTitle: type === 'book' ? translationService.getItalianMessage('month') : translationService.getItalianMessage('month_button_title'),
+      buttonTitle: translationService.getItalianMessage('month'),
       buttons: next6Months,
     };
     await whatsappService.sendList(data);
@@ -287,9 +289,14 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
 
 const getAndSendWeeklyList = async (business_id, month, staff_id, appointment_id, user_phone_no, type = 'book') => {
   try {
+    const italianMonths = [
+      'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+      'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+    ];
     const [monthName, yearStr] = month.split(' ');
     const year = parseInt(yearStr, 10);
-    const monthIndex = new Date(`${monthName} 1, ${year}`).getMonth();
+    const monthIndex = italianMonths.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    if (monthIndex === -1) throw new Error('Invalid month name: ' + monthName);
     const today = new Date();
 
     let startDay = 1;
@@ -321,7 +328,7 @@ const getAndSendWeeklyList = async (business_id, month, staff_id, appointment_id
 
     const data = {
       phone: user_phone_no,
-      body: translationService.getItalianMessage('select_week_to_book'),
+      body: type === 'book' ? translationService.getItalianMessage('select_week_to_book') : translationService.getItalianMessage('select_week_to_reschedule'),
       buttonTitle: translationService.getItalianMessage('week'),
       buttons: weeklyRanges,
     };
@@ -355,7 +362,7 @@ const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_
     const data = {
       phone: user_phone_no,
       body: type === 'book'
-              ? translationService.getItalianMessage('select_date')
+              ? translationService.getItalianMessage('select_date_to_book')
               : translationService.getItalianMessage('select_date_to_reschedule'),
       buttonTitle: type === 'book'
                     ? translationService.getItalianMessage('date')
@@ -410,17 +417,19 @@ const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id,
 const sendAppointmentConfirmation = async (business_id, appointment_id, time, user_phone_no, type = 'book') => {
   try {
     const appointment = await updateTime(appointment_id, time);
+    const date = appointment.appointmentDate.split('-');
+
     const data = {
       phone: user_phone_no,
       body: type === 'book' ? translationService.getItalianMessage('appointment_details', {
         service: appointment?.serviceId?.title,
         staff: appointment?.staffId?.name,
-        date: appointment?.appointmentDate,
+        date: `${date[2]}/${date[1]}/${date[0]}`,
         time: appointment?.appointmentTime
       }) : translationService.getItalianMessage('appointment_reschedule_details', {
         service: appointment?.serviceId?.title,
         staff: appointment?.staffId?.name,
-        date: appointment?.appointmentDate,
+        date: `${date[2]}/${date[1]}/${date[0]}`,
         time: appointment?.appointmentTime
       }),
       buttons: [
