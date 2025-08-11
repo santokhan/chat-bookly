@@ -16,7 +16,8 @@ const store = useCalendarStore();
 // 👉 Event
 const event = ref(structuredClone(blankEvent));
 const isEventHandlerSidebarActive = ref(false);
-const selectAll = ref(true);
+const selectAll = ref(false);
+const teamButtonLabel = ref('Custom')
 
 watch(isEventHandlerSidebarActive, (val) => {
   if (!val) event.value = structuredClone(blankEvent);
@@ -55,27 +56,27 @@ const calendarOptions = computed(() => ({
   headerToolbar: false, // Remove default header toolbar
   initialView: selectedView.value, // Use the selected view
   firstDay: 1,
-  customButtons: {
-    myPrevButton: {
-      text: 'Prev',
-      click: function () {
-        calendar.prev();  // call calendar API prev()
-      }
-    },
-    myNextButton: {
-      text: 'Next',
-      click: function () {
-        calendar.next();  // call calendar API next()
-      }
-    },
-    myRefreshButton: {
-      text: 'Refresh',
-      click: function () {
-        // Your custom refresh action
-        alert('Refresh clicked!');
-      }
-    }
-  },
+  // customButtons: {
+  //   myPrevButton: {
+  //     text: 'Prev',
+  //     click: function () {
+  //       calendar.prev();  // call calendar API prev()
+  //     }
+  //   },
+  //   myNextButton: {
+  //     text: 'Next',
+  //     click: function () {
+  //       calendar.next();  // call calendar API next()
+  //     }
+  //   },
+  //   myRefreshButton: {
+  //     text: 'Refresh',
+  //     click: function () {
+  //       // Your custom refresh action
+  //       alert('Refresh clicked!');
+  //     }
+  //   }
+  // },
   views: {
     timeGridDay: {
       dayHeaderFormat: { weekday: "long" },
@@ -107,7 +108,7 @@ const calendarOptions = computed(() => ({
     const tickHtml = `
   <span style="
     float: right;
-    background-color: #198754;
+    background-color: #28a745;
     border-radius: 50%;
     width: 14px;
     height: 14px;
@@ -140,70 +141,6 @@ const calendarOptions = computed(() => ({
 
     return { html };
   },
-
-  // eventMouseEnter(info) {
-  //   const { status, client, teamMemeber, service } = info.event.extendedProps;
-
-  //   const tooltip = document.createElement("div");
-  //   tooltip.className = "event-tooltip";
-  //   tooltip.style.position = "absolute";
-  //   tooltip.style.top = "110%";
-  //   tooltip.style.left = "0";
-  //   tooltip.style.padding = "0";
-  //   tooltip.style.margin = "0"
-  //   tooltip.style.background = "#fff";
-  //   tooltip.style.border = "1px solid #ccc";
-  //   tooltip.style.borderRadius = "8px";
-  //   tooltip.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-  //   tooltip.style.width = "240px";
-  //   tooltip.style.fontFamily = "sans-serif";
-  //   tooltip.style.overflow = "hidden";
-
-  //   tooltip.innerHTML = `
-  //   <!-- Header -->
-  //   <div style="
-  //     display:flex;
-  //     justify-content:space-between;
-  //     align-items:center;
-  //     background:${status === 'completed' ? '#28a745' : '#6c757d'};
-  //     color:#fff;
-  //     padding:6px 10px;
-  //     font-size:13px;
-  //     font-weight:bold;
-  //   ">
-  //     <span>${new Date(info.event.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -
-  //           ${new Date(info.event.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-  //     <span style="text-transform:uppercase;">${status}</span>
-  //   </div>
-
-  //   <!-- Client -->
-  //   <div style="padding:10px;">
-  //     <div style="font-size:11px; color:#6c757d; margin-bottom:4px;">CLIENT</div>
-  //     <div style="display:flex; align-items:center; gap:8px;">
-  //       <img src="${client.avatar}" alt="${client.name}" style="width:28px; height:28px; border-radius:50%;">
-  //       <div>
-  //         <div style="font-size:13px; font-weight:500;">${client.name}</div>
-  //         <div style="font-size:11px; color:#6c757d;">+39 351 195 5891</div>
-  //       </div>
-  //     </div>
-
-  //     <!-- Team Member -->
-  //     <div style="font-size:11px; color:#6c757d; margin:10px 0 4px;">TEAM MEMBER</div>
-  //     <div style="display:flex; align-items:center; gap:8px;">
-  //       <img src="${teamMemeber.avatar}" alt="${teamMemeber.name}" style="width:28px; height:28px; border-radius:50%;">
-  //       <div style="font-size:13px; font-weight:500;">${teamMemeber.name}</div>
-  //     </div>
-
-  //     <!-- Service -->
-  //     <div style="font-size:11px; color:#6c757d; margin:10px 0 4px;">SERVICE</div>
-  //     <div style="font-size:13px; font-weight:500;">
-  //       ${service.type} • ${service.duration}
-  //     </div>
-  //   </div>
-  // `;
-
-  //   info.el.appendChild(tooltip);
-  // },
   eventMouseEnter(info) {
     const { status, client, teamMemeber, service, blockedTime } = info.event.extendedProps;
 
@@ -309,15 +246,62 @@ const calendarOptions = computed(() => ({
     tooltip.style.top = `${top}px`;
     tooltip.style.zIndex = "9999";
     tooltip.style.left = `${left}px`;
+    // const el = document.querySelector('.fc-timegrid-slot-label');
+    // if (el) {
+    //   el.style.setProperty('width', '200px', 'important');
+    //   el.style.setProperty('min-width', '200px', 'important');
+    // }
 
   },
   eventMouseLeave(info) {
     const tooltip = document.body.querySelector(".event-tooltip");
     if (tooltip) tooltip.remove();
   },
-  allDaySlot: false, // Remove all-day slot globally
-  slotMinTime: "00:00:00", // Start from midnight
-  slotMaxTime: "24:00:00", // End at midnight
+  allDaySlot: false,
+  slotMinTime: "00:00:00",
+  slotMaxTime: "24:00:00",
+  // datesSet(info) {
+  //   if (!calendarApiRef.value) {
+  //     calendarApiRef.value = info.view.calendar;
+  //   }
+
+  //   const headerEl = document.querySelector('.fc-col-header');
+  //   if (!headerEl) return;
+
+  //   // Prevent multiple button inserts
+  //   // if (document.querySelector('.custom-nav-buttons')) return;
+
+  //   const btnWrapper = document.createElement('div');
+  //   btnWrapper.className = 'custom-nav-buttons';
+  //   btnWrapper.style.display = 'inline-flex';
+  //   btnWrapper.style.alignItems = 'center';
+  //   btnWrapper.style.marginRight = '10px';
+
+  //   // Create Previous Button
+  //   const prevBtn = document.createElement('button');
+  //   prevBtn.textContent = 'Prev';
+  //   prevBtn.style.marginRight = '6px';
+  //   prevBtn.style.padding = '4px 10px';
+  //   prevBtn.style.cursor = 'pointer';
+  //   // prevBtn.onclick = () => {
+  //   //   handlePrevPeriod();
+  //   // };
+
+  //   // Create Next Button
+  //   const nextBtn = document.createElement('button');
+  //   nextBtn.textContent = 'Next';
+  //   nextBtn.style.padding = '4px 10px';
+  //   nextBtn.style.cursor = 'pointer';
+  //   // nextBtn.onclick = () => {
+  //   //   handleNextPeriod();
+  //   // };
+
+  //   btnWrapper.appendChild(prevBtn);
+  //   btnWrapper.appendChild(nextBtn);
+
+  //   // Insert buttons before the dates header
+  //   headerEl.parentNode.insertBefore(btnWrapper, headerEl);
+  // },
 }));
 
 // 👉 Custom calendar controls
@@ -327,13 +311,27 @@ const selectedEmployees = ref([
   "jane smith",
   "mike johnson",
   "sarah wilson",
-  "david brown",
+  // "david brown",
 ]);
 const isTeamDropdownOpen = ref(false);
-const dateRange = ref({
-  start: new Date().toISOString().split("T")[0],
-  end: new Date().toISOString().split("T")[0],
-});
+// const dateRange = ref({
+//   start: new Date().toISOString().split("T")[0],
+//   end: new Date().toISOString().split("T")[0],
+// });
+const getCurrentWeekRange = () => {
+  const now = new Date();
+  const day = now.getDay();
+  const mondayOffset = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + mondayOffset);
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  return {
+    start: monday.toISOString().split("T")[0],
+    end: sunday.toISOString().split("T")[0],
+  };
+};
+const dateRange = ref(getCurrentWeekRange());
 const isDatePickerOpen = ref(false);
 const isLoading = ref(false);
 
@@ -519,6 +517,13 @@ const employeeOptions = [
     avatar: "/images/avatars/avatar-1.png",
   },
 ];
+const toLocalDateString = (date) => {
+  // returns yyyy-mm-dd in local time, no timezone shift
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 // View options with 3-day view
 const viewOptions = [
@@ -559,7 +564,6 @@ const goToToday = () => {
   const calendarApi = refCalendar.value?.getApi();
   if (calendarApi) {
     calendarApi.today();
-    // Update date range to today
     const today = new Date();
     dateRange.value = {
       start: today.toISOString().split("T")[0],
@@ -583,11 +587,11 @@ const handleCalendarDateRangeChange = () => {
   }
 };
 
+
 const handlePrevPeriod = () => {
   const calendarApi = refCalendar.value?.getApi();
   if (calendarApi) {
     calendarApi.prev();
-    // Update date range based on current view
     updateDateRangeFromCalendar();
   }
 };
@@ -596,7 +600,6 @@ const handleNextPeriod = () => {
   const calendarApi = refCalendar.value?.getApi();
   if (calendarApi) {
     calendarApi.next();
-    // Update date range based on current view
     updateDateRangeFromCalendar();
   }
 };
@@ -619,15 +622,15 @@ const updateDateRangeFromCalendar = () => {
     ) {
       const start = new Date(view.currentStart);
       const end = new Date(view.currentEnd);
-      end.setDate(end.getDate() - 1); // Adjust for FullCalendar's exclusive end
+      end.setDate(end.getDate() - 1);
       dateRange.value = {
-        start: start.toISOString().split("T")[0],
-        end: end.toISOString().split("T")[0],
+        start: toLocalDateString(start),
+        end: toLocalDateString(end),
       };
     } else if (view.type === "dayGridMonth") {
       const start = new Date(view.currentStart);
       const end = new Date(view.currentEnd);
-      end.setDate(end.getDate() - 1); // Adjust for FullCalendar's exclusive end
+      end.setDate(end.getDate() - 1);
       dateRange.value = {
         start: start.toISOString().split("T")[0],
         end: end.toISOString().split("T")[0],
@@ -673,6 +676,9 @@ const selectAllEmployees = () => {
     selectAll.value = true;
   }
 };
+const removeEmployee = (empVal) => {
+  selectedEmployees.value = selectedEmployees.value.filter(val => val !== empVal)
+}
 
 watch(selectedEmployees, (newVal) => {
   const allEmployeesExceptAllTeam = employeeOptions
@@ -688,12 +694,14 @@ watch(selectedEmployees, (newVal) => {
       selectedEmployees.value = [...newVal, "all team"];
     }
     selectAll.value = true;
+    teamButtonLabel.value = 'All Team Members'
   } else {
     // If not all selected, uncheck 'all team'
     if (newVal.includes("all team")) {
       selectedEmployees.value = newVal.filter(val => val !== "all team");
     }
     selectAll.value = false;
+    teamButtonLabel.value = 'Custom'
   }
 });
 
@@ -778,10 +786,7 @@ const handleBookedSlot = () => {
           <!-- Left button -->
           <div>
             <div class="d-flex align-center justify-md-space-between mb-4 calendar-custom-header">
-              <!-- Left side controls -->
               <div class="d-flex flex-wrap align-center gap-4">
-                <!-- Today button -->
-                <!-- <VBtn variant="outlined" @click="goToToday"> Today </VBtn> -->
                 <div class="refresh-view-group" style="
             display: flex;
             align-items: center;
@@ -790,17 +795,6 @@ const handleBookedSlot = () => {
             overflow: hidden;
             height: 36px;
           ">
-                  <!-- Left: Refresh Button -->
-                  <!-- <VBtn
-                :icon="isLoading ? 'tabler-loader-2' : 'tabler-refresh'"
-                variant="plain"
-                density="comfortable"
-                :loading="isLoading"
-                style="border-right: 1px solid #ccc; border-radius: 0; min-width: 36px; height: 100%;"
-                @click="handleReload"
-              /> -->
-
-                  <!-- Right: View Selector -->
                   <VSelect v-model="selectedView" :items="viewOptions" density="compact" variant="plain" hide-details
                     style="min-width: 50px; background-color: white; height: 100%;" menu-icon="tabler-chevron-down"
                     @update:model-value="handleViewChange" class="custom-view-select">
@@ -857,77 +851,62 @@ const handleBookedSlot = () => {
                 </div>
 
                 <!-- Team filter -->
-                <VMenu v-model="isTeamDropdownOpen" :close-on-content-click="false">
-                  <template #activator="{ props }">
+                <div style="display: flex; align-items: center; gap: 8px; ">
+                  <div>
+                    <VMenu v-model="isTeamDropdownOpen" :close-on-content-click="false">
+                      <template #activator="{ props }">
 
-                    <VBtn v-bind="props" variant="outlined" class="icon-button1"
-                      style="background-color: white;display: flex;justify-content: space-between;"
-                      prepend-icon="tabler-users">
-                      All Team Members
-                      <VIcon size="15" :class="{ 'rotate-180': isTeamDropdownOpen }" style="margin-left: 10px;"
-                        icon="tabler-chevron-down" />
-                    </VBtn>
+                        <VBtn v-bind="props" variant="outlined" class="icon-button1"
+                          style="background-color: white;display: flex;justify-content: space-between;"
+                          prepend-icon="tabler-users">
+
+                          {{ teamButtonLabel }}
+                          <VIcon size="15" :class="{ 'rotate-180': isTeamDropdownOpen }" style="margin-left: 10px;"
+                            icon="tabler-chevron-down" />
+                        </VBtn>
+                      </template>
+
+                      <VCard min-width="250">
+                        <VCardTitle class="text-h6 pa-4">
+                          <div class="d-flex align-center justify-space-between">
+                            <VCheckbox v-model="selectAll" label="All Team Members" @click="selectAllEmployees"
+                              color="primary" hide-details density="compact" />
+                          </div>
+                        </VCardTitle>
+                        <VCardText style="padding: 0 16px">
+                          <div class="d-flex flex-column gap-2 pb-4">
+                            <VCheckbox v-for="employee in employeeOptions.filter(
+                              (emp) => emp.value !== 'all team'
+                            )" :key="employee.value" v-model="selectedEmployees" :value="employee.value"
+                              density="compact">
+                              <template #label>
+                                <div class="d-flex align-center justify-space-between w-100">
+                                  <div class="d-flex align-center gap-2 ms-2">
+                                    <VAvatar :image="employee.avatar" size="24" />
+                                    <span>{{ employee.title }}</span>
+                                  </div>
+                                  <VIcon v-if="selectedEmployees.includes(employee.value)" icon="tabler-check" size="17"
+                                    color="secondary" class="position-absolute"
+                                    style="right: 8px; top: 50%; transform: translateY(-50%);" />
+                                </div>
+                              </template>
+                            </VCheckbox>
+                          </div>
+                        </VCardText>
+                      </VCard>
+                    </VMenu>
+                  </div>
+
+                </div>
+                <div style="display: flex; flex-wrap:wrap ;  gap: 6px;">
+                  <template v-for="empVal in selectedEmployees.filter(val => val !== 'all team')" :key="empVal">
+                    <VChip small class="d-flex bg-white align-center custom-chip">
+                      <VAvatar :image="employeeOptions.find(e => e.value === empVal)?.avatar" size="16" class="me-2" />
+                      {{employeeOptions.find(e => e.value === empVal)?.title}}
+                      <VIcon icon="tabler-x" size="14" class="chip-close" @click.stop="removeEmployee(empVal)" />
+                    </VChip>
                   </template>
-
-                  <VCard min-width="250">
-                    <VCardTitle class="text-h6 pa-4">
-                      <!-- All Team Button -->
-                      <div class="d-flex align-center justify-space-between">
-                        <VCheckbox v-model="selectAll" label="All Team Members" @click="selectAllEmployees"
-                          color="primary" hide-details density="compact" />
-
-                        <!-- <VBtn
-                          variant="text"
-                          size="small"
-                          color="primary"
-                          @click="selectAllEmployees"
-                        > -->
-                        <!-- All Team Members
-                        </VBtn> -->
-
-                        <!-- Clear All Button -->
-                        <!-- <VBtn
-                          variant="text"
-                          size="small"
-                          color="error"
-                          @click="clearAllEmployees"
-                        >
-                          Clear All
-                        </VBtn> -->
-                      </div>
-                      <!-- Select Employees -->
-                    </VCardTitle>
-                    <!-- <VCardText>
-                      <div class="d-flex flex-column gap-2">
-                        <VCheckbox v-for="employee in employeeOptions.filter(
-                          (emp) => emp.value !== 'all team'
-                        )" :key="employee.value" v-model="selectedEmployees" :value="employee.value"
-                          :label="employee.title" />
-                      </div>
-                    </VCardText> -->
-                    <VCardText style="padding: 0 16px">
-                      <div class="d-flex flex-column gap-2 pb-4">
-                        <!-- Employee Checkboxes -->
-                        <VCheckbox v-for="employee in employeeOptions.filter(
-                          (emp) => emp.value !== 'all team'
-                        )" :key="employee.value" v-model="selectedEmployees" :value="employee.value" density="compact">
-                          <template #label>
-                            <div class="d-flex align-center justify-between w-100">
-                              <div class="d-flex align-center gap-2 ms-2">
-                                <VAvatar :image="employee.avatar" size="24" />
-                                <span>{{ employee.title }}</span>
-                              </div>
-                              <VIcon v-if="
-                                selectedEmployees.includes(employee.value)
-                              " icon="tabler-check" size="17" color="secondary" style="margin-left: auto;" />
-                            </div>
-
-                          </template>
-                        </VCheckbox>
-                      </div>
-                    </VCardText>
-                  </VCard>
-                </VMenu>
+                </div>
               </div>
 
             </div>
@@ -1104,10 +1083,15 @@ const handleBookedSlot = () => {
 
 .fc-timegrid-col-header {
   background-color: #f0f0f0;
-  /* your desired background color */
   border-bottom: 1px solid #ccc;
-  /* optional bottom border */
 }
+
+.chip-close {
+  cursor: pointer;
+  margin-left: 4px;
+  color: #666;
+}
+
 
 /* Add right border to each day header cell */
 .fc-timegrid-col-header-cell {
@@ -1135,6 +1119,13 @@ const handleBookedSlot = () => {
   &.v-navigation-drawer--temporary:not(.v-navigation-drawer--active) {
     transform: translateX(-110%) !important;
   }
+}
+
+.custom-chip {
+  --v-theme-background: white !important;
+  background-color: white !important;
+  padding: 0px 8px !important;
+  font-size: 12px !important;
 }
 
 .calendar-date-picker {
@@ -1214,59 +1205,59 @@ body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
     }
   }
 
-  .employee-column-calendar {
-    width: 100px;
-    background-color: var(--v-theme-surface);
-    border-right: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 0;
-    top: 40px; // Below the integrated header
-    bottom: 0;
-    z-index: 1;
+  // .employee-column-calendar {
+  //   width: 100px;
+  //   background-color: var(--v-theme-surface);
+  //   border-right: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  //   padding: 8px;
+  //   display: flex;
+  //   flex-direction: column;
+  //   position: absolute;
+  //   left: 0;
+  //   top: 40px; // Below the integrated header
+  //   bottom: 0;
+  //   z-index: 1;
 
-    .employee-list-calendar {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 8px; // Reduced space since we have integrated header
-    }
+  //   .employee-list-calendar {
+  //     display: flex;
+  //     flex-direction: column;
+  //     gap: 12px;
+  //     margin-top: 8px; // Reduced space since we have integrated header
+  //   }
 
-    .employee-item-calendar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      min-height: 60px; // Match calendar row height
+  //   .employee-item-calendar {
+  //     display: flex;
+  //     flex-direction: column;
+  //     align-items: center;
+  //     gap: 8px;
+  //     padding: 8px;
+  //     border-radius: 8px;
+  //     transition: all 0.2s ease;
+  //     min-height: 60px; // Match calendar row height
 
-      &:hover {
-        background-color: rgba(var(--v-theme-on-surface), 0.08);
-      }
+  //     &:hover {
+  //       background-color: rgba(var(--v-theme-on-surface), 0.08);
+  //     }
 
-      .employee-avatar-calendar {
-        flex-shrink: 0;
-        width: 48px !important;
-        height: 48px !important;
-      }
+  //     .employee-avatar-calendar {
+  //       flex-shrink: 0;
+  //       width: 48px !important;
+  //       height: 48px !important;
+  //     }
 
-      .employee-name-calendar {
-        font-size: 11px;
-        font-weight: 500;
-        color: rgba(var(--v-theme-on-surface), 0.87);
-        text-align: center;
-        line-height: 1.2;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
-      }
-    }
-  }
+  //     .employee-name-calendar {
+  //       font-size: 11px;
+  //       font-weight: 500;
+  //       color: rgba(var(--v-theme-on-surface), 0.87);
+  //       text-align: center;
+  //       line-height: 1.2;
+  //       white-space: nowrap;
+  //       overflow: hidden;
+  //       text-overflow: ellipsis;
+  //       max-width: 100%;
+  //     }
+  //   }
+  // }
 
   // .event-tooltip {
   //   position: absolute;
@@ -1275,7 +1266,7 @@ body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
 
   .calendar-main {
     flex: 1;
-    margin-left: 100px; // Push calendar to the right to make space for employee column
+    // margin-left: 100px; // Push calendar to the right to make space for employee column
     // width: 100%;
     // overflow: auto;
 
@@ -1288,6 +1279,7 @@ body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
       }
 
       .fc-timegrid-axis {
+        width: 200px !important;
         border-right: none !important;
       }
 
@@ -1320,6 +1312,17 @@ body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
   }
 }
 
+.fc-timegrid {
+  table-layout: fixed !important;
+  width: 100% !important;
+}
+
+td.fc-timegrid-slot.fc-timegrid-slot-label.fc-scrollgrid-shrink {
+  padding: 30px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  border: none !important;
+}
 
 
 // Calendar container for side-by-side display
