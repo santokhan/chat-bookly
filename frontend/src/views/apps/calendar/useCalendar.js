@@ -41,18 +41,18 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
     const styles = [];
 
     if (event._def.extendedProps.status === "completed") {
-      styles.push(`bg-light-primary`);
+      styles.push(`bg-light-secondary rounded-lg mx-2 my-2`);
     }
 
     if (event._def.extendedProps.status === "booked") {
-      styles.push(`bg-light-warning`);
+      styles.push(`bg-light-warning rounded-lg mx-2 my-2`);
     }
 
     if (event._def.extendedProps.status === "blocked" || event._def.status === "blocked-slot") {
-      styles.push(`bg-light-secondary blocked-slot`);
+      styles.push(`blocked-slot rounded-lg mx-2 my-2`);
     }
 
-    return styles.join('; ');
+    return styles.join(';');
   }
 
 
