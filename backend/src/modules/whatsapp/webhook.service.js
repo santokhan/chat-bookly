@@ -154,6 +154,7 @@ const sendIntentMessage = async (business_id, user_phone_no) => {
         type: 'text',
         text: translationService.getItalianMessage('intent_header_message'),
       },
+      // "it": "Grazie per averci contattato {{namelocalactivity}}!\n\nCome possiamo aiutarti?"
       body: translationService.getItalianMessage('intent_message'),
       buttons: [
         {
@@ -276,7 +277,7 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
     const data = {
       phone: user_phone_no,
       body: type === 'book' ? translationService.getItalianMessage('select_month_to_book') : translationService.getItalianMessage('select_month_to_reschedule'),
-      buttonTitle: type === 'book' ? translationService.getItalianMessage('month') : translationService.getItalianMessage('month_button_title'),
+      buttonTitle: translationService.getItalianMessage('month'),
       buttons: next6Months,
     };
     await whatsappService.sendList(data);
@@ -321,7 +322,7 @@ const getAndSendWeeklyList = async (business_id, month, staff_id, appointment_id
 
     const data = {
       phone: user_phone_no,
-      body: translationService.getItalianMessage('select_week_to_book'),
+      body: type === 'book' ? translationService.getItalianMessage('select_week_to_book') : translationService.getItalianMessage('select_week_to_reschedule'),
       buttonTitle: translationService.getItalianMessage('week'),
       buttons: weeklyRanges,
     };
@@ -355,7 +356,7 @@ const getAndSendListOfDate = async (business_id, staff_id, appointment_id, user_
     const data = {
       phone: user_phone_no,
       body: type === 'book'
-              ? translationService.getItalianMessage('select_date')
+              ? translationService.getItalianMessage('select_date_to_book')
               : translationService.getItalianMessage('select_date_to_reschedule'),
       buttonTitle: type === 'book'
                     ? translationService.getItalianMessage('date')

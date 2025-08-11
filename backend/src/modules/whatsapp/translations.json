@@ -13,11 +13,11 @@
   },
   "intent_header_message": {
     "en": "What would you like to do?",
-    "it": "Grazie per averci contattato!👋🏻 Come possiamo aiutarti?"
+    "it": "Ciao!👋🏻"
   },
   "intent_message": {
     "en": "Please select the option you want to choose:",
-    "it": "Seleziona una delle seguenti opzioni per procedere:"
+    "it": "Grazie per averci contattato Chatbookly!\n\nCome possiamo aiutarti?"
   },
   "user_registered_success": {
     "en": "User registered successfully",
@@ -93,7 +93,7 @@
   },
   "date": {
     "en": "Date",
-    "it": "Mostra le date"
+    "it": "Visualizza Giorni"
   },
   "time": {
     "en": "Time",
@@ -173,15 +173,15 @@
   },
   "select_date_to_reschedule": {
     "en": "Please select the date you want to reschedule your appointment to",
-    "it": "Seleziona una nuova data per il tuo appuntamento"
+    "it": "Seleziona il giorno esatto in cui desideri fissare il nuovo appuntamento."
   },
   "date_button_title": {
     "en": "Select Date",
-    "it": "Cambia la data"
+    "it": "Visualizza Giorni"
   },
   "select_time_to_reschedule": {
     "en": "Please select the time you want to reschedule your appointment to",
-    "it": "A che ora preferisci spostare l’appuntamento?"
+    "it": "Seleziona l’ora in cui desideri fissare il nuovo appuntamento."
   },
   "time_button_title": {
     "en": "Select Time",
@@ -190,5 +190,33 @@
   "cancel_reschedule": {
     "en": "Cancel Reschedule",
     "it": "Annulla operazione"
+  },
+  "select_month_to_book": {
+    "en": "select_month_to_book",
+    "it": "Seleziona il mese in cui desideri prenotare:"
+  },
+  "select_month_to_reschedule": {
+    "en": "select_month_to_reschedule",
+    "it": "Seleziona il mese in cui desideri fissare il nuovo appuntamento."
+  },
+  "month": {
+    "en": "select_month_to_reschedule",
+    "it": "Visualizza Mesi"
+  },
+  "select_week_to_book": {
+    "en": "select_week_to_book",
+    "it": "Seleziona la settimana in cui desideri prenotare"
+  },
+  "select_week_to_reschedule": {
+    "en": "select_week_to_reschedule",
+    "it": "Seleziona la settimana in cui desideri fissare il nuovo appuntamento."
+  },
+  "week": {
+    "en": "Week",
+    "it": "Visualizza Settimana"
+  },
+  "select_date_to_book": {
+    "en": "select_date_to_book",
+    "it": "Seleziona il giorno esatto in cui desideri prenotare"
   }
 }
