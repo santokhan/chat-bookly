@@ -125,7 +125,7 @@
   },
   "service_duration": {
     "en": "This service will take {duration} minutes",
-    "it": "Questo servizio richiederà {duration} minuti"
+    "it": "La durata stimata del servizio è di {duration} minuti."
   },
   "appointment_details": {
     "en": "Service: {service}\nStaff: {staff}\nDate: {date}\nTime: {time}",

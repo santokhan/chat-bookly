@@ -265,7 +265,8 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
     const next6Months = Array.from({ length: 6 }, (_, i) => {
       const date = new Date();
       date.setMonth(date.getMonth() + i);
-      const monthName = date.toLocaleString('default', { month: 'long' });
+      let monthName = date.toLocaleString('it-IT', { month: 'long' });
+      monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
       const year = date.getFullYear();
 
       return {
