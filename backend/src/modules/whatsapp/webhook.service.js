@@ -289,9 +289,14 @@ const getAndSendNext6MonthsList = async (business_id, staff_id, appointment_id, 
 
 const getAndSendWeeklyList = async (business_id, month, staff_id, appointment_id, user_phone_no, type = 'book') => {
   try {
+    const italianMonths = [
+      'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+      'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+    ];
     const [monthName, yearStr] = month.split(' ');
     const year = parseInt(yearStr, 10);
-    const monthIndex = new Date(`${monthName} 1, ${year}`).getMonth();
+    const monthIndex = italianMonths.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+    if (monthIndex === -1) throw new Error('Invalid month name: ' + monthName);
     const today = new Date();
 
     let startDay = 1;
@@ -412,17 +417,19 @@ const getAndSendListOfTime = async (business_id, date, staff_id, appointment_id,
 const sendAppointmentConfirmation = async (business_id, appointment_id, time, user_phone_no, type = 'book') => {
   try {
     const appointment = await updateTime(appointment_id, time);
+    const date = appointment.appointmentDate.split('-');
+
     const data = {
       phone: user_phone_no,
       body: type === 'book' ? translationService.getItalianMessage('appointment_details', {
         service: appointment?.serviceId?.title,
         staff: appointment?.staffId?.name,
-        date: appointment?.appointmentDate,
+        date: `${date[2]}/${date[1]}/${date[0]}`,
         time: appointment?.appointmentTime
       }) : translationService.getItalianMessage('appointment_reschedule_details', {
         service: appointment?.serviceId?.title,
         staff: appointment?.staffId?.name,
-        date: appointment?.appointmentDate,
+        date: `${date[2]}/${date[1]}/${date[0]}`,
         time: appointment?.appointmentTime
       }),
       buttons: [
