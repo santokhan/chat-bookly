@@ -17,7 +17,7 @@
   },
   "intent_message": {
     "en": "Please select the option you want to choose:",
-    "it": "Grazie per averci contattato Chatbookly!\n\nCome possiamo aiutarti?"
+    "it": "Grazie per aver contattato Chatbookly!\n\nCome possiamo aiutarti?"
   },
   "user_registered_success": {
     "en": "User registered successfully",
