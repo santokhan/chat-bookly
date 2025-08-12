@@ -454,12 +454,14 @@ const confirmAppointment = async (business_id, appointment_id, user_phone_no, st
   try {
     const appointment = await updateFinalStatus(appointment_id, status);
     if (status === WHATSAPP_CONFIG.APPOINTMENT_STATUS.SCHEDULED) {
+      const date = appointment?.appointmentDate.split('-');
+
       await whatsappService.sendText(
         type === 'book' ? translationService.getItalianMessage('appointment_confirmation_message', {
-          date: appointment?.appointmentDate,
+          date: `${date[2]}/${date[1]}/${date[0]}`,
           time: appointment?.appointmentTime
         }) : translationService.getItalianMessage('appointment_reschedule_message', {
-          date: appointment?.appointmentDate,
+          date: `${date[2]}/${date[1]}/${date[0]}`,
           time: appointment?.appointmentTime
         }),
         user_phone_no,

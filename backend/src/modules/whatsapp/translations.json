@@ -137,7 +137,7 @@
   },
   "appointment_confirmation_message": {
     "en": "Your appointment has been confirmed successfully",
-    "it": "Appuntamento confermato con successo.\n\nGrazie per averci scelto!\n\nTi aspettiamo il {date} alle {time}. Se desideri modificare o annullare l’appuntamento, puoi contattarci in qualsiasi momento qui."
+    "it": "Appuntamento confermato con successo.\n\nGrazie per averci scelto!\n\nTi aspettiamo il {date} alle ore {time}. Se desideri modificare o annullare l’appuntamento, puoi contattarci in qualsiasi momento qui."
   },
   "appointment_reschedule_message": {
     "en": "Your appointment has been rescheduled successfully",
