@@ -117,12 +117,17 @@ $screen-xs: 767px;
           min-height: 100vh;
           padding: 24px;
         }
+        &.no-flex{
+          display: block;
+          //height: auto;
+        }
         .auth-header{
           position: relative;
           width: 100%;
           a.logo{
+            display: inline-block;
             img{
-              max-width: 150px;
+              max-width: 144px;
             }
           }
         }
@@ -168,7 +173,6 @@ $screen-xs: 767px;
           }
           .form-wrapper{
             ul.social-login{
-              margin-bottom: 24px;
               li{
                 display: block;
                 a.social-btn{
@@ -196,8 +200,11 @@ $screen-xs: 767px;
             }
             .or-divider{
               position: relative;
-              margin-bottom: 24px;
+              margin: 24px 0;
               text-align: center;
+              &.mtb-16{
+                margin: 16px 0 20px;
+              }
               &:before {
                 content: "";
                 background: #E1E4EA;
@@ -237,6 +244,9 @@ $screen-xs: 767px;
                 }
                 &.submit{
                   margin-top: 24px;
+                  &.mt-12{
+                    margin-top: 12px!important;
+                  }
                   .v-btn{
                     min-width: 100%;
                     box-shadow: none;
@@ -327,6 +337,7 @@ $screen-xs: 767px;
                     top: 33px;
                   }
                   .v-otp-input{
+                    padding: 0;
                     .v-otp-input__content{
                       gap: 10px;
                       .v-field{
@@ -558,7 +569,7 @@ $screen-xs: 767px;
       }
     }
     .auth-graphic{
-      background: #F5F7FA;
+      //background: #F5F7FA;
       height: 100%;
       padding: 8px;
       display: flex;
