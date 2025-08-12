@@ -10,7 +10,7 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 // Import Images
-import logoDark from '@images/logo-with-text.png'
+import logoDark from '@images/logo-dark.png'
 import usFlag from '@images/auth/us-flag-icon.svg'
 
 
@@ -41,6 +41,7 @@ definePage({
 const form = ref({
   email: '',
   password: '',
+  confirmPassword: '',
   businessName: '',
   firstName: '',
   lastName: '',
@@ -78,7 +79,7 @@ function handleLogin() {
   <section class="sec-auth-wrapper">
     <VContainer fluid>
       <div class="auth-grid">
-        <div class="auth-form-wrapper">
+        <div class="auth-form-wrapper no-flex">
           <div class="auth-header">
             <a
               href="#"
@@ -122,7 +123,7 @@ function handleLogin() {
                   </a>
                 </li>
               </ul>
-              <div class="or-divider">
+              <div class="or-divider mtb-16">
                 <span>OR</span>
               </div>
               <VForm
@@ -232,7 +233,7 @@ function handleLogin() {
                           >
                         </div>
                         <AppTextField
-                          v-model="form.password"
+                          v-model="form.confirmPassword"
                           label="Confirm Password<sup>*</sup>"
                           placeholder="• • • • • • • • • • "
                           :type="isConfirmPasswordVisible ? 'text' : 'password'"
@@ -245,7 +246,7 @@ function handleLogin() {
                   </VCol>
 
                   <VCol cols="12">
-                    <div class="form-group submit">
+                    <div class="form-group submit mt-12">
                       <VBtn
                         block
                         type="submit"

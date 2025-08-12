@@ -10,7 +10,7 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 // Import Images
-import logoDark from '@images/logo-with-text.png'
+import logoDark from '@images/logo-dark.png'
 
 
 // Import icons
