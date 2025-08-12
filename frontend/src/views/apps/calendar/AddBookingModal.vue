@@ -19,10 +19,13 @@
                     </VBtn>
 
                     <div class="w-full">
-                        <h4>Book an Appointment</h4>
-                        <div class="text-caption text-wrap m-none">
+                        <h4 class="heading">Book an Appointment</h4>
+                        <!-- <div class="text-caption text-wrap m-none">
                             Book an appointment with a professional
-                        </div>
+                        </div> -->
+                        <h6 class="sub-heading">
+                            Book an appointment with a professional.
+                        </h6>
                     </div>
                 </div>
                 <VBtn variant="text" size="small" color="black" @click="close"
@@ -88,6 +91,9 @@
                                 color="primary">*</span></label>
                         <vue-tel-input id="phone" v-model="form.phone"
                             :input-options="{ placeholder: '(555) 000 0000' }" default-country="US"
+                            :enabled-country-code="true"
+                            :formatted="true"
+                            :showDialCodeInSelection="true"
                             :rules="[v => !!v || 'Phone is required']" class="input-field m-0" />
                     </div>
                     <p class="text-sm text-muted d-flex align-center gap-2 mb-0">
@@ -154,57 +160,74 @@
 
                 <!-- Team Member Dropdown -->
                 <div class="field mb-3">
-                    <label for="selectedTeamMember" class="field-label">Select Team Member</label>
+                    <label class="field-label">Select Team Member</label>
                     <VMenu v-model="dropdown.team" :close-on-content-click="false">
                         <template #activator="{ props }">
-                            <VBtn v-bind="props" block variant="outlined"
-                                style="height: 41px; border-radius: 8px;font-size: 14px;padding-left: 15px;"
-                                append-icon="tabler-chevron-down" class="vBtn custom-dropdown-btn">
-                                <template #prepend>
+                            <VBtn v-bind="props" block variant="outlined" class="custom-dropdown-btn"
+                                append-icon="tabler-chevron-down"
+                                style="justify-content: flex-start; height: 41px; padding-left: 10px; border-radius: 8px; letter-spacing: 0px; font-size: 14px;">
+                                <!-- Show avatar if exists -->
+                                <VAvatar v-if="selectedTeamMember?.avatar" :image="selectedTeamMember.avatar" size="24"
+                                    class="mr-2" />
+
+                                <!-- Show SVG icon if no avatar -->
+                                <template v-else>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 20 20"
-                                        fill="none">
+                                        class="mr-2" fill="none">
                                         <path
                                             d="M9.99991 13.75C12.7464 13.75 15.1487 14.9312 16.4552 16.6937L15.0737 17.347C14.0102 16.087 12.1352 15.25 9.99991 15.25C7.86466 15.25 5.98966 16.087 4.92616 17.347L3.54541 16.693C4.85191 14.9305 7.25341 13.75 9.99991 13.75ZM9.99991 2.5C10.9945 2.5 11.9483 2.89509 12.6516 3.59835C13.3548 4.30161 13.7499 5.25544 13.7499 6.25V8.5C13.7499 9.46635 13.3768 10.3954 12.7084 11.0933C12.0401 11.7913 11.1281 12.2043 10.1627 12.2463L9.99991 12.25C9.00535 12.25 8.05152 11.8549 7.34826 11.1517C6.645 10.4484 6.24991 9.49456 6.24991 8.5V6.25C6.24997 5.28365 6.62307 4.35463 7.2914 3.65667C7.95974 2.95871 8.87172 2.54569 9.83716 2.50375L9.99991 2.5ZM9.99991 4C9.426 3.99997 8.87377 4.21924 8.45621 4.61296C8.03865 5.00668 7.78733 5.54508 7.75366 6.118L7.74991 6.25V8.5C7.74935 9.08568 7.97717 9.6485 8.38499 10.0689C8.7928 10.4892 9.34846 10.734 9.93388 10.7512C10.5193 10.7684 11.0884 10.5566 11.5201 10.1609C11.9519 9.76519 12.2124 9.2167 12.2462 8.632L12.2499 8.5V6.25C12.2499 5.65326 12.0129 5.08097 11.5909 4.65901C11.1689 4.23705 10.5966 4 9.99991 4Z"
                                             fill="#99A0AE" />
                                     </svg>
                                 </template>
-                                <span class="btn-label">{{ selectedTeamMember || 'Any Team Member' }}</span>
+
+                                <span class="btn-label">
+                                    {{ selectedTeamMember?.title || 'Select Team Member' }}
+                                </span>
                             </VBtn>
                         </template>
+
                         <VList>
-                            <VListItem v-for="member in teamMembers" :key="member" @click="selectTeamMember(member)">
-                                {{ member }}
+                            <VListItem v-for="member in teamMembers" :key="member.value"
+                                @click="selectTeamMember(member)" class="d-flex align-center">
+                                <VAvatar :image="member.avatar" size="24" />
+                                <span class="ml-2">{{ member.title }}</span>
                             </VListItem>
                         </VList>
                     </VMenu>
                 </div>
 
                 <div class="field-row mb-0">
-                    <!-- Select Date -->
+                    <!-- Date Picker Modal -->
                     <div class="field">
                         <label for="selectedDate" class="field-label">Date</label>
-                        <VMenu v-model="dropdown.date" :close-on-content-click="false">
-                            <template #activator="{ props }">
-                                <VBtn v-bind="props" block variant="outlined" append-icon="tabler-chevron-down"
-                                    style="height: 41px;border-radius: 8px;padding-left: 15px;letter-spacing: 0px;font-size: 14px;"
-                                    class="vBtn custom-dropdown-btn">
-                                    <template #prepend>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-                                            viewBox="0 0 20 20" fill="none">
-                                            <path
-                                                d="M13.75 3.25H16.75C16.9489 3.25 17.1397 3.32902 17.2803 3.46967C17.421 3.61032 17.5 3.80109 17.5 4V16C17.5 16.1989 17.421 16.3897 17.2803 16.5303C17.1397 16.671 16.9489 16.75 16.75 16.75H3.25C3.05109 16.75 2.86032 16.671 2.71967 16.5303C2.57902 16.3897 2.5 16.1989 2.5 16V4C2.5 3.80109 2.57902 3.61032 2.71967 3.46967C2.86032 3.32902 3.05109 3.25 3.25 3.25H6.25V1.75H7.75V3.25H12.25V1.75H13.75V3.25ZM12.25 4.75H7.75V6.25H6.25V4.75H4V7.75H16V4.75H13.75V6.25H12.25V4.75ZM16 9.25H4V15.25H16V9.25Z"
-                                                fill="#525866" />
-                                        </svg>
-                                    </template>
-                                    <span class="btn-label">{{ selectedDate || 'Select Date' }}</span>
-                                </VBtn>
+
+                        <!-- Button to open dialog -->
+                        <VBtn block variant="outlined"
+                            style="height: 41px; border-radius: 8px; padding-left: 15px; letter-spacing: 0; font-size: 14px;"
+                            class="vBtn custom-dropdown-btn" @click="dialogDate = true">
+                            <template #prepend>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path
+                                        d="M13.75 3.25H16.75C16.9489 3.25 17.1397 3.32902 17.2803 3.46967C17.421 3.61032 17.5 3.80109 17.5 4V16C17.5 16.1989 17.421 16.3897 17.2803 16.5303C17.1397 16.671 16.9489 16.75 16.75 16.75H3.25C3.05109 16.75 2.86032 16.671 2.71967 16.5303C2.57902 16.3897 2.5 16.1989 2.5 16V4C2.5 3.80109 2.57902 3.61032 2.71967 3.46967C2.86032 3.32902 3.05109 3.25 3.25 3.25H6.25V1.75H7.75V3.25H12.25V1.75H13.75V3.25ZM12.25 4.75H7.75V6.25H6.25V4.75H4V7.75H16V4.75H13.75V6.25H12.25V4.75ZM16 9.25H4V15.25H16V9.25Z"
+                                        fill="#525866" />
+                                </svg>
                             </template>
-                            <VList>
-                                <VListItem v-for="date in dateOptions" :key="date" @click="selectDate(date)">
-                                    {{ date }}
-                                </VListItem>
-                            </VList>
-                        </VMenu>
+                            <span class="btn-label">{{ formattedDate || 'Select Date' }}</span>
+                            <!-- <v-icon right>tabler-chevron-down</v-icon> -->
+                        </VBtn>
+
+                        <!-- Dialog with VDatePicker -->
+                        <VDialog v-model="dialogDate" width="320">
+                            <VCard>
+                                <VDatePicker v-model="selectedDate" />
+                                <VCardActions>
+                                    <VSpacer />
+                                    <VBtn text @click="dialogDate = false">Cancel</VBtn>
+                                    <VBtn text @click="saveDate">OK</VBtn>
+                                </VCardActions>
+                            </VCard>
+                        </VDialog>
                     </div>
 
                     <!-- Select Time -->
@@ -273,6 +296,7 @@ const form = ref({
     phone: ''
 })
 
+
 const props = defineProps({
     modelValue: Boolean,
 })
@@ -291,12 +315,38 @@ const selectedTime = ref('')
 
 const clientOptions = ['Ali', 'John', 'Sara']
 const serviceOptions = ['Consultation', 'Development', 'Design']
-const teamMembers = ['Umer', 'Hassan', 'Zoya']
+const teamMembers = [
+    {
+        title: "Any Team Member",
+        value: "Any Team Member",
+        avatar: "/images/avatars/avatar-1.png",
+    },
+    {
+        title: "Jane Smith",
+        value: "jane smith",
+        avatar: "/images/avatars/avatar-2.png",
+    },
+    {
+        title: "Mike Johnson",
+        value: "mike johnson",
+        avatar: "/images/avatars/avatar-1.png",
+    },
+    {
+        title: "Sarah Wilson",
+        value: "sarah wilson",
+        avatar: "/images/avatars/avatar-2.png",
+    },
+    {
+        title: "David Brown",
+        value: "david brown",
+        avatar: "/images/avatars/avatar-1.png",
+    },
+];
 
 const dateOptions = ['07/08/2025', '08/08/2025', '09/08/2025']
 const timeOptions = ['10:00 AM', '12:00 PM', '03:00 PM']
 
-
+const dialogDate = ref(false)
 const dropdown = ref({
     client: false,
     service: false,
@@ -318,10 +368,16 @@ const selectTeamMember = (member) => {
     dropdown.value.team = false
 }
 
-const selectDate = (date) => {
-    selectedDate.value = date
-    dropdown.value.date = false
+const formattedDate = computed(() => {
+    if (!selectedDate.value) return ''
+    const dateObj = new Date(selectedDate.value)
+    return dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+})
+
+const saveDate = () => {
+    dialogDate.value = false
 }
+
 const selectTime = (time) => {
     selectedTime.value = time
     dropdown.value.time = false
@@ -501,16 +557,36 @@ const submitAppointment = () => {
     /* or adjust as needed */
 }
 
-/* If you want to target all inputs inside vue-tel-input */
-.vue-tel-input input::placeholder {
-    color: #afafaf;
-    /* your desired placeholder color */
-    opacity: 1;
-    /* optional, to ensure full color */
+.v-btn:not(.v-btn--icon).v-btn--size-default .v-btn__content .v-icon {
+    --v-icon-size-multiplier: 0.7113;
+    block-size: 1rem;
+    font-size: 1rem;
+    inline-size: 1rem;
+    position: absolute;
+    right: 15px;
 }
 
-/* Or if you gave your component a custom class */
-.input-field input::placeholder {
-    color: #afafaf;
+.heading {
+    color: rgb(var(--v-theme-text-strong)) !important;
+}
+
+.sub-heading {
+    font-size: 14px !important;
+    line-height: 18px !important;
+    color: rgb(var(--v-theme-text-secondary)) !important;
+    font-weight: 400 !important;
+}
+
+
+.iti__flag {
+  display: inline-block !important;
+  background-size: contain !important;
+}
+
+.vue-tel-input .vti__selection {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    /* moves code to right */
+    justify-content: space-between !important;
 }
 </style>

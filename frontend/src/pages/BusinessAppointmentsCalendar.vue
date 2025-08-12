@@ -56,27 +56,6 @@ const calendarOptions = computed(() => ({
   headerToolbar: false, // Remove default header toolbar
   initialView: selectedView.value, // Use the selected view
   firstDay: 1,
-  // customButtons: {
-  //   myPrevButton: {
-  //     text: 'Prev',
-  //     click: function () {
-  //       calendar.prev();  // call calendar API prev()
-  //     }
-  //   },
-  //   myNextButton: {
-  //     text: 'Next',
-  //     click: function () {
-  //       calendar.next();  // call calendar API next()
-  //     }
-  //   },
-  //   myRefreshButton: {
-  //     text: 'Refresh',
-  //     click: function () {
-  //       // Your custom refresh action
-  //       alert('Refresh clicked!');
-  //     }
-  //   }
-  // },
   views: {
     timeGridDay: {
       dayHeaderFormat: { weekday: "long" },
@@ -308,9 +287,9 @@ const calendarOptions = computed(() => ({
 const selectedView = ref("timeGridWeek");
 const selectedEmployees = ref([
   "john doe",
-  "jane smith",
-  "mike johnson",
-  "sarah wilson",
+  // "jane smith",
+  // "mike johnson",
+  // "sarah wilson",
   // "david brown",
 ]);
 const isTeamDropdownOpen = ref(false);
@@ -368,6 +347,14 @@ const calendarDays = computed(() => {
 const calendarDays2 = computed(() => {
   return generateCalendarDays(currentMonth2.value);
 });
+const toLocalDateString = (date) => {
+  // returns yyyy-mm-dd in local time, no timezone shift
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 
 // Generate calendar days
 const generateCalendarDays = (date) => {
@@ -384,7 +371,7 @@ const generateCalendarDays = (date) => {
     currentDate.setDate(startDate.getDate() + i);
 
     days.push({
-      date: currentDate.toISOString().split("T")[0],
+      date: toLocalDateString(currentDate),
       day: currentDate.getDate(),
       currentMonth: currentDate.getMonth() === month,
     });
@@ -517,14 +504,6 @@ const employeeOptions = [
     avatar: "/images/avatars/avatar-1.png",
   },
 ];
-const toLocalDateString = (date) => {
-  // returns yyyy-mm-dd in local time, no timezone shift
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
 // View options with 3-day view
 const viewOptions = [
   // { title: "Day", value: "timeGridDay" },
@@ -676,6 +655,7 @@ const selectAllEmployees = () => {
     selectAll.value = true;
   }
 };
+
 const removeEmployee = (empVal) => {
   selectedEmployees.value = selectedEmployees.value.filter(val => val !== empVal)
 }
@@ -856,25 +836,44 @@ const handleBookedSlot = () => {
                     <VMenu v-model="isTeamDropdownOpen" :close-on-content-click="false">
                       <template #activator="{ props }">
 
-                        <VBtn v-bind="props" variant="outlined" class="icon-button1"
+                        <!-- <VBtn v-bind="props" variant="outlined" class="icon-button1"
                           style="background-color: white;display: flex;justify-content: space-between;"
-                          prepend-icon="tabler-users">
+                          prepend-icon="tabler-user">
 
                           {{ teamButtonLabel }}
+                          <VIcon size="15" :class="{ 'rotate-180': isTeamDropdownOpen }" style="margin-left: 10px;"
+                            icon="tabler-chevron-down" />
+                        </VBtn> -->
+                        <VBtn v-bind="props" variant="outlined" class="icon-button1"
+                          style="background-color: white; display: flex; justify-content: space-between;">
+
+                          <template #prepend>
+                            <!-- <VIcon size="20" icon="tabler-user" /> -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                              fill="none">
+                              <path
+                                d="M16 17.5H14.5V16C14.5 15.4033 14.2629 14.831 13.841 14.409C13.419 13.9871 12.8467 13.75 12.25 13.75H7.75C7.15326 13.75 6.58097 13.9871 6.15901 14.409C5.73705 14.831 5.5 15.4033 5.5 16V17.5H4V16C4 15.0054 4.39509 14.0516 5.09835 13.3483C5.80161 12.6451 6.75544 12.25 7.75 12.25H12.25C13.2446 12.25 14.1984 12.6451 14.9017 13.3483C15.6049 14.0516 16 15.0054 16 16V17.5ZM10 10.75C9.40905 10.75 8.82389 10.6336 8.27792 10.4075C7.73196 10.1813 7.23588 9.84984 6.81802 9.43198C6.40016 9.01412 6.06869 8.51804 5.84254 7.97208C5.6164 7.42611 5.5 6.84095 5.5 6.25C5.5 5.65905 5.6164 5.07389 5.84254 4.52792C6.06869 3.98196 6.40016 3.48588 6.81802 3.06802C7.23588 2.65016 7.73196 2.31869 8.27792 2.09254C8.82389 1.8664 9.40905 1.75 10 1.75C11.1935 1.75 12.3381 2.22411 13.182 3.06802C14.0259 3.91193 14.5 5.05653 14.5 6.25C14.5 7.44347 14.0259 8.58807 13.182 9.43198C12.3381 10.2759 11.1935 10.75 10 10.75ZM10 9.25C10.7956 9.25 11.5587 8.93393 12.1213 8.37132C12.6839 7.80871 13 7.04565 13 6.25C13 5.45435 12.6839 4.69129 12.1213 4.12868C11.5587 3.56607 10.7956 3.25 10 3.25C9.20435 3.25 8.44129 3.56607 7.87868 4.12868C7.31607 4.69129 7 5.45435 7 6.25C7 7.04565 7.31607 7.80871 7.87868 8.37132C8.44129 8.93393 9.20435 9.25 10 9.25Z"
+                                fill="#99A0AE" />
+                            </svg>
+                          </template>
+
+                          {{ teamButtonLabel }}
+
                           <VIcon size="15" :class="{ 'rotate-180': isTeamDropdownOpen }" style="margin-left: 10px;"
                             icon="tabler-chevron-down" />
                         </VBtn>
                       </template>
 
-                      <VCard min-width="250">
-                        <VCardTitle class="text-h6 pa-4">
+                      <VCard min-width="300" class="mt-1" style="border-radius: 14px !important">
+                        <VCardTitle class="text-h6 pt-4">
                           <div class="d-flex align-center justify-space-between">
-                            <VCheckbox v-model="selectAll" label="All Team Members" @click="selectAllEmployees"
-                              color="primary" hide-details density="compact" />
+                            <VCheckbox v-model="selectAll" label="All Team Members" class="checkbox-label-space"
+                              @click="selectAllEmployees" color="primary" hide-details density="compact"
+                              style="font-weight: 500;" />
                           </div>
                         </VCardTitle>
-                        <VCardText style="padding: 0 16px">
-                          <div class="d-flex flex-column gap-2 pb-4">
+                        <VCardText style="padding: 0 16px; ">
+                          <div class="d-flex flex-column gap-2 pb-4 card-row">
                             <VCheckbox v-for="employee in employeeOptions.filter(
                               (emp) => emp.value !== 'all team'
                             )" :key="employee.value" v-model="selectedEmployees" :value="employee.value"
@@ -913,8 +912,8 @@ const handleBookedSlot = () => {
           </div>
 
           <!-- Right button -->
-          <VBtn v-bind="props" append-icon="tabler-chevron-down" color="primary"
-            style="border-radius: 0.5rem; margin-bottom: 0.5rem">
+          <VBtn class="add-btn" v-bind="props" append-icon="tabler-chevron-down" color="primary"
+            style="border-radius: 8px; padding-left: 15px; padding-right: 15px; font-weight: 300; margin-bottom: 0.5rem">
             Add
           </VBtn>
           <!-- <VBtn
@@ -926,19 +925,33 @@ const handleBookedSlot = () => {
         </div>
       </template>
 
-      <VList style="border-radius: 15px !important;">
+      <VList style="border-radius: 15px !important; margin-top: 2px !important;">
         <VListItem @click="openAppointmentModal"
-          style="padding-top: 4px !important; padding-bottom: 4px !important; padding-left: 4px !important; border-radius: 10px !important;">
-          <VListItemTitle>
-            <VBtn icon="tabler-calendar" variant="text" size="small" color="black" />
-            Book An Appointment
+          style="padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 3px !important; border-radius: 10px !important;"
+          class="custom-list">
+          <VListItemTitle class="d-flex align-center gap-2 ps-1 pe-1 " style="font-weight: 500 !important;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M4 5h16a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1H4a1 1 0 0 1 -1-1V6a1 1 0 0 1 1-1z" />
+              <path d="M16 3v4" />
+              <path d="M8 3v4" />
+              <path d="M4 11h16" />
+            </svg>
+            Book an appointment
           </VListItemTitle>
         </VListItem>
         <VListItem @click="handleBookedSlot"
-          style="padding-top: 4px !important; padding-bottom: 4px !important; padding-left: 4px !important; border-radius: 10px !important;">
-          <VListItemTitle>
-            <VBtn icon="tabler-calendar-x" variant="text" size="small" color="black" />
-            Blocked Slot
+          style="padding-top: 3px !important; padding-bottom: 3px !important; padding-left: 3px !important; border-radius: 10px !important; ">
+          <VListItemTitle class="d-flex align-center gap-2 ps-1 pe-1" style="font-weight: 500 !important;">
+            <!-- Your exact SVG icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" lass="icon icon-tabler icon-tabler-calendar" width="20" height="20"
+              viewBox="0 0 20 20" fill="none">
+              <path
+                d="M8.25 4.5V3H6.75V4.5H3.75C3.33579 4.5 3 4.83579 3 5.25V17.25C3 17.6642 3.33579 18 3.75 18H17.25C17.6642 18 18 17.6642 18 17.25V5.25C18 4.83579 17.6642 4.5 17.25 4.5H14.25V3H12.75V4.5H8.25ZM4.5 9.75H16.5V16.5H4.5V9.75ZM4.5 6H6.75V6.75H8.25V6H12.75V6.75H14.25V6H16.5V8.25H4.5V6ZM8.90897 10.4733L10.5 12.0644L12.0909 10.4733L13.1516 11.5339L11.5606 13.1251L13.1516 14.7159L12.091 15.7766L10.5 14.1857L8.90891 15.7766L7.84832 14.7158L9.43927 13.1251L7.84827 11.5339L8.90897 10.4733Z"
+                fill="#525866" />
+            </svg>
+            Blocked slot
           </VListItemTitle>
         </VListItem>
       </VList>
@@ -1081,6 +1094,14 @@ const handleBookedSlot = () => {
   }
 }
 
+.add-btn .v-btn__append {
+  padding-left: 10px;
+}
+
+.fc-col-header-cell-cushion {
+  text-transform: uppercase;
+}
+
 .fc-timegrid-col-header {
   background-color: #f0f0f0;
   border-bottom: 1px solid #ccc;
@@ -1090,6 +1111,14 @@ const handleBookedSlot = () => {
   cursor: pointer;
   margin-left: 4px;
   color: #666;
+}
+
+// .custom-list:hover {
+//   background-color: #F5F7FA !important; /* bg color on hover */
+// }
+.custom-list.v-list-item:hover,
+.custom-list.v-list-item.v-list-item--active {
+  background-color: transparent !important;
 }
 
 
@@ -1102,12 +1131,6 @@ const handleBookedSlot = () => {
 /* Optional: remove border on last cell so it looks neat */
 .fc-timegrid-col-header-cell:last-child {
   border-right: none;
-}
-
-.fc-event-lower {
-  z-index: 10 !important;
-  /* Ensure your tooltip can go over it */
-  background-color: red !important;
 }
 
 .calendar-add-event-drawer {
@@ -1124,7 +1147,8 @@ const handleBookedSlot = () => {
 .custom-chip {
   --v-theme-background: white !important;
   background-color: white !important;
-  padding: 0px 8px !important;
+  padding: 0px 6px !important;
+  height: 23px !important;
   font-size: 12px !important;
 }
 
@@ -1157,6 +1181,39 @@ const handleBookedSlot = () => {
   }
 }
 
+.icon-button1 {
+  padding: 12px !important;
+}
+
+.custom-calendar-with-tall-headers {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+.fc-day-today {
+  background-color: transparent !important;
+}
+
+body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
+  background-color: rgb(var(--v-theme-bg-bgsoft)) !important;
+  color: rgb(var(--v-theme-text-secondary)) !important;
+}
+
+// .custom-list{
+//   background-color: rgb(var(--v-theme-bg-bgsoft)) !important;
+// }
+// .custom-list.v-list-item:hover {
+//   background-color: var(--v-theme-bg-bgsoft) !important;
+//   box-shadow: none !important;
+//   outline: none !important;
+// }
+
+// /* Also disable ripple effect */
+// .custom-list .v-ripple__container {
+//   display: none !important;
+// }
+
+
 // Custom calendar header styles
 .calendar-custom-header {
   .v-btn {
@@ -1180,6 +1237,11 @@ body .fc .fc-col-header .fc-col-header-cell .fc-col-header-cell-cushion {
   width: 100% !important;
   background-color: #f3f3f4;
   // border-right: 1px solid #ccc;
+}
+
+.checkbox-label-space .v-label {
+  margin-inline-start: 0.5rem;
+  /* same as ms-2 in Tailwind */
 }
 
 // Calendar with employee column
@@ -1513,5 +1575,6 @@ td.fc-timegrid-slot.fc-timegrid-slot-label.fc-scrollgrid-shrink {
       color: #666 !important;
     }
   }
+
 }
 </style>
