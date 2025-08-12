@@ -11,6 +11,7 @@ import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 // Import Images
 import logoDark from '@images/logo-with-text.png'
+import usFlag from '@images/auth/us-flag-icon.svg'
 
 
 // Import icons
@@ -20,10 +21,17 @@ import lockGrayIcon from '@images/auth/lock-gray-icon.svg?url'
 import authImg from '@images/auth/auth-img.png'
 import globeGrayIcon from '@images/auth/globe-gray-icon.svg?url'
 import userGrayIcon from '@images/auth/user-gray-icon.svg?url'
+import emailCheckIcon from '@images/auth/email-check-icon.svg?url'
+import errorInfoIcon from '@images/auth/error-info-icon.svg?url'
 
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import { useRouter } from 'vue-router'
+
+import { VueTelInput } from 'vue3-tel-input'
+import 'vue3-tel-input/dist/vue3-tel-input.css'
+
+
 
 definePage({
   meta: {
@@ -35,16 +43,22 @@ definePage({
 const form = ref({
   email: '',
   password: '',
+  businessName: '',
+  firstName: '',
+  lastName: '',
+  phoneNumber: '',
   remember: false,
 })
 
 const isPasswordVisible = ref(false)
+const isConfirmPasswordVisible = ref(false)
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
 const authStore = useAuthStore()
 const router = useRouter()
 const loginError = ref('')
+const phone = ref(null)
 
 function handleLogin() {
   loginError.value = ''
@@ -82,105 +96,52 @@ function handleLogin() {
             <div class="user-wrapper">
               <div class="user-icon">
                 <img
-                  :src="userGrayIcon"
+                  :src="emailCheckIcon"
                   alt="img"
                 >
               </div>
             </div>
             <div class="about-company">
-              <h3>Welcome to Chatbookly! 👋🏻</h3>
+              <h3>Enter Verification Code</h3>
               <p class="f-16">
-                Please sign-in to your account and start the <br> adventure
+                We’ve sent a code to marco@chatbookly.com
               </p>
             </div>
             <div class="form-wrapper">
-              <ul class="social-login">
-                <li>
-                  <a
-                    href="#"
-                    class="social-btn"
-                  >
-                    <span class="icon">
-                      <img
-                        :src="googleColorIcon"
-                        alt="icon"
-                      >
-                    </span>
-                    Login with Google
-                  </a>
-                </li>
-              </ul>
               <div class="or-divider">
-                <span>OR</span>
+                <span />
               </div>
               <VForm
                 class="form"
-                @submit.prevent="handleLogin"
+                @submit.prevent=""
               >
                 <div class="form-group">
-                  <div class="input-container has-icon">
-                    <div class="icon">
-                      <img
-                        :src="emailGrayIcon"
-                        alt="icon"
-                      >
-                    </div>
-                    <AppTextField
-                      v-model="form.email"
-                      autofocus
-                      label="Email Address<sup>*</sup>"
-                      type="email"
-                      placeholder="hello@example.com"
-                    />
+                  <div class="input-container">
+                    <VOtpInput length="4" />
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="input-container password-container">
-                    <div class="icon">
-                      <img
-                        :src="lockGrayIcon"
-                        alt="icon"
-                      >
-                    </div>
-                    <AppTextField
-                      v-model="form.password"
-                      label="Password<sup>*</sup>"
-                      placeholder="• • • • • • • • • • "
-                      :type="isPasswordVisible ? 'text' : 'password'"
-                      autocomplete="password"
-                      :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                    />
-                  </div>
-                </div>
-                <div class="form-group forgot-group">
-                  <div class="remember-wrapper">
-                    <VCheckbox
-                      v-model="form.remember"
-                      label="Remember me"
-                    />
-                  </div>
-                  <div class="forgot-wrapper">
-                    <a href="#">Forgot password?</a>
-                  </div>
-                </div>
+
                 <div class="form-group submit">
                   <VBtn
                     block
                     type="submit"
                   >
-                    Login
+                    Verify
                   </VBtn>
+                  <div class="error-message mt-12">
+                    <img :src="errorInfoIcon" class="icon" alt="icon">
+                    <p>Code is invalid</p>
+                  </div>
                 </div>
               </VForm>
-              <div class="no-account">
-                <p>Don't have an account?</p>
-                <RouterLink
-                  to="/signup"
-                  class="tag-btn"
+              <div class="no-account no-flex">
+                <p>Already have an account?</p>
+                <a
+                  href="#"
+                  class="line-btn"
                 >
-                  Register
-                </RouterLink>
+                  Resend code
+                </a>
               </div>
             </div>
           </div>

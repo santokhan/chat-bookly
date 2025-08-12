@@ -8,7 +8,7 @@ function recursiveLayouts(route) {
       route.children[i] = recursiveLayouts(route.children[i])
 
     return route
-  } 
+  }
 
   return setupLayouts([route])[0]
 }
@@ -47,6 +47,10 @@ const router = createRouter({
     { path: '/business/support/chat', component: () => import('@/pages/BusinessSupportChat.vue'), name: 'BusinessSupportChat' },
     { path: '/business/support/whatsapp', component: () => import('@/pages/BusinessSupportWhatsapp.vue'), name: 'BusinessSupportWhatsapp' },
     { path: '/business/online-booking', component: () => import('@/pages/BusinessOnlineBooking.vue'), name: 'BusinessOnlineBooking' },
+    { path: '/signup', component: () => import('@/pages/auth/Signup.vue'), name: 'signup' },
+    { path: '/verification', component: () => import('@/pages/auth/Verification.vue'), name: 'verification' },
+    { path: '/password-reset', component: () => import('@/pages/auth/PasswordReset.vue'), name: 'PasswordReset' },
+    { path: '/update-password', component: () => import('@/pages/auth/UpdatePassword.vue'), name: 'UpdatePassword' },
   ],
 })
 
@@ -56,7 +60,7 @@ router.beforeEach((to, from, next) => {
   const role = authStore.role
 
   // If logged in and trying to access /login, redirect to dashboard
-  if (to.path === '/login' && isLoggedIn) {
+  if ((to.path === '/login' || to.path === '/signup' || to.path === '/verification' || to.path === '/password-reset' || to.path === '/update-password') && isLoggedIn) {
     if (role === 'admin') return next('/admin')
     if (role === 'business') return next('/business')
   }
@@ -76,7 +80,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // Unknown route handling
-  const knownRoutes = ['/login', '/admin', '/business']
+  const knownRoutes = ['/login', '/signup', '/verification', '/password-reset', '/update-password', '/admin', '/business']
   if (!knownRoutes.some(r => to.path.startsWith(r))) {
     if (isLoggedIn) {
       if (role === 'admin') return next('/admin')

@@ -15,7 +15,7 @@ const elementId = computed(() => {
   const attrs = useAttrs()
   const _elementIdToken = attrs.id
   const _id = useId()
-  
+
   return _elementIdToken ? `app-text-field-${ _elementIdToken }` : _id
 })
 
@@ -23,17 +23,14 @@ const label = computed(() => useAttrs().label)
 </script>
 
 <template>
-  <div
-    class="app-text-field flex-grow-1"
-    :class="$attrs.class"
-  >
+  <div :class="$attrs.class">
     <VLabel
       v-if="label"
       :for="elementId"
-      class="mb-1 text-body-2 text-wrap"
       style="line-height: 15px;"
-      :text="label"
+      v-html="label"
     />
+    <!--    :text="label" -->
     <VTextField
       v-bind="{
         ...$attrs,
@@ -42,8 +39,6 @@ const label = computed(() => useAttrs().label)
         variant: 'outlined',
         id: elementId,
         'prepend-inner-icon': props.showSearchIcon ? 'tabler-search' : undefined,
-
-
       }"
     >
       <template
