@@ -9,13 +9,195 @@ html {
   box-sizing: border-box;
 }
 
+html, body, #app {
+  font-family: 'Inter', sans-serif;
+}
+
 .blocked-slot {
+  // background-image: repeating-linear-gradient(
+  //   135deg,
+  //   rgba(0, 0, 0, 0.05),
+  //   rgba(0, 0, 0, 0.05) 10px,
+  //   transparent 10px,
+  //   transparent 20px
+  // );
   background-image: repeating-linear-gradient(
-    45deg,
+    135deg,
     rgba(0, 0, 0, 0.05),
-    rgba(0, 0, 0, 0.05) 10px,
-    transparent 10px,
-    transparent 20px
+    rgba(0, 0, 0, 0.05) 2px,
+    transparent 2px,
+    transparent 10px
   );
   background-color: #f8f9fa; // light base color
+}
+
+
+
+
+// ================= Custom Styling ======================
+// h1 {
+//   font-size: 3.5rem; // 56px
+//   font-weight: 400; // Inter Regular
+//   line-height: 4rem; // 64px
+//   letter-spacing: -0.01em; // -1%
+// }
+
+// h2 {
+//   font-size: 3rem; // 48px
+//   font-weight: 400;
+//   line-height: 3.5rem; // 56px
+//   letter-spacing: -0.01em;
+// }
+
+// h3 {
+//   font-size: 2.5rem; // 40px
+//   font-weight: 400;
+//   line-height: 3rem; // 48px
+//   letter-spacing: -0.01em;
+// }
+
+// h4 {
+//   font-size: 2rem;
+//   font-weight: 400;
+//   line-height: 2.5rem; // 40px
+//   letter-spacing: -0.005em;
+// }
+
+// h5 {
+//   font-size: 1.5rem; // 24px
+//   font-weight: 400;
+//   line-height: 2rem; // 32px
+//   letter-spacing: 0;
+// }
+
+// h6 {
+//   font-size: 1.25rem; // 20px
+//   font-weight: 400;
+//   line-height: 1.75rem; // 28px
+//   letter-spacing: 0;
+// }
+
+// Label Styles {custom naming)
+// .label-xl {
+//   font-size: 1.5rem; // 24px
+//   font-weight: 500; // Inter Medium
+//   line-height: 2rem; // 32px
+//   letter-spacing: -0.015em; // -1.5%
+// }
+
+// .label-lg {
+//   font-size: 1.125rem; // 18px
+//   font-weight: 500;
+//   line-height: 1.5rem; // 24px
+//   letter-spacing: -0.015em;
+// }
+
+// .label-md {
+//   font-size: 1rem; // 16px
+//   font-weight: 500;
+//   line-height: 1.5rem; // 24px
+//   letter-spacing: -0.011em;
+// }
+
+// .label-sm {
+//   font-size: 0.875rem; // 14px
+//   font-weight: 500;
+//   line-height: 1.25rem; // 20px
+//   letter-spacing: -0.006em;
+// }
+
+// .label-xs {
+//   font-size: 0.75rem; // 12px
+//   font-weight: 500;
+//   line-height: 1rem; // 16px
+//   letter-spacing: 0;
+// }
+
+// // Paragraph Styles
+// .paragraph-xl {
+//   font-size: 1.5rem; // 24px
+//   font-weight: 400; // Inter Regular
+//   line-height: 2rem; // 32px
+//   letter-spacing: -0.015em;
+// }
+
+// .paragraph-lg {
+//   font-size: 1.125rem; // 18px
+//   font-weight: 400;
+//   line-height: 1.5rem; // 24px
+//   letter-spacing: -0.015em;
+// }
+
+// .paragraph-md {
+//   font-size: 1rem; // 16px
+//   font-weight: 400;
+//   line-height: 1.5rem; // 24px
+//   letter-spacing: -0.011em;
+// }
+
+// .paragraph-sm {
+//   font-size: 0.875rem; // 14px
+//   font-weight: 400;
+//   line-height: 1.25rem; // 20px
+//   letter-spacing: -0.006em;
+// }
+
+// .paragraph-xs {
+//   font-size: 0.75rem; // 12px
+//   font-weight: 400;
+//   line-height: 1rem; // 16px
+//   letter-spacing: 0;
+// }
+
+// // Sub Headings
+// .subheading-md {
+//   font-size: 1rem; // 16px
+//   font-weight: 500;
+//   line-height: 1.5rem; // 24px
+//   letter-spacing: 0.06em;
+//   text-transform: uppercase;
+// }
+
+// .subheading-sm {
+//   font-size: 0.875rem; // 14px
+//   font-weight: 500;
+//   line-height: 1.25rem; // 20px
+//   letter-spacing: 0.06em;
+//   text-transform: uppercase;
+// }
+
+// .subheading-xs {
+//   font-size: 0.75rem; // 12px
+//   font-weight: 500;
+//   // line-height: 1rem; // 16px
+//   letter-spacing: 0.04em;
+//   // text-transform: uppercase;
+// }
+
+// .subheading-2xs {
+//   font-size: 0.6875rem; // 11px
+//   font-weight: 500;
+//   line-height: 0.75rem; // 12px
+//   letter-spacing: 0.02em;
+//   text-transform: uppercase;
+// }
+
+.v-btn.custom-dropdown-btn {
+  // padding: 0 20px;
+  padding-right: 20px !important;
+}
+
+.v-btn__append {
+  margin-left: auto;
+}
+
+.v-radio.v-selection-control--dirty .v-selection-control__wrapper.text-primary .v-selection-control__input .v-icon {
+    filter: drop-shadow(0 2px 6px rgba(var(--v-theme-primary), 0)) !important;
+}
+
+.v-overlay__scrim, .v-navigation-drawer__scrim {
+  background: rgba(var(--v-overlay-scrim-background), var(--v-overlay-scrim-opacity)) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  opacity: 1 !important;
 }
