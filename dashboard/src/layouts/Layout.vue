@@ -45,7 +45,7 @@
                                 leave-active-class="transition-all duration-300 ease-in"
                                 leave-from-class="opacity-100 max-h-screen" leave-to-class="opacity-0 max-h-0">
                                 <div v-if="item.hasSubmenu && expandedMenus.includes(item.name) && isExpanded"
-                                    class=" mt-1 space-y-1 overflow-hidden">
+                                    class="mt-1 space-y-1 overflow-hidden">
                                     <SidebarItem v-for="subItem in item.submenu" :key="subItem.name" :icon="''"
                                         :activeIcon="''" :label="subItem.label" :isExpanded="isExpanded"
                                         :isActive="activeItem === subItem.name" :isSubMenuItem="true" :subMenuLevel="1"
@@ -154,7 +154,7 @@
                             <img :src="selectedLanguage.flag" :alt="selectedLanguage.name" class="w-5 h-5 rounded-sm">
                             <span
                                 class="font-inter font-regular text-[14px] text-strong leading-[20px] tracking-[-0.6%]">{{
-                                selectedLanguage.name }}</span>
+                                    selectedLanguage.name }}</span>
                             <svg class="w-4 h-4 text-text-secondary transition-transform duration-200"
                                 :class="{ 'rotate-180': isLanguageDropdownOpen }" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
@@ -179,7 +179,7 @@
                                     <img :src="language.flag" :alt="language.name" class="w-5 h-5 rounded-sm">
                                     <span
                                         class="font-inter font-regular text-[14px] text-strong leading-[20px] tracking-[-0.6%]">{{
-                                        language.name }}</span>
+                                            language.name }}</span>
                                     <svg v-if="selectedLanguage.code === language.code"
                                         class="w-4 h-4 text-primary ml-auto" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -251,7 +251,7 @@
                                         <img :src="item.icon" class="w-[15px] h-auto" :alt="item.label" />
                                         <span
                                             class="font-inter font-normal text-[14px] leading-[20px] tracking-[-0.006em] text-[#0E121B]">{{
-                                            item.label }}</span>
+                                                item.label }}</span>
                                     </button>
                                 </div>
 
@@ -306,13 +306,14 @@
 
                 <!-- Menu Items -->
                 <div class="py-2 px-[8px]">
-                    <button v-for="item in userMenuItems" :key="item.name" @click="handleSidebarUserMenuItem(item)"
+                    <RouterLink v-for="item in userMenuItems" :key="item.name" @click="handleSidebarUserMenuItem(item)"
+                        :to="item.to"
                         class="w-full flex items-center space-x-3 px-3 py-2 hover:bg-soft transition-colors duration-150 text-left rounded-lg">
                         <img :src="item.icon" class="w-[15px] h-auto" :alt="item.label" />
                         <span
                             class="font-inter font-normal text-[14px] leading-[20px] tracking-[-0.006em] text-[#0E121B]">{{
-                            item.label }}</span>
-                    </button>
+                                item.label }}</span>
+                    </RouterLink>
                 </div>
 
                 <!-- Logout -->
@@ -332,7 +333,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import SidebarItem from '../components/SidebarItem.vue'
 
 const route = useRoute()
@@ -388,17 +389,20 @@ const userMenuItems = [
     {
         name: 'profile',
         label: 'Profile Settings',
-        icon: '/icons/header/profile.svg'
+        icon: '/icons/header/profile.svg',
+        to:'#'
     },
     {
         name: 'notifications',
         label: 'Notification Settings',
-        icon: '/icons/header/notifications.svg'
+        icon: '/icons/header/notifications.svg',
+        to:'#'
     },
     {
         name: 'billing',
         label: 'Billing & Subscription',
-        icon: '/icons/header/billing.svg'
+        icon: '/icons/header/billing.svg',
+        to:'/plan/upgrade'
     },
 ]
 
@@ -504,12 +508,12 @@ const mainNavItems = [
         icon: '/icons/bussinessSettings.svg',
         activeIcon: '/icons/active/bussinessSettings.svg',
         hasSubmenu: true,
-        route: '/business-settings',
+        route: '/business/settings',
         submenu: [
-            { name: 'opening-hours', label: 'Opening Hours', route: '/marketing/hours' },
-            { name: 'team-members', label: 'Team Members', route: '/marketing/team' },
-            { name: 'services', label: 'Services', route: '/marketing/services' },
-            { name: 'scheduled-shifts', label: 'Scheduled Shifts', route: '/marketing/shifts' }
+            { name: 'opening-hours', label: 'Opening Hours', route: '/business/settings/hours' },
+            { name: 'team-members', label: 'Team Members', route: '/business/settings/team' },
+            { name: 'services', label: 'Services', route: '/business/settings/services' },
+            { name: 'scheduled-shifts', label: 'Scheduled Shifts', route: '/business/settings/shifts' }
         ]
     },
     {

@@ -1,3 +1,12 @@
+:root {
+  /* Primary Color */
+  /* #335cff */
+  --primary-500: hsl(228 100% 60%);
+  --primary-600: hsl(228 100% 50%);
+  --info-lighter: #EBF1FF;
+  --success: #1fc1b8;
+}
+
 @import 'tailwindcss';
 
 @theme {
@@ -51,7 +60,7 @@
   --color-border-inverse: #2b303b;
 
   /* Status Colors */
-  --color-success: #1fc1b8;
+  --color-success: var(--success);
   --color-error: #f93748;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
@@ -94,21 +103,24 @@
   --color-accent-red: #ef4444;
   --color-accent-purple: #8b5cf6;
   --color-accent-orange: #f97316;
+  --color-accent-success: #1FC16B;
 
   /* Legacy Color Mappings for Compatibility */
   --color-light: var(--color-neutral-100);
   --color-white: var(--color-neutral-white);
   --color-soft: var(--color-neutral-50);
+  --color-soft-200: hsla(223, 16%, 90%, 1);
   --color-disabled: var(--color-neutral-200);
   --color-dark: var(--color-neutral-900);
   --color-neutral: var(--color-neutral-700);
-  --color-primary: var(--color-brand-primary);
+  --color-primary: var(--primary-500);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
   --color-menu: var(--color-sidebar-menu);
   --color-strong: var(--color-text-primary);
   --color-secondary: var(--color-text-secondary);
   --color-tertiary: var(--color-text-tertiary);
-  --color-error: var(--color-error);
-  --color-success: var(--color-success);
+  --color-success: var(--success);
 
   /* Border Color Mappings */
   --color-border-light: var(--color-border-default);
@@ -117,11 +129,24 @@
   --color-border-primary2: var(--color-border-brand);
   --color-border-error: var(--color-border-error);
 
+  --color-info-lighter: var(--info-lighter);
+
   /* Typography - Font Family */
   --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
+  --shadow-regular: 0px 1px 2px 0px hsla(222, 33%, 6%, 0.03);
 }
 
-button,a{
+body {
+  font-family: var(--font-inter);
+}
+
+button,
+a {
   cursor: pointer;
+  @apply transition-all;
+}
+
+.font-medium {
+  font-weight: 500 !important;
 }

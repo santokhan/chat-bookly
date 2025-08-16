@@ -48,11 +48,26 @@ const router = createRouter({
         //   name: 'marketing',
         //   component: () => import('../views/MarketingView.vue'),
         // },
-        // {
-        //   path: 'marketing/hours',
-        //   name: 'marketing-hours',
-        //   component: () => import('../views/marketing/OpeningHoursView.vue'),
-        // },
+        {
+          path: 'business/settings/hours',
+          name: 'business-settings-hours',
+          component: () => import('../views/business/settings/OpeningHoursView.vue'),
+        },
+        {
+          path: 'business/settings/team',
+          name: 'business-settings-team',
+          component: () => import('../views/business/settings/TeamMembersView.vue'),
+        },
+        {
+          path: 'business/settings/shifts',
+          name: 'business-settings-shifts',
+          component: () => import('../views/business/settings/ScheduledShiftsView.vue'),
+        },
+        {
+          path: 'business/settings/services',
+          name: 'business-settings-services',
+          component: () => import('../views/business/settings/ServicesView.vue'),
+        },
         // {
         //   path: 'marketing/team',
         //   name: 'marketing-team',
@@ -103,16 +118,16 @@ const router = createRouter({
         //   name: 'plan-current',
         //   component: () => import('../views/plan/CurrentPlanView.vue'),
         // },
-        // {
-        //   path: 'plan/upgrade',
-        //   name: 'plan-upgrade',
-        //   component: () => import('../views/plan/UpgradePlanView.vue'),
-        // },
-        // {
-        //   path: 'plan/billing',
-        //   name: 'plan-billing',
-        //   component: () => import('../views/plan/BillingHistoryView.vue'),
-        // },
+        {
+          path: 'plan/upgrade',
+          name: 'plan-upgrade',
+          component: () => import('../views/plan/UpgradePlanView.vue'),
+        },
+        {
+          path: 'plan/billing',
+          name: 'plan-billing',
+          component: () => import('../views/plan/BillingHistoryView.vue'),
+        },
         // {
         //   path: 'plan/usage',
         //   name: 'plan-usage',

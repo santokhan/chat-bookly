@@ -2,8 +2,8 @@
     <button @click="$emit('click')" :class="[
         'w-full flex items-center justify-between text-left transition-all duration-200 rounded-[8px] relative mb-2',
         isSubMenuItem
-            ? 'px-[16px] py-[6px] h-[32px] sub-menu-item'
-            : 'px-[12px] py-[8px] h-[36px]',
+            ? 'px-4 py-1.5 h-8 sub-menu-item'
+            : 'px-3 py-2 h-9',
         'hover:bg-menu',
         isActive
             ? (isSubMenuItem ? 'bg-menu text-neutral-white sub-menu-active' : 'bg-menu text-neutral-white side-btn')
@@ -11,9 +11,8 @@
         isExpanded ? (isSubMenuItem ? 'px-4 py-1' : 'px-3 py-2') : 'p-2 justify-center'
     ]">
         <div class=" absolute top-0 left-0 h-full flex items-center" v-if="isSubMenuItem">
-            <div class="h-full w-[1px] bg-border-primary "></div>
-            <img src="/icons/line.svg" alt="">
-
+            <div class="h-full w-[1px] bg-border-primary"></div>
+            <img src="/icons/line.svg" alt="icon">
         </div>
 
         <div class="flex items-center relative">
@@ -22,14 +21,12 @@
                 <img :src="isActive ? activeIcon : icon" alt="">
             </div>
 
-
-
             <!-- Label -->
-            <div v-show="isExpanded" class="mt-[5px]" :class="[
+            <div v-show="isExpanded" class="text-sm" :class="[
                 isActive ? 'text-neutral-white' : 'text-tertiary',
                 isSubMenuItem
-                    ? 'font-medium transition-opacity duration-200 leading-[18px] tracking-[-0.4%] text-[13px] font-inter'
-                    : 'ml-3 font-medium transition-opacity duration-200 leading-[20px] tracking-[-0.6%] text-[14px] font-inter'
+                    ? 'font-medium transition-opacity duration-200 leading-[1.125rem] tracking-[-0.4%]'
+                    : 'ml-3 font-medium transition-opacity duration-200 leading-[1.25rem] tracking-[-0.6%]'
             ]">
                 {{ label }}
             </div>
