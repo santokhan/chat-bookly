@@ -6,7 +6,7 @@
                     Team Members
                     <span
                         class="inline-flex justify-center items-center rounded-full p-1 text-xs bg-info-lighter text-primary-500 size-5">
-                        0
+                        {{ teamMembers.length }}
                     </span>
                 </h1>
                 <div class="grow"></div>

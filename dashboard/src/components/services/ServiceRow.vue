@@ -1,5 +1,5 @@
 <template>
-  <div ref="draggableEl" class="border border-light pl-2.5 pr-5 py-5 text-start flex items-center gap-2.5 rounded-2xl bg-white">
+  <div class="border border-light pl-2.5 pr-5 py-5 text-start flex items-center gap-2.5 rounded-2xl bg-white">
     <button type="button" class="hover:text-primary" @mousedown="startDrag">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path

@@ -150,3 +150,8 @@ a {
 .font-medium {
   font-weight: 500 !important;
 }
+
+strong {
+  @apply font-medium text-strong;
+  font-weight: 500 !important;
+}

@@ -10,12 +10,13 @@
                 <template v-for="item, key in weeklyOpeningHours" :key="key">
                     <div class="border border-border-light rounded-xl bg-white flex gap-4">
                         <div
-                            class="basis-41 shrink-0 p-4 min-h-full text-sm font-medium flex gap-2.5 items-center uppercase border-r border-border-light text-strong bg-soft">
+                            class="basis-41 shrink-0 p-4 min-h-full text-sm font-medium flex gap-2.5 items-center uppercase border-r border-border-light text-strong bg-soft rounded-l-xl">
                             <ToggleSwitch :isDayOff="item?.status == 'closed'" />
                             {{ item?.day }}
                         </div>
                         <div class="grow flex items-center gap-15">
-                            <p v-if="item?.status === 'closed'" class="text-sm font-medium text-secondary">Day Off</p>
+                            <p v-if="item?.status === 'closed'"
+                                class="text-sm font-medium text-secondary px-3.5 py-6.75">Day Off</p>
                             <template v-else v-for="hItem, hKey in item?.hours" :key="key">
                                 <div class="p-3.5 space-y-1.5 whitespace-nowrap">
                                     <h5 class="text-sm font-medium text-secondary">Shift - {{ hKey + 1 }}</h5>
@@ -55,12 +56,13 @@
 import FormWorkingHours from '@/components/forms/FormWorkingHours.vue'
 import Modal from '@/components/Modal.vue'
 import ToggleSwitch from '@/components/shared/ToggleSwitch.vue'
-import { openingHours, type Shift } from '@/stores/opening-hours'
+import { useOpeningHoursStore, type Shift } from '@/stores/opening-hours'
 import { reactive, ref } from 'vue'
 
 const modal = ref(false)
 const selectedDayHours = reactive<{ value: Record<string, any> | null }>({ value: null })
 const isCancelConfirmationVisible = ref(false)
+const { openingHours } = useOpeningHoursStore()
 const weeklyOpeningHours = reactive(openingHours)
 
 function onSave(dayHours: { day: string; hours: Shift[], copyAll: boolean }) {

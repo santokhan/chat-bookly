@@ -166,10 +166,11 @@ import { reactive, ref } from 'vue'
 import ButtonPrimary from '@/components/shared/ButtonPrimary.vue'
 import { dateGenerator, formatToMonthDay, isSameDate, reportDates } from '@/utils/date'
 import FormAssignTeamMember from '@/components/forms/FormAssignTeamMember.vue'
-import { team_member_shifts, type TeamMemberShift } from '@/stores/shifts'
+import { useTeamMemberStore, type TeamMemberShift } from '@/stores/shifts'
 import ModifyShift from '@/components/actions/ModifyShift.vue'
 import FormEditShift from '@/components/forms/FormEditShift.vue'
 
+const { team_member_shifts } = useTeamMemberStore()
 const modalAssignMember = ref(false)
 const modalEditShift = ref(false)
 const nextDate = dateGenerator(new Date())

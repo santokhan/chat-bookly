@@ -143,7 +143,7 @@ import { ref } from 'vue'
 import Modal from '@/components/Modal.vue'
 import ButtonPrimary from '@/components/shared/ButtonPrimary.vue'
 import FormServiceAdd from '@/components/forms/FormServiceAdd.vue'
-import { db_services, type Service } from '@/stores/services'
+import { useServicesStore, type Service } from '@/stores/services'
 import ServiceRow from '@/components/services/ServiceRow.vue'
 import FormServiceEdit from '@/components/forms/FormServiceEdit.vue'
 import FilterAllTeamMembers from '@/components/services/FilterAllTeamMembers.vue'
@@ -152,6 +152,7 @@ import FilterByTypes from '@/components/services/FilterByTypes.vue'
 
 const modalAddService = ref(false)
 const modalEditService = ref<Service | null>(null)
+const { db_services } = useServicesStore()
 const services = ref<Service[]>(db_services)
 
 let id = 0

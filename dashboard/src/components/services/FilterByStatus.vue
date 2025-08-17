@@ -1,5 +1,5 @@
 <template>
-  <div ref="statusDropdownRef" class="relative">
+  <div ref="statusDropdownRef" class="relative hidden">
     <!-- Dropdown Button -->
     <button @click.stop="statusOpen = !statusOpen"
       class="border border-border-light pl-3 pr-8 py-2 text-sm rounded-lg appearance-none w-full flex justify-between items-center text-neutral-500">
@@ -23,13 +23,18 @@
       </ul>
     </transition>
   </div>
+  <select name="status" id="status" class="border border-border-light px-3 py-2 text-sm rounded-lg capitalize">
+    <template v-for="status in statuses">
+      <option :value="status">{{ status }}</option>
+    </template>
+  </select>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
 // Status options
-const statuses = ['Pending', 'In Progress', 'Completed']
+const statuses = ['active', 'inactive']
 const statusOpen = ref(false)
 const selectedStatus = ref<string[]>([])
 const statusDropdownRef = ref<HTMLElement | null>(null)

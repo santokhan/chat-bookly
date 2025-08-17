@@ -1,4 +1,6 @@
+import { defineStore } from "pinia"
 import { db_team_members, type TeamMember } from "./team-members"
+import { ref } from "vue"
 
 export type ServiceType = {
   id?: number
@@ -92,3 +94,11 @@ export const db_services: Service[] = [
     "status": "inactive"
   },
 ]
+
+export const useServicesStore = defineStore('services', () => {
+  const services = ref(db_services)
+
+  return {
+    db_services: services
+  }
+})

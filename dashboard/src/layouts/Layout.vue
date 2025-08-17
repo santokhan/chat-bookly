@@ -118,8 +118,6 @@
                         </svg>
                     </div>
                 </button>
-
-
             </div>
         </div>
 
@@ -191,7 +189,7 @@
                         </transition>
                     </div>
 
-
+                    <HeaderNotification />
 
                     <!-- User Menu -->
                     <div class="relative" ref="userDropdown">
@@ -335,6 +333,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import SidebarItem from '../components/SidebarItem.vue'
+import HeaderNotification from './header/HeaderNotification.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -390,19 +389,19 @@ const userMenuItems = [
         name: 'profile',
         label: 'Profile Settings',
         icon: '/icons/header/profile.svg',
-        to:'#'
+        to: '#'
     },
     {
         name: 'notifications',
         label: 'Notification Settings',
         icon: '/icons/header/notifications.svg',
-        to:'#'
+        to: '#'
     },
     {
         name: 'billing',
         label: 'Billing & Subscription',
         icon: '/icons/header/billing.svg',
-        to:'/plan/upgrade'
+        to: '/plan/upgrade'
     },
 ]
 
